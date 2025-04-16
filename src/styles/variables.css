@@ -1,0 +1,118 @@
+:root {
+  /* Primary Colors - Artist-Focused */
+  --primary-color: #6a1b9a; /* Rich Purple */
+  --primary-light: #9c4dcc; /* Light Purple */
+  --primary-dark: #38006b; /* Deep Purple */
+  --highlight-color: #f06292; /* Pink Highlights */
+
+  /* Secondary Colors */
+  --secondary-color: #ff8f00; /* Vibrant Amber */
+  --secondary-light: #ffb74d; /* Light Amber */
+  --secondary-dark: #c56000; /* Deep Amber */
+
+  /* Tertiary Colors */
+  --tertiary-color: #29b6f6; /* Bright Cyan */
+  --tertiary-light: #81d4fa; /* Light Cyan */
+  --tertiary-dark: #0288d1; /* Deep Cyan */
+
+  /* Neutral Colors */
+  --neutral-light: #f5f5f5;
+  --neutral-medium: #cfd8dc;
+  --neutral-dark: #455a64;
+
+  /* Background Colors */
+  --background-light: #fafafa; /* Light Gray */
+  --background-medium: #eceff1; /* Subtle Gray */
+  --background-dark: #1c1c1e; /* Dark Mode */
+  --background-accent: #303136; /* Accent Background */
+
+  /* Font Colors */
+  --font-primary: #212121;
+  --font-secondary: #757575;
+  --font-highlight: #ffffff;
+  --dark-font-color: #e0e0e0;
+
+  /* Typography */
+  --font-family-primary: "Poppins", sans-serif;
+  --font-family-secondary: "Open Sans", sans-serif;
+  --font-size-base: 16px;
+  --font-size-large: 20px;
+  --font-size-medium: 18px;
+  --font-size-small: 14px;
+  --font-size-xsmall: 12px;
+
+  /* Border Styles */
+  --border-color: #b0bec5;
+  --border-thick: 2px;
+  --border-radius: 8px;
+
+  /* Box Shadows */
+  --box-shadow-light: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow-medium: 0px 6px 12px rgba(0, 0, 0, 0.15);
+  --box-shadow-heavy: 0px 8px 16px rgba(0, 0, 0, 0.2);
+
+  /* Button Styling */
+  --button-primary: var(--primary-color);
+  --button-secondary: var(--secondary-color);
+  --button-hover-opacity: 0.85;
+  --button-shadow-hover: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  --button-radius: 6px;
+
+  /* Inputs and Forms */
+  --input-border: #ddd;
+  --input-focus: var(--primary-color);
+  --input-radius: 5px;
+  --input-background: #ffffff;
+
+  /* Grid Customization */
+  --grid-line-color: rgba(0, 0, 0, 0.1);
+  --grid-highlight-color: rgba(255, 255, 255, 0.3);
+  --grid-interactive-color: var(--highlight-color);
+
+  /* Palette and Artboard */
+  --palette-border: rgba(0, 0, 0, 0.2);
+  --palette-hover: rgba(0, 0, 0, 0.1);
+  --palette-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  --artboard-background: var(--background-medium);
+
+  /* Alerts and Feedback */
+  --error-color: #d32f2f;
+  --warning-color: #ffb300;
+  --success-color: #388e3c;
+  --info-color: #1976d2;
+
+  /* Animations and Effects */
+  --transition-speed: 0.3s;
+  --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-fade-in: fadeIn 0.4s ease-in;
+  --animation-slide-up: slideUp 0.5s var(--transition-ease);
+  --glow-effect: 0 0 8px var(--highlight-color);
+  --ripple-effect: radial-gradient(circle, rgba(0, 0, 0, 0.15) 20%, transparent 100%);
+
+  /* Breakpoints for Responsive Design */
+  --breakpoint-mobile: 480px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1280px;
+  --breakpoint-large-desktop: 1440px;
+  --breakpoint-4k: 2560px;
+
+  /* Special Effects */
+  --hover-highlight: rgba(255, 255, 255, 0.1);
+  --active-highlight: rgba(0, 0, 0, 0.1);
+
+  /* Overlay */
+  --overlay-light: rgba(255, 255, 255, 0.6);
+  --overlay-dark: rgba(0, 0, 0, 0.6);
+
+  /* Dark Mode Adjustments */
+  --dark-background: #121212;
+  --dark-card: #1e1e1e;
+  --dark-border: #333;
+  --dark-highlight: #6200ea;
+
+  /* Custom Properties for Animations */
+  --animation-timing: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --keyframe-duration: 1s;
+  --keyframe-easing: ease-in-out;
+}
+

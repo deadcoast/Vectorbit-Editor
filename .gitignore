@@ -1,0 +1,35 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Build output
+build/
+
+# Logs
+logs/
+*.log
+.qodo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor files
+.vscode/
+.idea/
+
+# Cache and dependencies
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test coverage reports
+coverage/
+
+# Favicon
+/public/favicon.ico
+
+# Misc
+*.swp

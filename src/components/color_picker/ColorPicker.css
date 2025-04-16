@@ -1,0 +1,170 @@
+css
+/* File: src/components/ColorPicker/ColorPicker.css */
+
+/* Advanced Color Picker Container */
+.advanced-color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition);
+}
+
+/* Gradient Generator Section */
+.gradient-generator {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.gradient-generator h4 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--font-color);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 5px;
+}
+
+/* Gradient Preview */
+.gradient-preview {
+  height: 40px;
+  width: 100%;
+  border-radius: var(--button-radius-sm);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to right, #ccc, #eee);
+}
+
+/* Gradient Stops */
+.gradient-stop {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: var(--button-radius-circle);
+  background-color: var(--primary-color);
+  cursor: pointer;
+  border: 2px solid var(--background-color);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.gradient-stop:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.1);
+}
+
+/* Recent Colors Section */
+.color-history {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.color-history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+  gap: 10px;
+}
+
+.color-history-item {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  position: relative;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.color-history-item:hover {
+  border-color: var(--secondary-color);
+  transform: scale(1.1);
+}
+
+/* Tooltip for Hex Codes */
+.color-history-item::after {
+  content: attr(data-hex);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--font-color-dark);
+  color: var(--background-color-light);
+  font-size: 0.75rem;
+  padding: 3px 6px;
+  border-radius: var(--button-radius-sm);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.color-history-item:hover::after {
+  opacity: 1;
+}
+
+/* Action Buttons Section */
+.actions {
+  display: flex;
+  gap: 15px;
+}
+
+.actions button {
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  background-color: var(--primary-color);
+  color: var(--font-color-light);
+  border: none;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.actions button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.actions button:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* Accessibility Focus Styling */
+button:focus,
+.gradient-stop:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .advanced-color-picker {
+    padding: 15px;
+  }
+
+  .gradient-preview {
+    height: 35px;
+  }
+
+  .color-history-grid {
+    grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+  }
+
+  .color-history-item {
+    width: 25px;
+    height: 25px;
+  }
+
+  .actions button {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+}

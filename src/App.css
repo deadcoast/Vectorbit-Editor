@@ -1,0 +1,212 @@
+/* File: src/components/App.css */
+
+/* Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  font-family: var(--font-primary);
+  color: var(--font-color);
+  gap: 15px;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(to bottom, var(--primary-color), var(--primary-color-dark));
+  color: var(--header-font-color);
+  padding: 20px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  box-shadow: var(--shadow-lg);
+  border-bottom: 3px solid var(--secondary-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.header h1 {
+  margin: 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.header:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 25px;
+  background-image: var(--app-gradient);
+  background-size: cover;
+  background-attachment: fixed;
+  border-top: 2px solid var(--primary-color);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--secondary-color);
+  color: var(--footer-font-color);
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-top: 3px solid var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+.footer a {
+  color: var(--footer-link-color);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+/* Controls Section */
+.controls {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  background-color: var(--toolbar-background);
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-lg);
+  overflow-x: auto;
+  transition: all 0.3s ease;
+}
+
+.controls:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Button Styles */
+button {
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: var(--button-radius);
+  font-size: 1rem;
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--button-font-color);
+  font-weight: bold;
+  transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-md);
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-hover);
+}
+
+button:active {
+  transform: scale(0.95);
+  box-shadow: var(--active-box-shadow);
+}
+
+/* Grid Styling */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: 1px;
+  background-color: var(--grid-background);
+  border: 1px solid var(--grid-border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.grid-cell {
+  width: 100%;
+  height: 100%;
+  background-color: var(--grid-cell-background);
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.grid-cell:hover {
+  transform: scale(1.1);
+  background-color: var(--grid-cell-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Preset Section */
+.preset-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: var(--toolbar-background);
+  padding: 15px;
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.preset-container:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* History Controls */
+.history-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .header h1 {
+    font-size: 1.8rem;
+  }
+
+  .main {
+    padding: 20px;
+    gap: 15px;
+  }
+
+  .footer {
+    padding: 15px;
+    font-size: 0.85rem;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
+/* Accessibility */
+button:focus,
+a:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 3px;
+}

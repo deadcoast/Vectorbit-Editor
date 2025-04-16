@@ -1,0 +1,243 @@
+/* mixins.css */
+
+/* Flex Utilities */
+.center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-center-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Grid Utilities */
+.grid-center {
+  display: grid;
+  place-items: center;
+}
+
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.grid-auto-fill {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+/* Shadows */
+.box-shadow {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.box-shadow-lg {
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.box-shadow-inset {
+  box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.box-shadow-hover {
+  transition: box-shadow 0.3s ease;
+}
+
+.box-shadow-hover:hover {
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Transition Effects */
+.transition {
+  transition: all 0.3s ease;
+}
+
+.transition-fast {
+  transition: all 0.15s ease-in-out;
+}
+
+.transition-slow {
+  transition: all 0.5s ease;
+}
+
+.transition-color {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Border Radii */
+.rounded {
+  border-radius: 5px;
+}
+
+.rounded-lg {
+  border-radius: 10px;
+}
+
+.rounded-xl {
+  border-radius: 15px;
+}
+
+.rounded-circle {
+  border-radius: 50%;
+}
+
+/* Spacing Utilities */
+.margin-auto {
+  margin: auto;
+}
+
+.margin-sm {
+  margin: 10px;
+}
+
+.margin-lg {
+  margin: 20px;
+}
+
+.padding-sm {
+  padding: 5px;
+}
+
+.padding-md {
+  padding: 10px;
+}
+
+.padding-lg {
+  padding: 20px;
+}
+
+/* Text Utilities */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-light {
+  font-weight: 300;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-muted {
+  color: #999;
+}
+
+/* Width Utilities */
+.width-full {
+  width: 100%;
+}
+
+.width-half {
+  width: 50%;
+}
+
+.width-auto {
+  width: auto;
+}
+
+/* Animation */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.scale-on-hover {
+  transition: transform 0.3s ease;
+}
+
+.scale-on-hover:hover {
+  transform: scale(1.05);
+}
+
+.rotate-on-hover {
+  transition: transform 0.3s ease;
+}
+
+.rotate-on-hover:hover {
+  transform: rotate(5deg);
+}
+
+/* Accessibility Enhancements */
+.focus-ring {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 3px;
+}
+
+.focus-ring:hover {
+  outline: 2px solid var(--secondary-color);
+}
+
+/* Utility Overrides for Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .text-muted {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .box-shadow {
+    box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
+  }
+}

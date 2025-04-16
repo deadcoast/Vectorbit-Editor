@@ -1,0 +1,200 @@
+
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react";
+import Toolbar from "./Toolbar";
+import ColorWheel from "../ColorWheel/ColorWheel";
+
+describe("Toolbar Component", () => {
+  const mockSetActiveTool = jest.fn();
+  const mockSetActiveColor = jest.fn();
+  const mockOnAddToPalette = jest.fn();
+  const mockOnAssignToAnchor = jest.fn();
+  const mockSetBrushSize = jest.fn();
+  const mockSaveProject = jest.fn();
+  const mockLoadProject = jest.fn();
+  const mockHandleGridResize = jest.fn();
+  const mockSetDefaultFormat = jest.fn();
+  const mockSaveDefaultFormat = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("renders all tool buttons", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    expect(screen.getByText("Brush")).toBeInTheDocument();
+    expect(screen.getByText("Eraser")).toBeInTheDocument();
+    expect(screen.getByText("Bucket Fill")).toBeInTheDocument();
+    expect(screen.getByText("Rectangle")).toBeInTheDocument();
+    expect(screen.getByText("Ellipse")).toBeInTheDocument();
+    expect(screen.getByText("Freehand")).toBeInTheDocument();
+  });
+
+  it("calls setActiveTool when a tool button is clicked", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Brush"));
+    expect(mockSetActiveTool).toHaveBeenCalledWith("brush");
+
+    fireEvent.click(screen.getByText("Eraser"));
+    expect(mockSetActiveTool).toHaveBeenCalledWith("eraser");
+  });
+
+  it("integrates the ColorWheel component", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    expect(screen.getByTitle("Color Picker")).toBeInTheDocument();
+  });
+
+  it("calls setBrushSize on brush size input change", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    const brushSizeInput = screen.getByLabelText("Brush Size:");
+    fireEvent.change(brushSizeInput, { target: { value: "5" } });
+
+    expect(mockSetBrushSize).toHaveBeenCalledWith(5);
+  });
+
+  it("calls saveProject on save project button click", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Save Project"));
+    expect(mockSaveProject).toHaveBeenCalled();
+  });
+
+  it("calls handleGridResize with correct size on grid resize button click", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    fireEvent.click(screen.getByText("8x8"));
+    expect(mockHandleGridResize).toHaveBeenCalledWith(8);
+
+    fireEvent.click(screen.getByText("16x16"));
+    expect(mockHandleGridResize).toHaveBeenCalledWith(16);
+  });
+
+  it("calls setDefaultFormat when changing export format", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    const exportSelect = screen.getByDisplayValue("SVG");
+    fireEvent.change(exportSelect, { target: { value: "png" } });
+
+    expect(mockSetDefaultFormat).toHaveBeenCalledWith("png");
+  });
+
+  it("renders and interacts with ColorWheel", () => {
+    render(
+      <Toolbar
+        setActiveTool={mockSetActiveTool}
+        setActiveColor={mockSetActiveColor}
+        onAddToPalette={mockOnAddToPalette}
+        onAssignToAnchor={mockOnAssignToAnchor}
+        setBrushSize={mockSetBrushSize}
+        saveProject={mockSaveProject}
+        loadProject={mockLoadProject}
+        handleGridResize={mockHandleGridResize}
+        setDefaultFormat={mockSetDefaultFormat}
+        saveDefaultFormat={mockSaveDefaultFormat}
+      />
+    );
+
+    expect(screen.getByTitle("Color Picker")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTitle("Color Picker"), {
+      target: { value: "#ff0000" },
+    });
+
+    expect(mockSetActiveColor).toHaveBeenCalledWith("#ff0000");
+  });
+});

@@ -1,0 +1,171 @@
+css
+/* File: src/components/Toolbar/Controls.css */
+
+/* Main Controls Container */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(to bottom right, var(--background-color), #ffffff);
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-lg);
+  font-family: "Roboto", sans-serif;
+  color: var(--font-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.controls:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Menu Bar */
+.menu-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  font-size: 1rem;
+  color: var(--font-color-dark);
+}
+
+.menu {
+  position: relative;
+  font-weight: bold;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.menu:hover {
+  color: var(--secondary-color);
+}
+
+.menu span {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: var(--button-radius-sm);
+  transition: background-color 0.3s ease;
+}
+
+.menu span:hover {
+  background-color: var(--background-color-light);
+}
+
+/* Dropdown Menu */
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.menu:hover .dropdown {
+  display: block;
+}
+
+.dropdown button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  background-color: transparent;
+  color: var(--font-color);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown button:hover {
+  background-color: var(--primary-color);
+  color: var(--font-color-light);
+}
+
+/* Toolbar Buttons */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.toolbar button {
+  padding: 12px 20px;
+  background-color: var(--primary-color);
+  color: var(--font-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.toolbar button:hover {
+  background-color: var(--secondary-color);
+  box-shadow: var(--shadow-hover);
+}
+
+.toolbar button:active {
+  transform: scale(0.95);
+}
+
+/* Color Picker Input */
+.toolbar input[type="color"] {
+  width: 45px;
+  height: 45px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--button-radius-circle);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.toolbar input[type="color"]:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Accessibility Focus Styles */
+button:focus,
+input[type="color"]:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .controls {
+    padding: 15px;
+  }
+
+  .menu-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

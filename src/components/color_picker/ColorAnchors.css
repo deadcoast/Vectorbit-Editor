@@ -1,0 +1,175 @@
+css
+/* File: src/frontend/ColorAnchors.css */
+
+/* Main container for the color anchors popup */
+.color-anchors-popup {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  padding: 20px;
+  width: 400px;
+  z-index: 1000;
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+/* Title styling */
+.color-anchors-popup h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: var(--font-color);
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+/* Action buttons container */
+.action-buttons {
+  @apply flex-space-between; /* Using mixin for spacing */
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.action-buttons button {
+  flex: 1;
+  @apply text-uppercase rounded-lg; /* Using utility classes for buttons */
+  padding: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--font-color-light);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.action-buttons button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.action-buttons button:disabled {
+  background-color: var(--disabled-color);
+  cursor: not-allowed;
+}
+
+/* Anchor list container */
+.anchor-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: calc(80vh - 150px);
+  overflow-y: auto;
+}
+
+/* Individual anchor row */
+.color-anchor {
+  @apply flex-space-between; /* Using mixin for alignment */
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  transition: var(--transition);
+}
+
+.color-anchor:hover {
+  background-color: var(--background-hover);
+  border-color: var(--primary-color);
+}
+
+/* Anchor label styling */
+.color-anchor label {
+  flex: 1;
+  font-size: 1rem;
+  color: var(--font-color-muted);
+  margin-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Color picker input */
+.color-anchor input[type="color"] {
+  width: 40px;
+  height: 30px;
+  border: none;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  outline: 1px solid var(--border-color);
+  transition: outline 0.2s, transform 0.2s;
+}
+
+.color-anchor input[type="color"]:hover {
+  outline: 2px solid var(--primary-color);
+}
+
+.color-anchor input[type="color"]:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Action buttons for each anchor */
+.color-anchor button {
+  margin-left: 5px;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.color-anchor button.rename {
+  background-color: var(--success-color);
+  color: var(--font-color-light);
+}
+
+.color-anchor button.rename:hover {
+  background-color: var(--success-hover-color);
+}
+
+.color-anchor button.delete {
+  background-color: var(--danger-color);
+  color: var(--font-color-light);
+}
+
+.color-anchor button.delete:hover {
+  background-color: var(--danger-hover-color);
+}
+
+.color-anchor button:active {
+  transform: scale(0.95);
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .color-anchors-popup {
+    width: 90%;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .action-buttons button {
+    font-size: 0.8rem;
+  }
+
+  .color-anchor label {
+    font-size: 0.9rem;
+  }
+}
+
+/* Accessibility focus styles */
+button:focus,
+input[type="color"]:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 3px;
+}

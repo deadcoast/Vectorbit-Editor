@@ -1,0 +1,100 @@
+{
+  "gridSize": 16,
+  "canvasSize": 512,
+  "layers": [
+    {
+      "id": "layer-1",
+      "name": "Background",
+      "visible": true,
+      "opacity": 1,
+      "gridData": {
+        "0,0": "#FFFFFF",
+        "0,1": "#F0F0F0",
+        "1,0": "#E0E0E0",
+        "1,1": "#D0D0D0"
+      }
+    },
+    {
+      "id": "layer-2",
+      "name": "Foreground",
+      "visible": true,
+      "opacity": 0.8,
+      "gridData": {
+        "5,5": "#FF0000",
+        "5,6": "#00FF00",
+        "6,5": "#0000FF",
+        "6,6": "#FFFF00"
+      }
+    },
+    {
+      "id": "layer-3",
+      "name": "Highlights",
+      "visible": true,
+      "opacity": 0.6,
+      "gridData": {
+        "2,2": "#FFA500",
+        "2,3": "#FFD700",
+        "3,2": "#ADFF2F",
+        "3,3": "#7CFC00"
+      }
+    }
+  ],
+  "gridProperties": {
+    "rotation": 15,
+    "snapEnabled": true,
+    "snapThreshold": 10,
+    "proceduralFillOptions": {
+      "noiseScale": 0.2,
+      "baseColor": "#CCCCCC"
+    },
+    "gridLineColor": "rgba(0, 0, 0, 0.1)",
+    "gridLineWidth": 1,
+    "cellBorderStyle": "solid",
+    "cellBorderWidth": 1,
+    "cellBorderColor": "#888888"
+  },
+  "snapSettings": {
+    "snapToRotation": true,
+    "snapToGrid": true,
+    "allowPartialSnap": false
+  },
+  "defaultColors": {
+    "backgroundColor": "#FFFFFF",
+    "defaultCellColor": "#CCCCCC"
+  },
+  "exportSettings": {
+    "fileName": "gridProject",
+    "fileFormat": "png",
+    "includeLayers": true,
+    "includeMetadata": true
+  },
+  "proceduralPatterns": {
+    "enabled": true,
+    "patternType": "PerlinNoise",
+    "patternDensity": "medium",
+    "patternColorAdjust": true
+  },
+  "metadata": {
+    "projectName": "Sample Grid Project",
+    "author": "Artist Name",
+    "dateCreated": "2024-12-29T12:00:00Z",
+    "description": "A grid project demonstrating advanced grid features with multiple layers and procedural fill patterns.",
+    "lastModified": "2024-12-29T14:00:00Z",
+    "version": "1.0.0"
+  },
+  "interactionSettings": {
+    "allowDragAndDrop": true,
+    "contextMenuEnabled": true,
+    "keyboardShortcuts": {
+      "undo": "Ctrl+Z",
+      "redo": "Ctrl+Y",
+      "save": "Ctrl+S",
+      "export": "Ctrl+E"
+    }
+  },
+  "debugSettings": {
+    "enableLogging": true,
+    "logLevel": "info",
+    "showPerformanceStats": false
+  }
+}

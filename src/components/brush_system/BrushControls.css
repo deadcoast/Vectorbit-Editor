@@ -1,0 +1,261 @@
+/* src/components/BrushSystem/BrushControls.css */
+.brush-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1rem;
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  width: 300px;
+}
+
+/* Section Headers */
+.brush-controls h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+/* Control Groups */
+.brush-type-selector,
+.pattern-controls,
+.gradient-controls,
+.effect-controls,
+.blend-mode-controls,
+.symmetry-controls,
+.advanced-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--background-alt);
+  border-radius: var(--border-radius-sm);
+}
+
+/* Selects and Inputs */
+.brush-controls select,
+.brush-controls input[type="number"],
+.brush-controls input[type="text"] {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background: var(--input-background);
+  color: var(--font-color);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.brush-controls select:hover,
+.brush-controls input[type="number"]:hover,
+.brush-controls input[type="text"]:hover {
+  border-color: var(--primary-color);
+}
+
+.brush-controls select:focus,
+.brush-controls input[type="number"]:focus,
+.brush-controls input[type="text"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-alpha);
+  outline: none;
+}
+
+/* Range Inputs */
+.brush-controls input[type="range"] {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--range-background);
+  border-radius: 3px;
+  outline: none;
+}
+
+.brush-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.brush-controls input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Color Inputs */
+.brush-controls input[type="color"] {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+}
+
+.brush-controls input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.brush-controls input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Labels */
+.brush-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--font-color);
+}
+
+/* Pattern Controls */
+.pattern-controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+/* Gradient Controls */
+.gradient-controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.gradient-controls input[type="color"] {
+  width: 100%;
+  height: 30px;
+}
+
+/* Preview Canvas */
+.brush-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: var(--preview-background);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.brush-preview canvas {
+  background: transparent;
+  image-rendering: pixelated;
+}
+
+/* Custom Shape Upload */
+.brush-shape-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.brush-shape-upload input[type="file"] {
+  display: none;
+}
+
+.brush-shape-upload label {
+  padding: 0.5rem 1rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.brush-shape-upload label:hover {
+  background: var(--primary-color-dark);
+}
+
+/* Brush Presets */
+.brush-presets {
+  margin-top: 1rem;
+}
+
+.brush-presets select {
+  width: 100%;
+}
+
+/* Pressure Settings */
+.pressure-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Advanced Settings */
+.advanced-settings {
+  border-top: 1px solid var(--border-color);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .brush-controls {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .pattern-controls,
+  .gradient-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .brush-controls {
+    background: var(--background-dark);
+  }
+
+  .brush-controls select,
+  .brush-controls input[type="number"],
+  .brush-controls input[type="text"] {
+    background: var(--input-background-dark);
+    color: var(--font-color-light);
+  }
+}
+
+/* Animation */
+.brush-controls .animate-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .brush-controls * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Focus Styles */
+.brush-controls button:focus-visible,
+.brush-controls select:focus-visible,
+.brush-controls input:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

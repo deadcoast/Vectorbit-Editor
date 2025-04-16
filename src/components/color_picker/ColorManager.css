@@ -1,0 +1,194 @@
+css
+/* File: src/components/ColorPicker/ColorManager.css */
+
+/* Main container styling */
+.color-manager {
+  padding: 20px;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+/* Headings */
+.color-manager h4 {
+  font-size: 1.25rem;
+  margin-bottom: 15px;
+  color: var(--font-color);
+  font-weight: bold;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 5px;
+}
+
+/* Section Containers */
+.section-container {
+  margin-bottom: 20px;
+}
+
+/* Gradient Presets */
+.preset-gradients {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.preset-gradient {
+  width: 50px;
+  height: 50px;
+  border: 2px solid transparent;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.preset-gradient:hover {
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+/* Palette Presets */
+.preset-palettes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.preset-palette {
+  display: flex;
+  gap: 3px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  padding: 8px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.preset-palette:hover {
+  background-color: var(--background-hover);
+  border-color: var(--secondary-color);
+}
+
+.preset-color {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.preset-color:hover {
+  border-color: var(--primary-color);
+}
+
+/* Color Anchors Section */
+.color-anchor {
+  @apply flex-space-between; /* Using flex utility */
+  margin-bottom: 10px;
+}
+
+.color-anchor label {
+  font-size: 0.9rem;
+  color: var(--font-color-muted);
+  flex: 1;
+  margin-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.color-anchor input[type="color"] {
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--button-radius);
+  outline: 1px solid var(--border-color);
+  transition: transform var(--transition-fast), outline var(--transition-fast);
+}
+
+.color-anchor input[type="color"]:hover {
+  transform: scale(1.1);
+  outline: 2px solid var(--primary-color);
+}
+
+.color-anchor input[type="text"] {
+  padding: 8px;
+  width: 120px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  transition: var(--transition-fast);
+}
+
+.color-anchor input[type="text"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* Recent Colors Section */
+.recent-colors {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.recent-colors span {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.recent-colors span:hover {
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+/* Buttons */
+.color-manager button {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: var(--font-color-light);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.color-manager button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.color-manager button:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Accessibility focus styling */
+input[type="color"]:focus,
+input[type="text"]:focus {
+  outline: 2px dashed var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .color-manager {
+    padding: 15px;
+  }
+
+  .preset-gradients,
+  .preset-palettes {
+    flex-direction: column;
+  }
+
+  .preset-gradient,
+  .preset-palette {
+    width: 100%;
+  }
+}

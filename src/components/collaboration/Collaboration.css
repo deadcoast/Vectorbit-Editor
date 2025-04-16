@@ -1,0 +1,252 @@
+css
+/* File: src/components/Collaboration/Collaboration.css */
+
+/* Main Collaboration Manager */
+.collaboration-manager {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+  border: 2px solid var(--border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 400px;
+  transition: var(--transition);
+  margin: 20px auto;
+}
+
+.collaboration-manager:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Connection Status */
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border-radius: var(--button-radius);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: var(--font-color);
+}
+
+.status-indicator::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.status-indicator.connected::before {
+  background-color: var(--success-color);
+}
+
+.status-indicator.disconnected::before {
+  background-color: var(--error-color);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(var(--success-color-rgb), 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(var(--success-color-rgb), 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(var(--success-color-rgb), 0);
+  }
+}
+
+/* Reconnect Status */
+.reconnect-status {
+  font-size: 0.875rem;
+  color: var(--warning-color);
+  animation: fadeInOut 2s infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Collaborators List */
+.collaborators-list {
+  margin-top: 1.5rem;
+}
+
+.collaborators-list h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* Collaborator Item */
+.collaborator-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  transition: var(--transition);
+}
+
+.collaborator-item:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateX(4px);
+}
+
+.collaborator-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.collaborator-name {
+  font-weight: bold;
+  color: var(--font-color);
+}
+
+.collaborator-status {
+  font-size: 0.875rem;
+  color: var(--secondary-color);
+}
+
+/* Sync Controls */
+.sync-controls {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.sync-controls button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--button-radius);
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sync-controls button:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.sync-controls button:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Cursor Indicators */
+.collaborator-cursor {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.collaborator-cursor::after {
+  content: attr(data-name);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.collaborator-cursor:hover::after {
+  opacity: 1;
+}
+
+/* Alerts */
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--button-radius);
+  background-color: var(--error-color);
+  color: white;
+  animation: slideIn 0.3s ease;
+}
+
+.alert-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .collaboration-manager {
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .collaborator-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .collaboration-manager {
+    background: linear-gradient(135deg, rgba(31, 38, 135, 0.4), rgba(31, 38, 135, 0.2));
+  }
+
+  .collaborator-item {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .collaborator-name {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .collaborator-status {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

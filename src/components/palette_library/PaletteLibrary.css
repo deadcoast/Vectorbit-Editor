@@ -1,0 +1,152 @@
+css
+/* File: src/components/PaletteLibrary/PaletteLibrary.css */
+
+/* Main Palette Container */
+.palette-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(to bottom right, var(--background-color), #ffffff);
+  border: 2px solid var(--border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-lg);
+  font-family: "Roboto", sans-serif;
+  color: var(--font-color);
+  transition: var(--transition);
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.palette-container:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Palette Title */
+.palette-container h3 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+/* Palette Header */
+.palette-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--font-color);
+  text-align: center;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+/* Palette Description */
+.palette-description {
+  font-size: 1rem;
+  color: var(--font-color-muted);
+  text-align: center;
+  margin-top: 5px;
+  opacity: 0.8;
+}
+
+/* Palette List */
+.palette-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Individual Palette Item */
+.palette-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: linear-gradient(to bottom, var(--background-color), #ffffff);
+  border: 2px solid var(--border-color);
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  width: 150px;
+}
+
+.palette-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+.palette-item.active {
+  border-color: var(--primary-color);
+  background: linear-gradient(to bottom, #f0f9f4, #ffffff);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+/* Palette Color Swatches */
+.palette-color {
+  width: 50px;
+  height: 50px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.palette-color:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+/* Add Palette Button */
+.add-palette-button {
+  padding: 15px 20px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--button-radius);
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+  margin-top: 20px;
+}
+
+.add-palette-button:hover {
+  background-color: var(--secondary-color);
+  box-shadow: var(--shadow-hover);
+}
+
+.add-palette-button:active {
+  transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .palette-container {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  .palette-item {
+    width: 120px;
+    padding: 10px;
+  }
+
+  .palette-color {
+    width: 40px;
+    height: 40px;
+  }
+
+  .add-palette-button {
+    font-size: 1rem;
+    padding: 12px 15px;
+  }
+}
