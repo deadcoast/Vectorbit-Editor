@@ -1,5 +1,9 @@
 # Enhancing the Freehand Tool with Smoothing Algorithms and Adding Layer Manipulation Features
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 We’ll refine the Freehand Tool to create smoother, more natural strokes and enhance layer manipulation features with drag-and-drop reordering and additional group management options.
 
 1. Enhance the Freehand Tool with Smoothing Algorithms

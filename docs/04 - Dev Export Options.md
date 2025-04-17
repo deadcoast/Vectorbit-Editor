@@ -1,5 +1,9 @@
 # Feature 4: Export Options Placeholder
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 The export functionality will enable saving the current grid as .svg, .png, or .jpg files. For now, we’ll create a working placeholder that:
 
 1. Exports the grid as an SVG.

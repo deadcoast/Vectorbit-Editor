@@ -1,5 +1,9 @@
 # Enhancing the Palette and Color Picker with a Palette Library
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 We will implement a palette library to allow users to save and manage their custom palettes. This will include saving palettes to a library, loading saved palettes, and reusing them in projects.
 
 ## Step 1: Update Back-End for Palette Library

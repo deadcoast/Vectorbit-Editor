@@ -1,5 +1,9 @@
 # Finalizing Outstanding Front-End Features
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 Below is the step-by-step implementation plan to finalize all outstanding front-end features. This includes dynamic grid resizing, full drawing tool functionality, menus, and export options.
 
 ## Step 1: Finalize Dynamic Grid Resizing
@@ -94,11 +98,11 @@ Modify applyBrush to support erasing:
 
 ```javascript
 const handleCellClick = (index) => {
-if (activeTool === "brush") {
-applyBrush(index, brushSize);
-} else if (activeTool === "eraser") {
-applyBrush(index, brushSize, true); // Pass a flag for erasing
-}
+  if (activeTool === "brush") {
+    applyBrush(index, brushSize);
+  } else if (activeTool === "eraser") {
+    applyBrush(index, brushSize, true); // Pass a flag for erasing
+  }
 };
 ```
 
@@ -112,15 +116,17 @@ Add project saving and loading functionality.
 
 ```javascript
 const saveProject = () => {
-const projectData = {
-gridSize,
-cellColors,
-};
-const blob = new Blob([JSON.stringify(projectData)], { type: "application/json" });
-const link = document.createElement("a");
-link.href = URL.createObjectURL(blob);
-link.download = "project.json";
-link.click();
+  const projectData = {
+    gridSize,
+    cellColors,
+  };
+  const blob = new Blob([JSON.stringify(projectData)], {
+    type: "application/json",
+  });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "project.json";
+  link.click();
 };
 ```
 
@@ -128,14 +134,14 @@ link.click();
 
 ```javascript
 const loadProject = (event) => {
-const file = event.target.files[0];
-const reader = new FileReader();
-reader.onload = (e) => {
-const projectData = JSON.parse(e.target.result);
-setGridSize(projectData.gridSize);
-setCellColors(projectData.cellColors);
-};
-reader.readAsText(file);
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const projectData = JSON.parse(e.target.result);
+    setGridSize(projectData.gridSize);
+    setCellColors(projectData.cellColors);
+  };
+  reader.readAsText(file);
 };
 ```
 
@@ -275,9 +281,12 @@ app.use("/projects", projectsRouter);
 
 // MongoDB Connection
 mongoose
-.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => console.log("Connected to MongoDB"))
-.catch((err) => console.error("MongoDB connection error:", err));
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Start Server
 const PORT = process.env.PORT || 5000;
@@ -294,10 +303,10 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 const mongoose = require("mongoose");
 
 const projectSchema = new mongoose.Schema({
-name: { type: String, required: true },
-gridSize: { type: Number, required: true },
-cellColors: { type: Map, of: String },
-createdAt: { type: Date, default: Date.now },
+  name: { type: String, required: true },
+  gridSize: { type: Number, required: true },
+  cellColors: { type: Map, of: String },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Project", projectSchema);
@@ -314,60 +323,66 @@ const Project = require("../models/Project");
 
 // Create a new project
 router.post("/", async (req, res) => {
-const { name, gridSize, cellColors } = req.body;
+  const { name, gridSize, cellColors } = req.body;
 
-try {
-const newProject = new Project({ name, gridSize, cellColors });
-await newProject.save();
-res.status(201).json(newProject);
-} catch (err) {
-res.status(500).json({ error: "Failed to create project" });
-}
+  try {
+    const newProject = new Project({ name, gridSize, cellColors });
+    await newProject.save();
+    res.status(201).json(newProject);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create project" });
+  }
 });
 
 // Fetch all projects
 router.get("/", async (req, res) => {
-try {
-const projects = await Project.find();
-res.status(200).json(projects);
-} catch (err) {
-res.status(500).json({ error: "Failed to fetch projects" });
-}
+  try {
+    const projects = await Project.find();
+    res.status(200).json(projects);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch projects" });
+  }
 });
 
 // Fetch a single project by ID
 router.get("/:id", async (req, res) => {
-try {
-const project = await Project.findById(req.params.id);
-if (!project) return res.status(404).json({ error: "Project not found" });
-res.status(200).json(project);
-} catch (err) {
-res.status(500).json({ error: "Failed to fetch project" });
-}
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) return res.status(404).json({ error: "Project not found" });
+    res.status(200).json(project);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch project" });
+  }
 });
 
 // Update a project
 router.put("/:id", async (req, res) => {
-try {
-const updatedProject = await Project.findByIdAndUpdate(req.params.id, req.body, {
-new: true,
-});
-if (!updatedProject) return res.status(404).json({ error: "Project not found" });
-res.status(200).json(updatedProject);
-} catch (err) {
-res.status(500).json({ error: "Failed to update project" });
-}
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (!updatedProject)
+      return res.status(404).json({ error: "Project not found" });
+    res.status(200).json(updatedProject);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update project" });
+  }
 });
 
 // Delete a project
 router.delete("/:id", async (req, res) => {
-try {
-const deletedProject = await Project.findByIdAndDelete(req.params.id);
-if (!deletedProject) return res.status(404).json({ error: "Project not found" });
-res.status(200).json(deletedProject);
-} catch (err) {
-res.status(500).json({ error: "Failed to delete project" });
-}
+  try {
+    const deletedProject = await Project.findByIdAndDelete(req.params.id);
+    if (!deletedProject)
+      return res.status(404).json({ error: "Project not found" });
+    res.status(200).json(deletedProject);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete project" });
+  }
 });
 
 module.exports = router;
@@ -394,26 +409,22 @@ const upload = multer({ storage });
 
 // Convert SVG to PNG
 router.post("/convert/png", upload.single("file"), async (req, res) => {
-try {
-const pngBuffer = await sharp(req.file.buffer)
-.toFormat("png")
-.toBuffer();
-res.type("image/png").send(pngBuffer);
-} catch (err) {
-res.status(500).json({ error: "Failed to convert SVG to PNG" });
-}
+  try {
+    const pngBuffer = await sharp(req.file.buffer).toFormat("png").toBuffer();
+    res.type("image/png").send(pngBuffer);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to convert SVG to PNG" });
+  }
 });
 
 // Convert SVG to JPG
 router.post("/convert/jpg", upload.single("file"), async (req, res) => {
-try {
-const jpgBuffer = await sharp(req.file.buffer)
-.jpeg()
-.toBuffer();
-res.type("image/jpeg").send(jpgBuffer);
-} catch (err) {
-res.status(500).json({ error: "Failed to convert SVG to JPG" });
-}
+  try {
+    const jpgBuffer = await sharp(req.file.buffer).jpeg().toBuffer();
+    res.type("image/jpeg").send(jpgBuffer);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to convert SVG to JPG" });
+  }
 });
 ```
 
@@ -427,24 +438,23 @@ Send project data to the back-end API.
 
 ```javascript
 const saveProjectToServer = async () => {
-const projectData = { name: "My Project", gridSize, cellColors };
+  const projectData = { name: "My Project", gridSize, cellColors };
 
-try {
-const response = await fetch("<http://localhost:5000/projects>", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify(projectData),
-});
+  try {
+    const response = await fetch("<http://localhost:5000/projects>", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(projectData),
+    });
 
     if (response.ok) {
       alert("Project saved successfully!");
     } else {
       alert("Failed to save project.");
     }
-
-} catch (err) {
-alert("Error saving project.");
-}
+  } catch (err) {
+    alert("Error saving project.");
+  }
 };
 ```
 
@@ -456,17 +466,22 @@ Upload the SVG and fetch the converted file.
 
 ```javascript
 const exportImage = async (format) => {
-const canvas = canvasRef.current;
-const svgBlob = new Blob([canvas.toDataURL("image/svg+xml")], { type: "image/svg+xml" });
+  const canvas = canvasRef.current;
+  const svgBlob = new Blob([canvas.toDataURL("image/svg+xml")], {
+    type: "image/svg+xml",
+  });
 
-const formData = new FormData();
-formData.append("file", svgBlob);
+  const formData = new FormData();
+  formData.append("file", svgBlob);
 
-try {
-const response = await fetch(`http://localhost:5000/projects/convert/${format}`, {
-method: "POST",
-body: formData,
-});
+  try {
+    const response = await fetch(
+      `http://localhost:5000/projects/convert/${format}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     if (response.ok) {
       const blob = await response.blob();
@@ -477,10 +492,9 @@ body: formData,
     } else {
       alert("Failed to export image.");
     }
-
-} catch (err) {
-alert("Error exporting image.");
-}
+  } catch (err) {
+    alert("Error exporting image.");
+  }
 };
 ```
 
@@ -565,9 +579,12 @@ app.use("/projects", projectsRouter);
 
 // Connect to MongoDB
 mongoose
-.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => console.log("Connected to MongoDB"))
-.catch((err) => console.error("MongoDB connection error:", err));
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Start the server
 const PORT = process.env.PORT || 5000;
@@ -691,26 +708,22 @@ const upload = multer({ storage });
 
 // Convert SVG to PNG
 router.post("/convert/png", upload.single("file"), async (req, res) => {
-try {
-const pngBuffer = await sharp(req.file.buffer)
-.toFormat("png")
-.toBuffer();
-res.type("image/png").send(pngBuffer);
-} catch (err) {
-res.status(500).json({ error: "Failed to convert SVG to PNG" });
-}
+  try {
+    const pngBuffer = await sharp(req.file.buffer).toFormat("png").toBuffer();
+    res.type("image/png").send(pngBuffer);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to convert SVG to PNG" });
+  }
 });
 
 // Convert SVG to JPG
 router.post("/convert/jpg", upload.single("file"), async (req, res) => {
-try {
-const jpgBuffer = await sharp(req.file.buffer)
-.jpeg()
-.toBuffer();
-res.type("image/jpeg").send(jpgBuffer);
-} catch (err) {
-res.status(500).json({ error: "Failed to convert SVG to JPG" });
-}
+  try {
+    const jpgBuffer = await sharp(req.file.buffer).jpeg().toBuffer();
+    res.type("image/jpeg").send(jpgBuffer);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to convert SVG to JPG" });
+  }
 });
 ```
 
@@ -763,81 +776,89 @@ import axios from "axios";
 const API_BASE_URL = "<http://localhost:5000>";
 
 export const createProject = async (project) => {
-try {
-const response = await axios.post(`${API_BASE_URL}/projects`, project);
-return response.data;
-} catch (error) {
-console.error("Error creating project:", error);
-throw error;
-}
+  try {
+    const response = await axios.post(`${API_BASE_URL}/projects`, project);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating project:", error);
+    throw error;
+  }
 };
 
 export const fetchProjects = async () => {
-try {
-const response = await axios.get(`${API_BASE_URL}/projects`);
-return response.data;
-} catch (error) {
-console.error("Error fetching projects:", error);
-throw error;
-}
+  try {
+    const response = await axios.get(`${API_BASE_URL}/projects`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    throw error;
+  }
 };
 
 export const fetchProjectById = async (id) => {
-try {
-const response = await axios.get(`${API_BASE_URL}/projects/${id}`);
-return response.data;
-} catch (error) {
-console.error("Error fetching project by ID:", error);
-throw error;
-}
+  try {
+    const response = await axios.get(`${API_BASE_URL}/projects/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching project by ID:", error);
+    throw error;
+  }
 };
 
 export const updateProject = async (id, project) => {
-try {
-const response = await axios.put(`${API_BASE_URL}/projects/${id}`, project);
-return response.data;
-} catch (error) {
-console.error("Error updating project:", error);
-throw error;
-}
+  try {
+    const response = await axios.put(`${API_BASE_URL}/projects/${id}`, project);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating project:", error);
+    throw error;
+  }
 };
 
 export const deleteProject = async (id) => {
-try {
-const response = await axios.delete(`${API_BASE_URL}/projects/${id}`);
-return response.data;
-} catch (error) {
-console.error("Error deleting project:", error);
-throw error;
-}
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/projects/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    throw error;
+  }
 };
 
 export const convertSvgToPng = async (file) => {
-try {
-const formData = new FormData();
-formData.append("file", file);
-const response = await axios.post(`${API_BASE_URL}/projects/convert/png`, formData, {
-headers: { "Content-Type": "multipart/form-data" },
-});
-return response.data;
-} catch (error) {
-console.error("Error converting SVG to PNG:", error);
-throw error;
-}
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axios.post(
+      `${API_BASE_URL}/projects/convert/png`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error converting SVG to PNG:", error);
+    throw error;
+  }
 };
 
 export const convertSvgToJpg = async (file) => {
-try {
-const formData = new FormData();
-formData.append("file", file);
-const response = await axios.post(`${API_BASE_URL}/projects/convert/jpg`, formData, {
-headers: { "Content-Type": "multipart/form-data" },
-});
-return response.data;
-} catch (error) {
-console.error("Error converting SVG to JPG:", error);
-throw error;
-}
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axios.post(
+      `${API_BASE_URL}/projects/convert/jpg`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error converting SVG to JPG:", error);
+    throw error;
+  }
 };
 ```
 
@@ -851,18 +872,18 @@ Add a “Save Project” button to the front-end and implement the save logic.
 import { createProject } from "../api/api";
 
 const saveProject = async () => {
-const projectData = {
-name: "My Project",
-gridSize,
-cellColors,
-};
+  const projectData = {
+    name: "My Project",
+    gridSize,
+    cellColors,
+  };
 
-try {
-const savedProject = await createProject(projectData);
-alert(`Project saved successfully! ID: ${savedProject._id}`);
-} catch (error) {
-alert("Failed to save project.");
-}
+  try {
+    const savedProject = await createProject(projectData);
+    alert(`Project saved successfully! ID: ${savedProject._id}`);
+  } catch (error) {
+    alert("Failed to save project.");
+  }
 };
 ```
 
@@ -928,25 +949,26 @@ Upload the current SVG to the back-end for conversion.
 import { convertSvgToPng, convertSvgToJpg } from "../api/api";
 
 const exportToImage = async (format) => {
-const canvas = canvasRef.current;
-const svgBlob = new Blob([canvas.toDataURL("image/svg+xml")], { type: "image/svg+xml" });
+  const canvas = canvasRef.current;
+  const svgBlob = new Blob([canvas.toDataURL("image/svg+xml")], {
+    type: "image/svg+xml",
+  });
 
-try {
-let response;
-if (format === "png") {
-response = await convertSvgToPng(svgBlob);
-} else if (format === "jpg") {
-response = await convertSvgToJpg(svgBlob);
-}
+  try {
+    let response;
+    if (format === "png") {
+      response = await convertSvgToPng(svgBlob);
+    } else if (format === "jpg") {
+      response = await convertSvgToJpg(svgBlob);
+    }
 
     const link = document.createElement("a");
     link.href = URL.createObjectURL(new Blob([response]));
     link.download = `pixel-art.${format}`;
     link.click();
-
-} catch (error) {
-alert(`Failed to export to ${format}`);
-}
+  } catch (error) {
+    alert(`Failed to export to ${format}`);
+  }
 };
 ```
 
@@ -978,26 +1000,31 @@ npm start
 ## 3.2.3 Test Features
 
 • Save Project: Verify that project data is saved in the back-end and accessible via the API.
-
 • Load Projects: Ensure projects can be fetched and loaded into the grid.
-
 • Export Options: Test exporting SVG to PNG and JPG via the back-end.
 
-______________________________________________________________________
+## 3.2.4 Test All Features
 
-______________________________________________________________________
+1. Grid Resizing:
+   • Test resizing the grid while retaining art proportions.
+   • Verify all standard bit sizes (8x8 to 1024x1024).
+1. Drawing Tools:
+   • Test the brush tool with adjustable sizes.
+   • Test the eraser tool.
+1. Menus:
+   • Verify saving and loading projects.
+   • Test all export options (.svg, .png, .jpg).
+1. Final Integration:
+   • Ensure all components (menus, tools, grid, export) work together seamlessly.
 
 Enhancing Custom Palette Storage, Settings, and Zoom Features
 
 We will focus on the following tasks:
 
 1. Persistent Storage for Custom Color Palettes (back-end integration).
-
-1. Advanced Customization Options in the Settings Menu (e.g., format presets).
-
-1. Enhanced Zoom Functionality (smooth zooming and keyboard shortcuts).
-
-1. Persistent Storage for Custom Color Palettes
+2. Advanced Customization Options in the Settings Menu (e.g., format presets).
+3. Enhanced Zoom Functionality (smooth zooming and keyboard shortcuts).
+4. Persistent Storage for Custom Color Palettes
 
 ## 1.1 Back-End: Extend Project Schema for Palettes
 

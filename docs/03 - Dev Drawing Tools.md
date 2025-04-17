@@ -1,5 +1,9 @@
 # Feature 3: Basic Drawing Tools Placeholder
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 The goal for Feature 3 is to create a placeholder for the Pixel Brush, Eraser Tool, and Color Picker, integrating these features with the grid system and menus. This will provide a foundation for adding functionality later.
 
 ## Step 1: Update the Grid Component for Interactions
@@ -79,11 +83,8 @@ import "./Toolbar.css";
 const Toolbar = ({ setActiveTool, setActiveColor }) => {
   return (
     <div className="toolbar">
-      \<button onClick={() => setActiveTool("brush")}>Brush</button>\<button
-        onClick={() => setActiveTool("eraser")}
-      >
-        Eraser
-      </button>
+      \<button onClick={() => setActiveTool("brush")}>Brush</button>\
+      <button onClick={() => setActiveTool("eraser")}>Eraser</button>
       \
       <input
         type="color"

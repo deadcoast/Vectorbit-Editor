@@ -1,5 +1,7 @@
 # Project Analysis
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
 - Version: 1.2
 - Date: 2025-04-16
 - Status: Planning & Review
@@ -11,7 +13,7 @@ STEP BY STEP, ANALYZE, INTEGRATE AND DOCUMENT THE CODEBASE BASED ON THE TASKLIST
 ## Directory Structure
 
 ```text
-Vectorbit/
+Vectorbit
 ├── src/
 │   ├── components/
 │   │   ├── brush_system/
@@ -26,17 +28,19 @@ Vectorbit/
 │   │   │   ├── ColorAnchors.css
 │   │   │   ├── ColorAnchors.js
 │   │   │   ├── ColorContext.js
+│   │   │   ├── colorHarmony.js.md
 │   │   │   ├── ColorManager.css
 │   │   │   ├── ColorManager.js
 │   │   │   ├── ColorPicker.css
 │   │   │   ├── ColorPicker.js
 │   │   │   ├── ColorPicker.test.js
+│   │   │   ├── colortheory.js.md
 │   │   │   ├── ColorWheel.css
 │   │   │   ├── ColorWheel.js
 │   │   │   ├── ColorWheel.test.js
 │   │   │   ├── eyeDropper.test.js
 │   │   │   └── index.js
-│   │   ├── Grid/
+│   │   ├── grid/
 │   │   │   ├── DrawingTools.js
 │   │   │   ├── Grid.css
 │   │   │   ├── Grid.js
@@ -51,6 +55,8 @@ Vectorbit/
 │   │   ├── palette_library/
 │   │   │   ├── index.js
 │   │   │   ├── PaletteLibrary.css
+│   │   │   ├── PaletteLibrary.css.md
+│   │   │   ├── PaletteLibrary.js.md
 │   │   │   ├── PalleteLibrary.js
 │   │   │   ├── PalleteLibrary.test.js
 │   │   │   └── PalleteManager.js
@@ -97,6 +103,7 @@ Vectorbit/
 │   │   └── index.js
 │   ├── App.css
 │   ├── App.js
+│   ├── App.js.md
 │   ├── index.js
 │   └── setup.tests.js
 ├── tests/

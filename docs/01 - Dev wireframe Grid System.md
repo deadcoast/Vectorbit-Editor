@@ -1,5 +1,9 @@
 # Feature 1: Dynamic Grid System
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 Requirements:
 • A grid that resizes based on the selected bit size (e.g., 8bit to 1024bit).
 • Grid visualization toggling (show/hide grid).

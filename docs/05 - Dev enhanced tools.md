@@ -1,5 +1,9 @@
 # Enhancing Bucket Fill and Rectangle Tools
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 We’ll enhance the Bucket Fill Tool to flood-fill an area with the selected color and implement the Rectangle Tool for drawing rectangles on the grid.
 
 ## Step 1: Enhance Bucket Fill Tool

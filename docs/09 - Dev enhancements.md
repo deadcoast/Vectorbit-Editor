@@ -1,5 +1,9 @@
 # Implementation Plan: Advanced Color Tools and Brush Enhancements
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 We will focus on developing indexed color mode, palette tools, and brush enhancements, providing detailed implementation steps and advanced functionality.
 
 ## 4. Advanced Color Tools

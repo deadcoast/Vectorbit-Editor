@@ -1,5 +1,9 @@
 # Step 1: Code for Placeholder Menus
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 ## File: src/frontend/Menus.js
 
 ```javascript

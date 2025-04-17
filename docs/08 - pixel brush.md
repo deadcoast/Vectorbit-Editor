@@ -1,5 +1,9 @@
 # Enhancing the Brush for Pixel Art Consistency
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 We will enhance the brush to ensure it always draws square blocks that align perfectly with the grid, regardless of the grid bit size. The brush will dynamically adjust to the grid cell size to maintain pixel-perfect alignment.
 
 ## Step 1: Update Brush Logic
@@ -60,9 +64,9 @@ The brush will paint square cells that align perfectly with the grid.
 
 const applyBrush = (x, y) => {
 const updatedColors = { ...cellColors };
-const index = y * gridSize + x;
+const index = y \* gridSize + x;
 
-if (index >= 0 && index < gridSize * gridSize) {
+if (index >= 0 && index < gridSize \* gridSize) {
 updatedColors[index] = activeColor; // Paint the cell
 }
 

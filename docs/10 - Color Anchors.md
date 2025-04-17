@@ -1,5 +1,9 @@
 # Implementing “Color Anchors” for Dynamic Color Replacement
 
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+
+---
+
 The Color Anchors feature will allow users to define specific color roles (base, secondary, accent) and dynamically update them across the grid. Here’s how to implement this feature in an integrated manner with the brush and palette tools.
 
 ## Step 1: Data Structure for Color Anchors
