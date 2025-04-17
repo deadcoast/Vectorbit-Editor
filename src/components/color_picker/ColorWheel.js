@@ -3,7 +3,7 @@
 import React, { useContext, useState, useCallback, useRef, useMemo } from "react";
 import { SketchPicker } from "react-color";
 import debounce from "lodash.debounce";
-import { ColorContext } from "../state/ColorContext";
+import { ColorContext } from "./ColorContext";
 import "./ColorWheel.css";
 
 const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = false }) => {

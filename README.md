@@ -37,24 +37,18 @@ VectorBit is a versatile and cutting-edge pixel art illustration software tailor
 #### Steps to Install
 
 1. Clone the repository:
-sh
-git clone https://github.com/deadcoast/vectorbit.git
+   sh
+   git clone <https://github.com/deadcoast/vectorbit.git>
 
 cd vectorbit
 
-
-
 2. Install dependencies:
-sh
-npm install
+   sh
+   npm install
 
-
-
-3. Start the development server:
-sh
-npm start
-
-
+1. Start the development server:
+   sh
+   npm start
 
 ## Usage
 
@@ -70,53 +64,45 @@ npm start
 
 - npm run lint Lints the codebase for issues.
 
-
 ### Environment Variables
 
 1. Create a .env file in the root directory.
 
-2. Configure the following variables:
-sh
-REACT_APP_API_BASE_URL=http://localhost:5000
-REACT_APP_DEFAULT_GRID_SIZE=16
-REACT_APP_DEFAULT_COLOR=#ffffff
-
-
+1. Configure the following variables:
+   sh
+   REACT_APP_API_BASE_URL=<http://localhost:5000>
+   REACT_APP_DEFAULT_GRID_SIZE=16
+   REACT_APP_DEFAULT_COLOR=#ffffff
 
 ## Project Structure
-
-  
 
 vectorbit/
 
 vectorbit/
 ├── src/
-│   ├── components/         # React components (UI)
-│   ├── utils/              # Helper functions (grid, palette, file handling)
-│   ├── styles/             # Shared CSS styles
-│   ├── state/              # State management hooks
-│   ├── App.js              # Root application component
-│   ├── App.css             # Root application styles
-│   └── index.js            # Main React entry point
-├── public/                 # Static files
-│   ├── index.html          # Root HTML file
-│   └── favicon.ico         # App icon
-├── server/                 # Backend server
-│   ├── routes/             # API routes (projects, palettes)
-│   ├── models/             # Database models (Mongoose schemas)
-│   ├── server.js           # Main server entry point
-│   └── utils/              # Server utility functions
-├── tests/                  # Test files
-├── .env                    # Environment variables
-├── package.json            # Project metadata and dependencies
-├── README.md               # Project documentation
-├── webpack.config.js       # Webpack configuration
-└── setup.sh                # Setup script for installation
+│ ├── components/ # React components (UI)
+│ ├── utils/ # Helper functions (grid, palette, file handling)
+│ ├── styles/ # Shared CSS styles
+│ ├── state/ # State management hooks
+│ ├── App.js # Root application component
+│ ├── App.css # Root application styles
+│ └── index.js # Main React entry point
+├── public/ # Static files
+│ ├── index.html # Root HTML file
+│ └── favicon.ico # App icon
+├── server/ # Backend server
+│ ├── routes/ # API routes (projects, palettes)
+│ ├── models/ # Database models (Mongoose schemas)
+│ ├── server.js # Main server entry point
+│ └── utils/ # Server utility functions
+├── tests/ # Test files
+├── .env # Environment variables
+├── package.json # Project metadata and dependencies
+├── README.md # Project documentation
+├── webpack.config.js # Webpack configuration
+└── setup.sh # Setup script for installation
 
-
-  
 ## Development Notes
-
 
 ### Frontend
 
@@ -146,29 +132,21 @@ We welcome contributions from the community! Follow these steps to contribute:
 
 1. Fork the repository.
 
-2. Create a feature branch:
-sh
-git checkout -b feature-name
+1. Create a feature branch:
+   sh
+   git checkout -b feature-name
 
+1. Commit your changes:
+   sh
+   git commit -m "Add feature description"
 
+1. Push your branch:
+   sh
+   git push origin feature-name
 
-3. Commit your changes:
-sh
-git commit -m "Add feature description"
-
-
-
-4. Push your branch:
-sh
-git push origin feature-name
-
-
-
-5. Submit a pull request.
-
+1. Submit a pull request.
 
 ### License
-
 
 This project is licensed under the [MIT License](LICENSE).
 

@@ -1,10 +1,8 @@
-
 // src/components/Toolbar/Toolbar.js
 import React, { useState, useRef } from "react";
-import "./Toolbar.css";
-import applyBrushStroke from "./BrushTool";
-import { exportToSVG, exportToPNG } from "../../utils/api/ExportManager";
-import ColorWheel from "../ColorPicker/ColorWheel";
+import "./toolbar.css";
+import { exportToSVG, exportToPNG } from "../../utils/api/exportManager";
+import ColorWheel from "../color_picker/ColorWheel";
 
 const Toolbar = ({
   gridSize,

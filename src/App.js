@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import Grid from "./components/grid/Grid";
-import Controls from "./components/Toolbar/Controls";
-import { handleNewFile, handleOpenFile, handleSaveFile } from "./utils/fileHandlers";
+import Grid from "./components/Grid";
+import Controls from "./components/Toolbar/Controls.js";
+import {
+  handleNewFile,
+  handleOpenFile,
+  handleSaveFile,
+} from "./utils/fileHandlers";
 import { useAnchorHistory } from "./state/useAnchorHistory";
 import { usePresetStorage } from "./state/presets";
 import { renderGridOverlay } from "./utils/grid/gridUtils";
@@ -14,12 +18,19 @@ const App = () => {
   const [activeColor, setActiveColor] = useState("#000000"); // Initial color
   const [exportFormat, setExportFormat] = useState("png"); // Add state for export format
   const [layers, setLayers] = useState([
-    { id: "layer-1", name: "Background", visible: true, opacity: 1, gridData: {} },
+    {
+      id: "layer-1",
+      name: "Background",
+      visible: true,
+      opacity: 1,
+      gridData: {},
+    },
   ]); // Layer management
   const [activeLayer, setActiveLayer] = useState("layer-1"); // Active layer selection
 
   const gridCanvasRef = useRef(null); // Ref for the grid canvas
-  const { addToHistory, undo, redo, history, historyIndex } = useAnchorHistory(); // Undo/Redo integration
+  const { addToHistory, undo, redo, history, historyIndex } =
+    useAnchorHistory(); // Undo/Redo integration
   const { presets, savePreset, deletePreset } = usePresetStorage(); // Preset management
 
   // Handlers for file operations
@@ -28,7 +39,15 @@ const App = () => {
       setGridSize(16);
       setActiveTool("brush");
       setActiveColor("#000000");
-      setLayers([{ id: "layer-1", name: "Background", visible: true, opacity: 1, gridData: {} }]);
+      setLayers([
+        {
+          id: "layer-1",
+          name: "Background",
+          visible: true,
+          opacity: 1,
+          gridData: {},
+        },
+      ]);
       setActiveLayer("layer-1");
     });
   };
@@ -127,7 +146,7 @@ const App = () => {
           }}
           gridOverlay={gridVisible}
           setGridOverlay={setGridVisible}
-          availableTools={['brush', 'eraser', 'fill']}
+          availableTools={["brush", "eraser", "fill"]}
         />
 
         {/* Grid Component */}

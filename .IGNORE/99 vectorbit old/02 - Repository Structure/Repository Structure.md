@@ -1,7 +1,3 @@
-
-  
-
-
 Vectorbit/
 ├── src/
 │   ├── frontend/
@@ -16,7 +12,7 @@ Vectorbit/
 │   │   └── index.js          # Entry point for React app rendering
 │   │
 │   ├── backend/
-│   │   ├── app.py         
+│   │   ├── app.py
 │   │   ├── routes/           # API routes for file handling and export
 │   │   ├── utils/            # Utility functions for backend logic
 │   │   ├── services/        file conversion)
@@ -49,7 +45,6 @@ Vectorbit/
 ├── webpack.config.js         # Webpack configuration for bundling frontend
 └── LICENSE                   # Project license
 
-
 ### Key Folder Descriptions
 
 1. src/
@@ -80,36 +75,31 @@ Vectorbit/
 
 • Documentation files for developers and contributors.
 
-  
-
 ### Initial Setup Files
 
 1. package.json (for managing frontend dependencies and scripts):
 
-  
 on
 {
-  "name": "vectorbit",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "webpack serve --mode development",
-    "build": "webpack --mode production",
-    "test": "jest"
-  },
-  "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "iro.js": "^5.5.1"
-  },
-  "devDependencies": {
-    "webpack": "^5.0.0",
-    "webpack-cli": "^5.0.0",
-    "babel-loader": "^9.0.0",
-    "jest": "^29.0.0"
-  }
+"name": "vectorbit",
+"version": "1.0.0",
+"scripts": {
+"start": "webpack serve --mode development",
+"build": "webpack --mode production",
+"test": "jest"
+},
+"dependencies": {
+"react": "^18.0.0",
+"react-dom": "^18.0.0",
+"iro.js": "^5.5.1"
+},
+"devDependencies": {
+"webpack": "^5.0.0",
+"webpack-cli": "^5.0.0",
+"babel-loader": "^9.0.0",
+"jest": "^29.0.0"
 }
-
-
+}
 
 2. requirements.txt (for Python backend dependencies):
 
@@ -118,7 +108,6 @@ flask-cors==3.0.10
 svgwrite==1.4.1
 Pillow==9.5.0
 
-
 3. .gitignore
 
 git
@@ -126,7 +115,6 @@ node_modules/
 __pycache__/
 .DS_Store
 dist/
-*.svg
-*.png
-*.jpg
-
+\*.svg
+\*.png
+\*.jpg

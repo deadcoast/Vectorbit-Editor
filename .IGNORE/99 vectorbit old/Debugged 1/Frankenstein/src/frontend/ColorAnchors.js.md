@@ -1,37 +1,37 @@
-
 const handleAddGroupColor = (anchor) => {
-  const updatedColors = [...colorAnchors[anchor], "#ffffff"];
-  updateColorAnchor(anchor, updatedColors);
+const updatedColors = \[...colorAnchors[anchor], "#ffffff"\];
+updateColorAnchor(anchor, updatedColors);
 };
 
 const handleRemoveGroupColor = (anchor, index) => {
-  const updatedColors = colorAnchors[anchor].filter((_, i) => i !== index);
-  updateColorAnchor(anchor, updatedColors);
+const updatedColors = colorAnchors[anchor].filter((\_, i) => i !== index);
+updateColorAnchor(anchor, updatedColors);
 };
 
 const handleColorChange = (anchor, newColor) => {
-  updateColorAnchor(anchor, newColor);
-  updateGridWithAnchor(anchor, newColor);
+updateColorAnchor(anchor, newColor);
+updateGridWithAnchor(anchor, newColor);
 };
 
 const handleAddAnchor = () => {
-  const newAnchorName = prompt("Enter a name for the new anchor:");
-  if (newAnchorName) addAnchor(newAnchorName);
+const newAnchorName = prompt("Enter a name for the new anchor:");
+if (newAnchorName) addAnchor(newAnchorName);
 };
 
 const handleRenameAnchor = (oldName) => {
-  const newName = prompt(`Rename ${oldName} to:`);
-  if (newName) renameAnchor(oldName, newName);
+const newName = prompt(`Rename ${oldName} to:`);
+if (newName) renameAnchor(oldName, newName);
 };
 
 const handleDeleteAnchor = (name) => {
-  if (confirm(`Are you sure you want to delete the anchor: ${name}?`)) {
-    deleteAnchor(name);
-  }
+if (confirm(`Are you sure you want to delete the anchor: ${name}?`)) {
+deleteAnchor(name);
+}
 };
 
 return (
-  <div>
+
+<div>
     <h3>Color Anchors</h3>
     <button onClick={handleAddAnchor}>Add Anchor</button>
     {Object.keys(colorAnchors).map((anchor) => (

@@ -1,31 +1,29 @@
-Feature 4: Export Options Placeholder
-
-  
+# Feature 4: Export Options Placeholder
 
 The export functionality will enable saving the current grid as .svg, .png, or .jpg files. For now, we’ll create a working placeholder that:
 
 1. Exports the grid as an SVG.
+1. Prepares the structure for future .png and .jpg exports.
+1. Integrates with the existing grid and menus.
 
-2. Prepares the structure for future .png and .jpg exports.
-
-3. Integrates with the existing grid and menus.
-
-  
-
-Step 1: Add Export Functionality in the Grid Component
-
-  
+## Step 1: Add Export Functionality in the Grid Component
 
 We’ll implement a function to generate an SVG representation of the current grid state.
 
-  
+## File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 import React from "react";
 import "./Grid.css";
 
-const Grid = ({ gridSize, gridVisible, activeTool, activeColor, cellColors, setCellColors }) => {
+const Grid = ({
+  gridSize,
+  gridVisible,
+  activeTool,
+  activeColor,
+  cellColors,
+  setCellColors,
+}) => {
   const handleCellClick = (index) => {
     setCellColors((prev) => {
       const updatedColors = { ...prev };
@@ -65,7 +63,9 @@ const Grid = ({ gridSize, gridVisible, activeTool, activeColor, cellColors, setC
       for (let j = 0; j < gridSize; j++) {
         const cellIndex = i * gridSize + j;
         const color = cellColors[cellIndex] || "#f9f9f9";
-        svgContent += `<rect x="${j * cellSize}" y="${i * cellSize}" width="${cellSize}" height="${cellSize}" fill="${color}" />`;
+        svgContent += `<rect x="${j * cellSize}" y="${
+          i * cellSize
+        }" width="${cellSize}" height="${cellSize}" fill="${color}" />`;
       }
     }
 
@@ -97,20 +97,15 @@ const Grid = ({ gridSize, gridVisible, activeTool, activeColor, cellColors, setC
 };
 
 export default Grid;
-
-
-  
+```
 
 ## Step 2: Pass State Management from App
 
-  
-
 Update the App component to manage cell states globally, so we can reuse the state for export operations.
 
-  
+## File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+```javascript
 import React, { useState } from "react";
 import Grid from "./Grid";
 import Menus from "./Menus";
@@ -145,33 +140,31 @@ const App = () => {
 };
 
 export default App;
-
-
-  
+```
 
 ## Step 3: Add Placeholder Buttons for .png and .jpg
 
-  
-
 We will update the grid controls to include buttons for .png and .jpg export, although they will currently only log a message.
 
-  
+### File: src/frontend/Grid.js (Updated Snippet)
 
-#### File: src/frontend/Grid.js (Updated Snippet)
-
+```javascript
 <div className="grid-controls">
   <button onClick={exportToSVG}>Export to SVG</button>
-  <button onClick={() => console.log("Export to PNG coming soon!")}>Export to PNG</button>
-  <button onClick={() => console.log("Export to JPG coming soon!")}>Export to JPG</button>
+  <button onClick={() => console.log("Export to PNG coming soon!")}>
+    Export to PNG
+  </button>
+  <button onClick={() => console.log("Export to JPG coming soon!")}>
+    Export to JPG
+  </button>
 </div>
-
+```
 
 ## Step 4: Add CSS for Export Controls
 
-  
+### File: src/frontend/Grid.css (Updated Snippet)
 
-#### File: src/frontend/Grid.css (Updated Snippet)
-css
+```css
 .grid-controls {
   margin-bottom: 10px;
   display: flex;
@@ -190,48 +183,36 @@ css
 .grid-controls button:hover {
   background-color: #555;
 }
-
+```
 
 ## Testing Feature 4
 
 1. Run the development server:
-
-  
-
-npm start
-
-  
-
-  
-
-2. Verify functionality:
-
-• Clicking Export to SVG downloads the current grid as an .svg file.
-
-• Clicking Export to PNG or Export to JPG logs placeholders in the console.
-
-  
----
----
-
-To implement full functionality for exporting to .png and .jpg, we’ll use the Canvas API to render the grid and convert it into rasterized image formats. Here’s how we’ll integrate this functionality step-by-step:
-
-  
+   npm start
+1. Verify functionality:
+   • Clicking Export to SVG downloads the current grid as an .svg file.
+   • Clicking Export to PNG or Export to JPG logs placeholders in the console.
 
 ## Step 1: Add a Canvas Element for Rendering
 
-  
+To implement full functionality for exporting to .png and .jpg, we’ll use the Canvas API to render the grid and convert it into rasterized image formats. Here’s how we’ll integrate this functionality step-by-step:
 
 We’ll add a hidden canvas element to the Grid component to handle rasterizing the grid.
 
-  
+### Canvas Element for File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 import React, { useRef } from "react";
 import "./Grid.css";
 
-const Grid = ({ gridSize, gridVisible, activeTool, activeColor, cellColors, setCellColors }) => {
+const Grid = ({
+  gridSize,
+  gridVisible,
+  activeTool,
+  activeColor,
+  cellColors,
+  setCellColors,
+}) => {
   const canvasRef = useRef(); // Reference to the hidden canvas element
 
   const handleCellClick = (index) => {
@@ -321,19 +302,15 @@ const Grid = ({ gridSize, gridVisible, activeTool, activeColor, cellColors, setC
 };
 
 export default Grid;
-
-
+```
 
 ## Step 2: Update the App Component
 
-  
-
 Ensure the App component passes the necessary props (cellColors and setCellColors) to the Grid.
 
-  
+### App Component Props for File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+```javascript
 import React, { useState } from "react";
 import Grid from "./Grid";
 import Menus from "./Menus";
@@ -368,19 +345,15 @@ const App = () => {
 };
 
 export default App;
-
-
+```
 
 ## Step 3: Add Styling for Export Controls
 
-  
-
 Update the Grid.css file to ensure the export controls are styled consistently.
 
-  
+### File: src/frontend/Grid.css
 
-#### File: src/frontend/Grid.css
-css
+```css
 .grid-controls {
   margin-bottom: 10px;
   display: flex;
@@ -400,19 +373,11 @@ css
   background-color: #555;
 }
 
-  
-
 ## Testing Full Export Functionality
 
 1. Run the development server:
 
-  
-
 npm start
-
-  
-
-  
 
 2. Test features:
 
@@ -431,31 +396,23 @@ npm start
 
 1. Refining Grid Rendering for Higher Resolutions
 
-  
-
 We will:
 
 • Improve canvas rendering to support higher resolutions dynamically based on the grid size.
 
 • Allow users to export high-resolution images while preserving the current grid’s state.
 
-  
-
 ## Step 1.1: Modify renderToCanvas for High Resolution
-
-  
 
 Update the canvas rendering function to support scaling for high resolutions dynamically. This involves increasing the canvas size and scaling the content accordingly.
 
-  
-
-#### File: src/frontend/Grid.js
+### File: src/frontend/Grid.js
 
 const renderToCanvas = (scale = 1) => {
   const canvas = canvasRef.current;
   const ctx = canvas.getContext("2d");
-  const cellSize = (canvas.width / gridSize) * scale; // Adjust cell size for scaling
-  const resolution = 500 * scale; // Scale canvas resolution
+  const cellSize = (canvas.width / gridSize) *scale; // Adjust cell size for scaling
+  const resolution = 500* scale; // Scale canvas resolution
 
   // Set canvas dimensions for high resolution
   canvas.width = resolution;
@@ -466,10 +423,10 @@ const renderToCanvas = (scale = 1) => {
 
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
-      const cellIndex = i * gridSize + j;
+      const cellIndex = i *gridSize + j;
       const color = cellColors[cellIndex] || "#f9f9f9";
       ctx.fillStyle = color;
-      ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+      ctx.fillRect(j* cellSize, i * cellSize, cellSize, cellSize);
     }
   }
 };
@@ -483,15 +440,9 @@ const exportCanvas = (format, scale = 1) => {
   link.click();
 };
 
-
-
 ## Step 1.2: Update Controls for High-Resolution Export
 
-  
-
 Add buttons to export the grid at different resolutions (e.g., 2x, 4x).
-
-  
 
 #### File: src/frontend/Grid.js (Updated Snippet)
 
@@ -502,10 +453,7 @@ Add buttons to export the grid at different resolutions (e.g., 2x, 4x).
   <button onClick={() => exportCanvas("jpeg", 4)}>Export to JPG (4x)</button>
 </div>
 
-  
 2. Advanced Drawing Tools and Undo/Redo
-
-  
 
 We will:
 
@@ -513,15 +461,9 @@ We will:
 
 • Implement undo/redo functionality.
 
-  
-
 ## Step 2.1: Add Line Tool
 
-  
-
 Enhance handleCellClick to support line drawing.
-
-  
 
 #### File: src/frontend/Grid.js
 
@@ -566,15 +508,9 @@ const handleCellClick = (index, endIndex = null) => {
   });
 };
 
-
-
 ## Step 2.2: Add Undo/Redo Functionality
 
-  
-
 Implement undo/redo by tracking the grid’s state history.
-
-  
 
 #### File: src/frontend/Grid.js
 
@@ -610,28 +546,18 @@ const redo = () => {
   }
 };
 
-  
-
 Add buttons for undo/redo in the grid controls:
-
 
 <div className="grid-controls">
   <button onClick={undo}>Undo</button>
   <button onClick={redo}>Redo</button>
 </div>
 
-
 Step 3: Test the New Features
 
 1. Run the development server:
 
-  
-
 npm start
-
-  
-
-  
 
 2. Test features:
 
@@ -640,3 +566,4 @@ npm start
 • Use the line tool to draw straight lines between two cells.
 
 • Verify undo/redo functionality works as expected.
+```

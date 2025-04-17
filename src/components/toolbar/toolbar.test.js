@@ -1,7 +1,7 @@
 
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import Toolbar from "./Toolbar";
+import Toolbar from "./toolbar";
 import ColorWheel from "../ColorWheel/ColorWheel";
 
 describe("Toolbar Component", () => {

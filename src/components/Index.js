@@ -1,4 +1,4 @@
-export { default as Toolbar } from "./Toolbar/Toolbar";
+export { default as Toolbar } from "./Toolbar/toolbar";
 export { default as ColorPicker } from "./ColorPicker/ColorPicker";
 export { default as Grid } from "./grid/Grid";
 export { default as PaletteLibrary } from "./PaletteLibrary/PaletteLibrary";

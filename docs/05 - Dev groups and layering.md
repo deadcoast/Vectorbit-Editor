@@ -1,29 +1,18 @@
-Enhancing the Freehand Tool with Smoothing Algorithms and Adding Layer Manipulation Features
-
-  
+# Enhancing the Freehand Tool with Smoothing Algorithms and Adding Layer Manipulation Features
 
 We’ll refine the Freehand Tool to create smoother, more natural strokes and enhance layer manipulation features with drag-and-drop reordering and additional group management options.
 
-  
-
 1. Enhance the Freehand Tool with Smoothing Algorithms
-
-  
 
 To achieve smoother strokes, we’ll implement a Bezier curve-based smoothing algorithm.
 
-  
-
 ## Step 1.1: Track Freehand Points
-
-  
 
 Modify the handleMouseMove function to record the points as the user drags.
 
-  
+### File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const [freehandPoints, setFreehandPoints] = useState([]);
 
 const handleMouseDown = (index) => {
@@ -46,19 +35,15 @@ const handleMouseUp = () => {
     setFreehandPoints([]);
   }
 };
-
-
+```
 
 ## Step 1.2: Implement Smoothing with Bezier Curves
 
-  
-
 Smooth the points using a Bezier curve algorithm.
 
-  
+### Smooth Points for File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const smoothFreehand = (points) => {
   const updatedColors = { ...cellColors };
 
@@ -90,24 +75,15 @@ const smoothFreehand = (points) => {
 
   setCellColors(updatedColors);
 };
-
-  
-  
-
-2. Layer Manipulation Features
-
-  
+```
 
 ## Step 2.1: Add Drag-and-Drop for Reordering
 
-  
-
 Implement drag-and-drop functionality for reordering layers.
 
-  
+### Reorder for File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+```javascript
 import { useDrag, useDrop } from "react-dnd";
 
 const reorderLayer = (dragIndex, hoverIndex) => {
@@ -149,28 +125,22 @@ const LayerItem = ({ layer, index }) => {
   );
 };
 
-
 Render the layers in a draggable list
-
 
 <div className="layer-list">
   {layers.map((layer, index) => (
     <LayerItem key={layer.id} layer={layer} index={index} />
   ))}
 </div>
-
-
+```
 
 ## Step 2.2: Add Group Management Options
 
-  
-
 Allow users to rename and delete groups.
 
-  
+### Rename/Remove for File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+```javascript
 const renameGroup = (groupId, newName) => {
   const updatedGroups = groups.map((group) =>
     group.id === groupId ? { ...group, name: newName } : group
@@ -198,16 +168,13 @@ const deleteGroup = (groupId) => {
     </div>
   ))}
 </div>;
-
-  
-
+```
 
 ## Step 3: Style Updates for Layer Manipulation
 
-  
+### Layer List for File: src/frontend/App.css
 
-#### File: src/frontend/App.css
-
+```css
 .layer-list {
   margin: 20px 0;
   display: flex;
@@ -225,66 +192,37 @@ const deleteGroup = (groupId) => {
 .layer-list div:hover {
   background-color: #eee;
 }
+```
 
-  
-
-Testing the Features
+## Testing the Features
 
 1. Run the development server:
+   npm start
+1. Test Freehand Tool:
+   • Verify the smoothness of strokes when using the freehand tool.
+1. Test Layer Reordering:
+   • Drag and drop layers to reorder them in the stack.
+1. Test Group Management:
+   • Create, rename, and delete groups. Verify layers are updated accordingly.
 
-  
-
-npm start
-
-  
-
-  
-
-2. Test Freehand Tool:
-
-• Verify the smoothness of strokes when using the freehand tool.
-
-3. Test Layer Reordering:
-
-• Drag and drop layers to reorder them in the stack.
-
-4. Test Group Management:
-
-• Create, rename, and delete groups. Verify layers are updated accordingly.
-
----
----
-
-Undo/Redo Support for Groups and Layer Reordering + Enhancing Export Functionality for Groups
-
-  
+## Undo/Redo Support for Groups and Layer Reordering + Enhancing Export Functionality for Groups
 
 We will:
 
 1. Add undo/redo functionality for group operations and layer reordering.
+1. Enhance export functionality to respect group-level transformations, such as opacity and visibility.
 
-2. Enhance export functionality to respect group-level transformations, such as opacity and visibility.
-
-  
-
-1. Undo/Redo Support for Groups and Layer Reordering
-
-  
+## Undo/Redo Support for Groups and Layer Reordering
 
 We’ll expand the existing undo/redo system to include group and layer reordering changes.
 
-  
-
 ## Step 1.1: Extend History Management
-
-  
 
 Modify the updateHistory function to handle both group and layer changes.
 
-  
+### History for File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+```javascript
 const [history, setHistory] = useState([]);
 const [historyIndex, setHistoryIndex] = useState(-1);
 
@@ -302,7 +240,8 @@ const saveState = () => {
 // Undo and redo functions
 const undo = () => {
   if (historyIndex > 0) {
-    const { layers: prevLayers, groups: prevGroups } = history[historyIndex - 1];
+    const { layers: prevLayers, groups: prevGroups } =
+      history[historyIndex - 1];
     setLayers(prevLayers);
     setGroups(prevGroups);
     setHistoryIndex(historyIndex - 1);
@@ -311,27 +250,24 @@ const undo = () => {
 
 const redo = () => {
   if (historyIndex < history.length - 1) {
-    const { layers: nextLayers, groups: nextGroups } = history[historyIndex + 1];
+    const { layers: nextLayers, groups: nextGroups } =
+      history[historyIndex + 1];
     setLayers(nextLayers);
     setGroups(nextGroups);
     setHistoryIndex(historyIndex + 1);
   }
 };
-
-
-
+```
 
 ## Step 1.2: Hook History into Layer and Group Actions
 
-  
-
 Call saveState whenever layers or groups are modified.
 
-  
+### History Management for File: src/frontend/App.js (Updated Snippets)
 
-#### File: src/frontend/App.js (Updated Snippets)
 Add Layer:
 
+```javascript
 const addLayer = () => {
   const newLayer = {
     id: layers.length + 1,
@@ -345,7 +281,7 @@ const addLayer = () => {
   saveState(); // Save state
 };
 
-  Reorder Layer:
+// Reorder Layer:
 
 const reorderLayer = (dragIndex, hoverIndex) => {
   const updatedLayers = [...layers];
@@ -355,7 +291,7 @@ const reorderLayer = (dragIndex, hoverIndex) => {
   saveState(); // Save state
 };
 
-Add Group:
+// Add Group:
 
 const addGroup = () => {
   const newGroup = {
@@ -366,42 +302,34 @@ const addGroup = () => {
   setGroups([...groups, newGroup]);
   saveState(); // Save state
 };
-
-  
-
+```
 
 ## Step 1.3: Add Undo/Redo Buttons
 
-  
-
 Add buttons to trigger undo and redo operations.
 
-  
+### Undo/Redo Buttons for File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+```javascript
 <div className="history-controls">
-  <button onClick={undo} disabled={historyIndex <= 0}>Undo</button>
-  <button onClick={redo} disabled={historyIndex >= history.length - 1}>Redo</button>
+  <button onClick={undo} disabled={historyIndex <= 0}>
+    Undo
+  </button>
+  <button onClick={redo} disabled={historyIndex >= history.length - 1}>
+    Redo
+  </button>
 </div>
+```
 
-
-
-
-2. Enhancing Export Functionality for Groups
-
-  
+## Step 2: Enhancing Export Functionality for Groups
 
 ## Step 2.1: Render Groups Respecting Opacity and Visibility
 
-  
-
 Update the rendering logic in Grid.js to account for group-level transformations.
 
-  
+### Render Group in File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const renderGroup = (ctx, group, scale = 1) => {
   const groupLayers = layers.filter((layer) => group.layers.includes(layer.id));
   ctx.globalAlpha = Math.min(...groupLayers.map((layer) => layer.opacity)); // Use the lowest opacity
@@ -423,21 +351,19 @@ const renderToCanvas = (scale = 1) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   groups.forEach((group) => renderGroup(ctx, group, scale));
-  layers.filter((layer) => !layer.group).forEach((layer) => renderLayer(ctx, layer, scale));
+  layers
+    .filter((layer) => !layer.group)
+    .forEach((layer) => renderLayer(ctx, layer, scale));
 };
-
-
+```
 
 ## Step 2.2: Add Export Options for Groups
 
-  
-
 Enable exporting groups as separate files or combined into one file.
 
-  
+### Export Groups in File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const exportGroupsToSVG = () => {
   groups.forEach((group) => {
     renderToCanvas(1); // Render the group
@@ -457,22 +383,22 @@ const exportAllGroupsToSVG = () => {
   link.download = `all-groups.svg`;
   link.click();
 };
+```
 
-  
-Add buttons for these export options:
+### Add buttons for these export options
 
+```html
 <div className="grid-controls">
-  <button onClick={exportGroupsToSVG}>Export Each Group</button>
-  <button onClick={exportAllGroupsToSVG}>Export All Groups</button>
+  <button onClick="{exportGroupsToSVG}">Export Each Group</button>
+  <button onClick="{exportAllGroupsToSVG}">Export All Groups</button>
 </div>
+```
 
-  
-  
-  3. Style Updates for History and Export Controls
+## 3. Style Updates for History and Export Controls
 
-  
-#### File: src/frontend/App.css
-css
+### File: src/frontend/App.css
+
+```css
 .history-controls {
   margin: 10px 0;
   display: flex;
@@ -498,54 +424,30 @@ css
   flex-direction: column;
   gap: 10px;
 }
+```
 
-
-
-Testing the Features
+## Step 7: Testing the Features
 
 1. Run the development server:
+   npm start
+1. Test Undo/Redo:
+   • Perform actions like adding layers/groups or reordering layers.
+   • Undo/redo changes and verify the state updates correctly.
+1. Test Group Export:
+   • Export each group as separate .svg files.
+   • Export all groups combined into a single .svg file.
 
-  
-
-npm start
-
-  
-
-  
-
-2. Test Undo/Redo:
-
-• Perform actions like adding layers/groups or reordering layers.
-
-• Undo/redo changes and verify the state updates correctly.
-
-3. Test Group Export:
-
-• Export each group as separate .svg files.
-
-• Export all groups combined into a single .svg file.
-
----
----
-
-Advanced Transformation Tools for Groups: Scaling and Rotation
-
-  
+## Advanced Transformation Tools for Groups: Scaling and Rotation
 
 We will implement tools to allow scaling and rotation of groups. These transformations will affect all layers within a group, and the changes will be reflected during rendering and export.
 
-  
-
 ## Step 1: Update Group Data Structure
-
-  
 
 Enhance the group structure to include transformation properties for scaling and rotation.
 
-  
+### Update Group Data Structure in File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+````javascript
 const App = () => {
   const [groups, setGroups] = useState([
     { id: 1, name: "Group 1", layers: [], scale: 1, rotation: 0 },
@@ -594,19 +496,13 @@ const App = () => {
   );
 };
 
-  
-
-
 ## Step 2: Apply Transformations During Rendering
-
-  
 
 Update the rendering logic to apply transformations for each group.
 
-  
+### File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const renderGroup = (ctx, group, scale = 1) => {
   const groupLayers = layers.filter((layer) => group.layers.includes(layer.id));
 
@@ -646,19 +542,13 @@ const renderToCanvas = (scale = 1) => {
   layers.filter((layer) => !layer.group).forEach((layer) => renderLayer(ctx, layer, scale));
 };
 
-
-
-
 ## Step 3: Export Groups with Transformations
-
-  
 
 Ensure transformations are respected during export.
 
-  
+### File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const exportTransformedGroupsToSVG = () => {
   const canvas = canvasRef.current;
   const ctx = canvas.getContext("2d");
@@ -676,20 +566,15 @@ const exportTransformedGroupsToSVG = () => {
 <div className="grid-controls">
   <button onClick={exportTransformedGroupsToSVG}>Export Groups with Transformations</button>
 </div>;
-
-
-
+````
 
 ## Step 4: Style Updates for Transformation Controls
 
-  
-
 Add styling for the new transformation controls.
 
-  
+### Styling for Transformation Controls in File: src/frontend/App.css
 
-#### File: src/frontend/App.css
-css
+```css
 .group-controls {
   margin: 20px 0;
   display: flex;
@@ -706,59 +591,41 @@ css
   margin-left: 10px;
   font-size: 14px;
 }
+```
 
-  
-  
-
-Step 5: Testing the Features
+## Step 5: Testing the Features
 
 1. Run the development server:
+   npm start
+1. Test Group Transformations:
+   • Adjust the scale and rotation for each group.
+   • Verify the transformations are applied correctly during rendering.
+1. Test Group Export:
+   • Export groups as .svg files with transformations applied.
+   • Verify each file respects the group’s scale and rotation.
 
-  
-
-npm start
-
-  
-
-  
-
-2. Test Group Transformations:
-
-• Adjust the scale and rotation for each group.
-
-• Verify the transformations are applied correctly during rendering.
-
-3. Test Group Export:
-
-• Export groups as .svg files with transformations applied.
-
-• Verify each file respects the group’s scale and rotation.
-
-
----
----
-
-Adding Drag-and-Drop Positioning for Groups
-
-  
+## Step 6: Adding Drag-and-Drop Positioning for Groups
 
 We will implement a drag-and-drop positioning tool to allow users to move entire groups around the grid.
 
-  
-
 ## Step 1: Add Positioning to the Group Data Structure
-
-  
 
 Enhance the group structure to include positionX and positionY.
 
-  
+### Add Positioning to Group Data Structure in File: src/frontend/App.js
 
-#### File: src/frontend/App.js
-
+```javascript
 const App = () => {
   const [groups, setGroups] = useState([
-    { id: 1, name: "Group 1", layers: [], scale: 1, rotation: 0, positionX: 0, positionY: 0 },
+    {
+      id: 1,
+      name: "Group 1",
+      layers: [],
+      scale: 1,
+      rotation: 0,
+      positionX: 0,
+      positionY: 0,
+    },
   ]);
 
   const updateGroupPosition = (groupId, position) => {
@@ -784,20 +651,15 @@ const App = () => {
     </div>
   );
 };
-
-  
-
+```
 
 ## Step 2: Implement Dragging for Groups
 
-  
-
 Use mouse events to allow users to drag groups on the grid.
 
-  
+### Handle Dragging in File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const handleDragStart = (groupId, startX, startY) => {
   setDraggingGroup({
     groupId,
@@ -819,10 +681,11 @@ const handleDrag = (event) => {
 const handleDragEnd = () => {
   setDraggingGroup(null); // Stop dragging
 };
+```
 
-  
 Attach these handlers to the grid and group rendering:
 
+````javascript
 <div
   onMouseDown={(event) => handleDragStart(group.id, event.clientX, event.clientY)}
   onMouseMove={handleDrag}
@@ -837,18 +700,13 @@ Attach these handlers to the grid and group rendering:
   {renderGroup(ctx, group, 1)}
 </div>
 
-
-
 ## Step 3: Update Render Logic to Respect Positioning
-
-  
 
 Apply the positionX and positionY properties during rendering.
 
-  
+### Render Group in File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const renderGroup = (ctx, group, scale = 1) => {
   const groupLayers = layers.filter((layer) => group.layers.includes(layer.id));
 
@@ -872,14 +730,11 @@ const renderGroup = (ctx, group, scale = 1) => {
   ctx.restore();
 };
 
-
-
 ## Step 4: Add Styling for Group Controls
 
-  
+### Styling for Group Controls in File: src/frontend/App.css
 
-#### File: src/frontend/App.css
-css
+```css
 .group-controls {
   margin: 20px 0;
   display: flex;
@@ -900,50 +755,37 @@ css
 .grid-group:active {
   cursor: grabbing;
 }
+````
 
-  
-
-Step 5: Testing Drag-and-Drop for Groups
+## Step 5: Testing Drag-and-Drop for Groups
 
 1. Run the development server:
+   npm start
+1. Test Dragging:
+   • Drag groups around the grid and verify their position updates correctly.
+1. Test Combined Transformations:
+   • Verify that scaling and rotation still apply correctly after repositioning a group.
 
-  
+## Step 6: Testing Drag-and-Drop for Groups
 
-npm start
+1. Run the development server:
+   npm start
+1. Test Dragging:
+   • Drag groups around the grid and verify their position updates correctly.
+1. Test Combined Transformations:
+   • Verify that scaling and rotation still apply correctly after repositioning a group.
 
-  
-
-  
-
-2. Test Dragging:
-
-• Drag groups around the grid and verify their position updates correctly.
-
-3. Test Combined Transformations:
-
-• Verify that scaling and rotation still apply correctly after repositioning a group.
-
----
----
-
-Enhance Group Positioning with Snapping to Grid
-
-  
+## Step 7: Enhance Group Positioning with Snapping to Grid
 
 We’ll improve group positioning by adding a snapping feature that ensures groups align with the grid when moved.
 
-  
-
-## Step 1: Add Grid Snapping Logic
-
-  
+### Add Grid Snapping Logic
 
 Implement a function to calculate the nearest snapped position based on the grid size.
 
-  
+### Calculate nearest grid position for File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+````javascript
 const snapToGrid = (value, gridSize, canvasSize) => {
   const cellSize = canvasSize / gridSize;
   return Math.round(value / cellSize) * cellSize;
@@ -971,19 +813,13 @@ const handleDragEnd = () => {
   }
 };
 
-  
-
-
 ## Step 2: Update Rendering Logic for Snapping
-
-  
 
 Ensure snapped positions are respected during rendering.
 
-  
+### File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const renderGroup = (ctx, group, scale = 1) => {
   const groupLayers = layers.filter((layer) => group.layers.includes(layer.id));
 
@@ -1007,18 +843,13 @@ const renderGroup = (ctx, group, scale = 1) => {
   ctx.restore();
 };
 
-
-
 ## Step 3: Visual Feedback for Snapping
-
-  
 
 Add visual feedback to indicate where the group will snap.
 
-  
+### File: src/frontend/Grid.js
 
-#### File: src/frontend/Grid.js
-
+```javascript
 const drawSnapPreview = (ctx, group) => {
   const cellSize = ctx.canvas.width / gridSize;
 
@@ -1039,46 +870,47 @@ groups.forEach((group) => {
   }
 });
 
-  
-
-
 ## Step 4: Style Updates for Snap Preview
-
-  
 
 Add styling for the snapping preview to make it visually distinct.
 
-  
+### File: src/frontend/App.css
 
-#### File: src/frontend/App.css
-css
+```css
 .snap-preview {
   border: 2px dashed rgba(0, 0, 255, 0.5);
 }
+````
 
-
-
-
-Step 5: Testing Snapping
+## Step 5: Testing Snapping
 
 1. Run the development server:
+   npm start
+1. Test Group Dragging:
+   • Drag groups and verify they snap to the nearest grid cell when released.
+1. Test Visual Feedback:
+   • Ensure the snapping preview aligns with the nearest grid cell during dragging.
+1. Test Combined Transformations:
+   • Verify that snapping works correctly alongside scaling and rotation.
 
-  
+## Step 6: Testing Snapping
 
-npm start
+1. Run the development server:
+   npm start
+1. Test Group Dragging:
+   • Drag groups and verify they snap to the nearest grid cell when released.
+1. Test Visual Feedback:
+   • Ensure the snapping preview aligns with the nearest grid cell during dragging.
+1. Test Combined Transformations:
+   • Verify that snapping works correctly alongside scaling and rotation.
 
-  
+## Step 7: Testing Snapping
 
-  
-
-2. Test Group Dragging:
-
-• Drag groups and verify they snap to the nearest grid cell when released.
-
-3. Test Visual Feedback:
-
-• Ensure the snapping preview aligns with the nearest grid cell during dragging.
-
-4. Test Combined Transformations:
-
-• Verify that snapping works correctly alongside scaling and rotation.
+1. Run the development server:
+   npm start
+1. Test Group Dragging:
+   • Drag groups and verify they snap to the nearest grid cell when released.
+1. Test Visual Feedback:
+   • Ensure the snapping preview aligns with the nearest grid cell during dragging.
+1. Test Combined Transformations:
+   • Verify that snapping works correctly alongside scaling and rotation.

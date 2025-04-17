@@ -1,8 +1,8 @@
+# Step 1: Code for Placeholder Menus
 
-## Step 1: Code for Placeholder Menus
+## File: src/frontend/Menus.js
 
-#### File: src/frontend/Menus.js
-
+```javascript
 import React from "react";
 import "./Menus.css";
 
@@ -25,7 +25,9 @@ const Menus = () => {
       <div className="menu">
         <span>View</span>
         <div className="dropdown">
-          <button onClick={() => handleMenuClick("Toggle Grid")}>Toggle Grid</button>
+          <button onClick={() => handleMenuClick("Toggle Grid")}>
+            Toggle Grid
+          </button>
           <button onClick={() => handleMenuClick("Zoom In")}>Zoom In</button>
           <button onClick={() => handleMenuClick("Zoom Out")}>Zoom Out</button>
         </div>
@@ -33,8 +35,12 @@ const Menus = () => {
       <div className="menu">
         <span>Settings</span>
         <div className="dropdown">
-          <button onClick={() => handleMenuClick("Grid Size")}>Grid Size</button>
-          <button onClick={() => handleMenuClick("Default Settings")}>Default Settings</button>
+          <button onClick={() => handleMenuClick("Grid Size")}>
+            Grid Size
+          </button>
+          <button onClick={() => handleMenuClick("Default Settings")}>
+            Default Settings
+          </button>
         </div>
       </div>
     </div>
@@ -42,12 +48,13 @@ const Menus = () => {
 };
 
 export default Menus;
+```
 
-  
 ## Step 2: CSS for Menus
 
-#### File: src/frontend/Menus.css
-css
+### File: src/frontend/Menus.css
+
+````css
 .menu-bar {
   display: flex;
   justify-content: space-around;
@@ -95,10 +102,9 @@ css
   background-color: #f0f0f0;
 }
 
-  
 ## Step 3: Integrate Menus into the Application
 
-#### File: src/frontend/App.js
+### File: src/frontend/App.js
 
 import React from "react";
 import Grid from "./Grid";
@@ -116,13 +122,11 @@ const App = () => {
 
 export default App;
 
-  
 ## Step 4: Testing
 
 1. Start the development server:
 bash
 npm start
-
 
 2. Verify the following:
 
@@ -141,18 +145,13 @@ npm start
 
 3. Prepare a structure for Settings Menu interactions.
 
-  
-
 ## Step 1: Add Props to Connect Menus with Other Components
-
-  
 
 Update the Menus component to accept props for controlling grid visibility and other actions.
 
-  
+### File: src/frontend/Menus.js
 
-#### File: src/frontend/Menus.js
-
+```javascript
 import React from "react";
 import "./Menus.css";
 
@@ -196,16 +195,11 @@ const Menus = ({ toggleGrid, setGridSize }) => {
 
 export default Menus;
 
-
 ### Step 2: Update the App Component to Handle Interactions
-
-  
 
 Add state and functions in the App component to manage grid visibility and grid size.
 
-  
-
-#### File: src/frontend/App.js
+### File: src/frontend/App.js
 
 import React, { useState } from "react";
 import Grid from "./Grid";
@@ -230,14 +224,11 @@ const App = () => {
 
 export default App;
 
-
 ### Step 3: Update the Grid Component
-
-  
 
 Modify the Grid component to accept props for grid size and visibility.
 
-#### File: src/frontend/Grid.js
+### File: src/frontend/Grid.js
 
 import React from "react";
 import "./Grid.css";
@@ -267,7 +258,6 @@ const Grid = ({ gridSize, gridVisible }) => {
 
 export default Grid;
 
- 
 ### Step 4: Test the Enhanced Menus
 
 1. Functionality to Verify:
@@ -280,25 +270,19 @@ export default Grid;
 bash
 npm start
 
-
 3. Confirm:
 
 • Grid toggling works as expected.
 
 • Grid resizing through menu options updates the grid dynamically.
 
-  
-
 ### Step 5: Placeholder Actions for File Menu
-
-  
 
 Enhance the File Menu to log realistic placeholders for now:
 
-  
+### File: src/frontend/Menus.js (Updated Snippet)
 
-#### File: src/frontend/Menus.js (Updated Snippet)
-
+```javascript
 <div className="menu">
   <span>File</span>
   <div className="dropdown">
@@ -308,12 +292,10 @@ Enhance the File Menu to log realistic placeholders for now:
     <button onClick={() => console.log("Exporting the project...")}>Export</button>
   </div>
 </div>
+````
 
-  
 ## Checklist Progress
 
 • Connect “Toggle Grid” to the grid system.
-
 • Connect grid size changes to the Settings Menu.
-
 • Add realistic logging for File Menu actions.
