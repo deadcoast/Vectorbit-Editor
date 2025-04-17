@@ -5,6 +5,105 @@
  * Implementation of core pattern generation functions
  */
 
+import seedrandom from 'seedrandom';
+
+/**
+ * Pattern Types Enumeration
+ */
+export const PATTERN_TYPES = {
+  SOLID: 'solid',
+  DOT: 'dot',
+  LINE: 'line',
+  NOISE: 'noise',
+  CROSSHATCH: 'crosshatch',
+  DITHER: 'dither',
+  CHECKER: 'checker',
+  PERLIN: 'perlin',
+  FLOW_FIELD: 'flow_field'
+};
+
+/**
+ * Main pattern generation function
+ * @param {object} options - Pattern options
+ * @param {string} options.type - Pattern type from PATTERN_TYPES
+ * @param {number} options.size - Size of the pattern grid
+ * @param {string} options.primaryColor - Primary color in hex format
+ * @param {string} options.secondaryColor - Secondary color in hex format (if applicable)
+ * @param {number} options.density - Pattern density (0-1)
+ * @param {number} options.angle - Rotation angle in degrees (if applicable)
+ * @param {number} options.seed - Random seed (if applicable)
+ * @returns {Array} Generated pattern data
+ */
+export const generatePattern = (options) => {
+  const {
+    type = PATTERN_TYPES.SOLID,
+    size = 16,
+    primaryColor = '#000000',
+    secondaryColor = '#FFFFFF',
+    density = 0.5,
+    angle = 0,
+    seed = Math.floor(Math.random() * 10000)
+  } = options;
+
+  // Generate the requested pattern type
+  switch (type) {
+    case PATTERN_TYPES.SOLID:
+      return generateSolidPattern(size, primaryColor);
+    case PATTERN_TYPES.DOT:
+      return generateDotPattern(size, density, primaryColor);
+    case PATTERN_TYPES.LINE:
+      return generateLinePattern(size, density, primaryColor, angle);
+    case PATTERN_TYPES.NOISE:
+      return generateNoisePattern(size, density, primaryColor, secondaryColor, seed);
+    case PATTERN_TYPES.CROSSHATCH:
+      return generateCrosshatchPattern(size, density, primaryColor);
+    case PATTERN_TYPES.DITHER:
+      return generateDitherPattern(primaryColor, secondaryColor, density);
+    case PATTERN_TYPES.CHECKER:
+      return generateCheckerPattern(size, primaryColor, secondaryColor);
+    case PATTERN_TYPES.PERLIN:
+      return generatePerlinPattern(size, density, primaryColor, secondaryColor, seed);
+    case PATTERN_TYPES.FLOW_FIELD:
+      return generateFlowFieldPattern(size, density, primaryColor, angle, seed);
+    default:
+      console.warn(`Unknown pattern type: ${type}, falling back to solid`);
+      return generateSolidPattern(size, primaryColor);
+  }
+};
+
+// Utility functions
+const validateNumeric = (value, name, min = Number.NEGATIVE_INFINITY, max = Number.POSITIVE_INFINITY) => {
+  if (typeof value !== 'number' || isNaN(value)) {
+    throw new Error(`${name} must be a number`);
+  }
+  if (value < min || value > max) {
+    throw new Error(`${name} must be between ${min} and ${max}`);
+  }
+};
+
+const validateColor = (color) => {
+  if (typeof color !== 'string' || !color.match(/^#([0-9A-F]{3}){1,2}$/i)) {
+    throw new Error('Invalid color format, must be hex (e.g., #FF0000)');
+  }
+};
+
+const hexToRgb = (hex) => {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  const formattedHex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(formattedHex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      }
+    : null;
+};
+
+const rgbToHex = (r, g, b) => {
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+};
+
 /**
  * Generates a solid color pattern
  * @param {number} size - Size of the pattern grid

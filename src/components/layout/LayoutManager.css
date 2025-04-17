@@ -1,0 +1,350 @@
+/**
+ * Layout Manager Component Styles
+ */
+
+.layout-manager {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Draggable Panel */
+.draggable-panel {
+  position: absolute;
+  background-color: #2a2a2a;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+  z-index: 10;
+}
+
+.draggable-panel.dragging {
+  opacity: 0.8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.draggable-panel.collapsed .panel-content {
+  display: none;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #333;
+  cursor: move;
+  user-select: none;
+}
+
+.panel-icon {
+  margin-right: 8px;
+  font-size: 14px;
+  color: #999;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #e0e0e0;
+  flex: 1;
+}
+
+.panel-controls {
+  display: flex;
+  align-items: center;
+}
+
+.panel-collapse-btn,
+.panel-close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  margin: 0 0 0 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.panel-collapse-btn:hover,
+.panel-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.panel-content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+.panel-resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  z-index: 20;
+}
+
+.panel-resize-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #666;
+  border-bottom: 2px solid #666;
+}
+
+/* Panel Toggles */
+.panel-toggle-btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #333;
+  border: none;
+  border-radius: 4px;
+  color: #999;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.panel-toggle-btn.active {
+  background-color: #444;
+  color: #e0e0e0;
+}
+
+.panel-toggle-btn:hover {
+  background-color: #444;
+  color: #e0e0e0;
+}
+
+.panel-toggle-btn .icon {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.panel-toggle-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Layout Settings Panel */
+.layout-settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.layout-settings-panel {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #e0e0e0;
+  animation: panel-slide-in 0.3s ease forwards;
+}
+
+@keyframes panel-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.layout-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #444;
+}
+
+.layout-settings-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-button:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.layout-settings-content {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(90vh - 60px);
+}
+
+.layout-save-section,
+.saved-layouts-section,
+.layout-reset-section {
+  margin-bottom: 24px;
+}
+
+.layout-save-section h3,
+.saved-layouts-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+.layout-save-form {
+  display: flex;
+  gap: 8px;
+}
+
+.layout-save-form input {
+  flex: 1;
+  padding: 8px 12px;
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.layout-save-form input:focus {
+  outline: none;
+  border-color: #0078ff;
+}
+
+.save-layout-btn,
+.apply-layout-btn,
+.reset-layout-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.save-layout-btn {
+  background-color: #0078ff;
+  color: white;
+}
+
+.save-layout-btn:hover:not(:disabled) {
+  background-color: #0085ff;
+}
+
+.save-layout-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.apply-layout-btn {
+  background-color: #555;
+  color: white;
+}
+
+.apply-layout-btn:hover {
+  background-color: #666;
+}
+
+.reset-layout-btn {
+  background-color: #f44336;
+  color: white;
+  width: 100%;
+}
+
+.reset-layout-btn:hover {
+  background-color: #f55a4e;
+}
+
+.saved-layouts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.saved-layout-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #444;
+}
+
+.saved-layout-item:last-child {
+  border-bottom: none;
+}
+
+.layout-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-name {
+  font-weight: 500;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+.layout-timestamp {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.no-layouts-message {
+  text-align: center;
+  color: #999;
+  padding: 16px;
+  border: 1px dashed #444;
+  border-radius: 4px;
+}

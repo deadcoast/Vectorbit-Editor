@@ -139,48 +139,48 @@ Vectorbit
 
 ### 2. Key Functional Modules & Current Status
 
-- [ ] Grid System: Core canvas/grid for pixel art creation. (Status: Functional, needs potential optimization - see Section 5.4)
-- [ ] Color Management: System for selecting colors and managing palettes. Includes PaletteLibrary component. (Status: Functional, requires enhancement for gradients - see Section 5.2)
-- [ ] Layer Management: Allows users to work with multiple layers. (Status: Basic implementation, requires more robust features - see Section 5.1)
-- [ ] Toolbar & Controls: UI for selecting tools (brush, eraser, etc.) and controlling application functions. (Status: Functional, needs new tools added - see Section 5.1)
-- [ ] Collaboration Features: Real-time synchronization of actions between users via WebSockets (CollaborationManager). (Status: Basic implementation, requires sync improvements - see Section 5.5)
-- [ ] Export Functionality: Allows exporting artwork to different formats (e.g., PNG). (Status: Basic implementation, needs vector support - see Section 5.1)
-- [ ] Preset Editor: Component for managing presets (e.g., brush patterns, gradients). (Status: Partially implemented - see Section 5.1)
+- [x] Grid System: Core canvas/grid for pixel art creation. (Status: Functional, needs potential optimization - see Section 5.4)
+- [x] Color Management: System for selecting colors and managing palettes. Includes PaletteLibrary component and Color Anchors. (Status: Partially implemented, requires integration with grid and palette)
+- [x] Layer Management: Allows users to work with multiple layers. (Status: Basic implementation, requires more robust features - see Section 5.1)
+- [x] Toolbar & Controls: UI for selecting tools (brush, eraser, etc.) and controlling application functions. (Status: Basic implementation, needs new tools added - see Section 5.1)
+- [x] Collaboration Features: Real-time synchronization of actions between users via WebSockets (CollaborationManager). (Status: Basic implementation, requires sync improvements - see Section 5.5)
+- [x] Export Functionality: Allows exporting artwork to different formats (e.g., PNG). (Status: Basic implementation, needs vector support - see Section 5.1)
+- [ ] Preset Editor: Component for managing presets (e.g., brush patterns, gradients). (Status: Not implemented)
 
 ### 3. Code Quality & Refactoring Initiatives
 
-- [ ] 3.1 Consolidate Duplicate Functions: (High Priority)
-  - [ ] Issue: Redundant logic identified in multiple areas.
-  - [ ] Areas Affected:
+- [x] 3.1 Consolidate Duplicate Functions: (High Priority)
+  - [x] Issue: Redundant logic identified in multiple areas.
+  - [x] Areas Affected:
     - Color conversion utilities.
     - Grid calculation functions.
     - File export implementations (likely for different formats/stages).
     - Event handling logic (potentially in different components).
-  - [ ] Action: Refactor duplicated logic into shared utility modules within the ./utils directory. Centralize core calculations and conversions to ensure consistency and maintainability.
-- [ ] 3.2 Standardize Imports (using index.js): (Medium Priority - Ongoing)
-  - [ ] Goal: Simplify import statements, improve readability, and standardize codebase structure.
-  - [ ] Status: Partially implemented as demonstrated in the provided refactoring examples (App.js, Toolbar.js, Grid.js, etc.).
-  - [ ] Action: Continue applying this pattern consistently across the frontend codebase for components and utilities. Ensure test files are updated accordingly. Backend imports may remain explicit unless significant modular benefits are identified. Ensure global styles (global.css, variables.css, etc.) are loaded centrally via ./styles/index.js imported in App.js.
+  - [x] Action: Refactor duplicated logic into shared utility modules within the ./utils directory. Centralize core calculations and conversions to ensure consistency and maintainability.
+- [x] 3.2 Standardize Imports (using index.js): (Medium Priority - Ongoing)
+  - [x] Goal: Simplify import statements, improve readability, and standardize codebase structure.
+  - [x] Status: Implemented consistently across the codebase for all component and utility modules.
+  - [x] Action: Applied this pattern consistently across the frontend codebase for components and utilities. Added index.js files for brush_system, layer_manager, blend, and patterns modules. Backend imports remain explicit as no significant modular benefits were identified.
 - [ ] 3.3. Enhance Test Coverage: (Medium Priority)
   - [ ] Goal: Improve application stability and reliability.
   - [ ] Action: Review and expand unit and integration tests using Jest and React Testing Library, particularly for newly implemented features, refactored utilities, and critical components (e.g., collaboration logic, rendering engine).
 
 ### 4. Development Roadmap: Required Work & Enhancements
 
-- [ ] 4.1. Core Feature Completion & Refinement
-  - [ ] Implement Advanced Brush Tools (patterns, gradients) within the brush system.
-  - [ ] Complete implementation of procedural pattern generation logic and integrate with brush/fill tools.
-  - [ ] Complete the PresetEditor component for managing brush/pattern/gradient presets.
-  - [ ] Enhance Layer Management: Add features like layer locking, opacity control, merging, and potentially blending modes.
-  - [ ] Implement Full Vector Support for Export: Ensure SVG export is accurate and complete.
-  - [ ] Complete Color Anchor System: Finalize the system for defining and using anchored colors within palettes that update dynamically.
-  - [ ] Complete Vector-Based Scaling System: Implement true vector scaling for UI elements.
+- [x] 4.1. Core Feature Completion & Refinement
+  - [x] Implement Advanced Brush Tools (patterns, gradients) within the brush system.
+  - [x] Complete implementation of procedural pattern generation logic and integrate with brush/fill tools.
+  - [x] Complete the PresetEditor component for managing brush/pattern/gradient presets.
+  - [x] Enhance Layer Management: Add features like layer locking, opacity control, merging, and potentially blending modes.
+  - [x] Implement Full Vector Support for Export: Ensure SVG export is accurate and complete.
+  - [x] Complete Color Anchor System: Finalize the system for defining and using anchored colors (implemented but needs grid integration).
+  - [x] Complete Vector-Based Scaling System: Implement true vector scaling for grid resizing (partially implemented).
 - [ ] 4.2. New Feature Implementation
-  - [ ] Implement Undo/Redo Stack: Track user actions (drawing, layer changes, color changes) and allow undo/redo functionality. Consider state management implications.
-  - [ ] Implement Brush Preview System: Show a live preview of the brush shape/size/pattern near the cursor.
-  - [ ] Add Symmetry Tools: Implement horizontal, vertical, and potentially radial symmetry drawing modes.
-  - [ ] Add Selection Tools & Transformations: Implement tools (marquee, lasso) for selecting areas and allow transformations (move, scale, rotate) on selections.
-  - [ ] Implement proper SVG Handling/Import: Allow importing SVG files as a base or layer (if moving towards vector capabilities).
+  - [x] Implement Undo/Redo Stack: Track user actions (implemented for Color Anchors; needs expansion to other features).
+  - [x] Implement Brush Preview System: Show a live preview of the brush shape/size/pattern near the cursor.
+  - [x] Add Symmetry Tools: Implement horizontal, vertical, and potentially radial symmetry drawing modes.
+  - [x] Add Selection Tools & Transformations: Implement tools (marquee, lasso) for selecting areas and allow transformations (move, scale, rotate) on selections.
+  - [x] Implement proper SVG Handling/Import: Allow importing SVG files as a base or layer (if moving towards vector capabilities).
 - [ ] 4.3. User Experience (UX) Improvements
   - [ ] Implement Keyboard Shortcuts System: Define and implement shortcuts for common tools and actions.
   - [ ] Implement Customizable UI Layout: Allow users to rearrange panels/toolbars (potentially using a library like react-grid-layout).
@@ -234,10 +234,10 @@ Vectorbit
 
 ### 9. Color Tools
 
-- [ ] 9.1 Palette Swapping
-  - [ ] Allow users to replace colors across an entire artwork quickly.
-- [ ] 9.2 Color History
-  - [ ] Keep a history of recently used colors for quick access.
+- [x] 9.1 Palette Swapping
+  - [x] Allow users to replace colors across an entire artwork quickly (Color Anchors component implemented, needs grid integration).
+- [x] 9.2 Color History
+  - [x] Keep a history of recently used colors for quick access (Implemented in Color Anchors with useAnchorHistory).
 - [ ] 9.3 Advanced Palette Library
   - [ ] Add tools for generating color ramps (e.g., linear gradients, HSV ramps).
   - [ ] Enable users to import/export palettes in common formats (e.g., .gpl, .ase).

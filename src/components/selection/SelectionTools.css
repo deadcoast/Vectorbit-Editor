@@ -1,0 +1,126 @@
+/**
+ * Selection Tools Styles
+ */
+
+.selection-tools {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.selection-controls {
+  background-color: #2a2a2a;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.selection-controls h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.selection-mode-buttons,
+.transform-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.selection-mode-buttons button,
+.transform-buttons button {
+  padding: 6px 10px;
+  background-color: #3d3d3d;
+  border: none;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selection-mode-buttons button:hover,
+.transform-buttons button:hover {
+  background-color: #4d4d4d;
+}
+
+.selection-mode-buttons button.active,
+.transform-buttons button.active {
+  background-color: #0078ff;
+  color: white;
+}
+
+.transform-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.transform-actions button {
+  flex: 1;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apply-button {
+  background-color: #00aa55;
+  color: white;
+}
+
+.apply-button:hover {
+  background-color: #00cc66;
+}
+
+.cancel-button {
+  background-color: #aa5500;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #cc6600;
+}
+
+.clear-selection-button {
+  width: 100%;
+  padding: 6px 12px;
+  background-color: #555555;
+  border: none;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 13px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-selection-button:hover {
+  background-color: #666666;
+}
+
+.clear-selection-button:disabled {
+  background-color: #333333;
+  color: #777777;
+  cursor: not-allowed;
+}
+
+.selection-canvas,
+.transform-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.transform-preview {
+  z-index: 11;
+}

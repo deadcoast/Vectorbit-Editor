@@ -25,7 +25,7 @@ Vectorbit is a pixelart illustrating software that allows you to customize the b
 - default is a vector file for resizing purposes under the [sbgs]
 - Export as; jpg, png
 
-```
+```text
 ├── .IGNORE/
 │   └── 99 vectorbit old/
 │       └── Debugged 1/

@@ -1,0 +1,232 @@
+/**
+ * SVG Importer Component Styles
+ */
+
+.svg-importer {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+  max-width: 100%;
+}
+
+.svg-importer h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #f5f5f5;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+}
+
+.svg-importer h3 {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+/* Import source selector */
+.import-source-selector {
+  display: flex;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.import-source-selector label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.import-source-selector input[type="radio"] {
+  margin-right: 6px;
+}
+
+/* File input container */
+.file-input-container {
+  margin-bottom: 16px;
+}
+
+.file-input-container input[type="file"] {
+  background-color: #3d3d3d;
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
+  cursor: pointer;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
+.file-name {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* URL input container */
+.url-input-container {
+  margin-bottom: 16px;
+}
+
+.url-input-container input[type="url"] {
+  background-color: #3d3d3d;
+  border-radius: 4px;
+  padding: 8px 12px;
+  width: 100%;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  outline: none;
+  font-size: 14px;
+}
+
+.url-input-container input[type="url"]:focus {
+  border-color: #0078ff;
+}
+
+/* Preview container */
+.preview-container {
+  margin-bottom: 16px;
+}
+
+.svg-preview {
+  background-color: #454545;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  max-height: 200px;
+  overflow: hidden;
+  border: 1px solid #555;
+}
+
+.svg-preview img {
+  max-width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+/* Import options */
+.import-options {
+  background-color: #333;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.import-options label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.import-options input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.scale-mode {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.scale-mode span {
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.scale-mode select {
+  background-color: #3d3d3d;
+  border-radius: 4px;
+  padding: 6px 10px;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Error message */
+.import-error {
+  background-color: rgba(255, 50, 50, 0.2);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-left: 3px solid #ff5050;
+}
+
+.import-error p {
+  margin: 0;
+  color: #ff7070;
+  font-size: 14px;
+}
+
+/* Import progress */
+.import-progress {
+  background-color: #3d3d3d;
+  border-radius: 4px;
+  height: 24px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background-color: #0078ff;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.import-progress span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.action-buttons button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.cancel-button {
+  background-color: #555;
+  color: #e0e0e0;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: #666;
+}
+
+.import-button {
+  background-color: #0078ff;
+  color: white;
+}
+
+.import-button:hover:not(:disabled) {
+  background-color: #0088ff;
+}
+
+.action-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

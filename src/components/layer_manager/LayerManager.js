@@ -3,6 +3,8 @@ import React, { useState, useCallback, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useAnchorHistory } from "../state/useAnchorHistory";
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { BLEND_MODES } from "../../utils/blend/BlendModeProcessor";
+import { setLayerLock, setLayerOpacity, setLayerBlendMode } from "../grid/GridManager";
 import "./LayerManager.css";
 
 const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
@@ -124,10 +126,35 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
     setActiveLayer(mergedLayer.id);
   }, [layers, setLayers, setActiveLayer, addToHistory]);
 
-  // Layer effects and blending
+  // Layer effects and blending modes
   const handleSetBlendMode = useCallback((id, blendMode) => {
     handleLayerPropertyChange(id, 'blendMode', blendMode);
-  }, [handleLayerPropertyChange]);
+    // Also update with the new grid manager function
+    setLayerBlendMode(id, blendMode, layers, setLayers);
+  }, [handleLayerPropertyChange, layers, setLayers]);
+  
+  // Layer opacity control
+  const handleOpacityChange = useCallback((id, opacity) => {
+    handleLayerPropertyChange(id, 'opacity', opacity);
+    // Also update with the new grid manager function
+    setLayerOpacity(id, opacity, layers, setLayers);
+  }, [handleLayerPropertyChange, layers, setLayers]);
+  
+  // Layer locking functionality
+  const handleLayerLockToggle = useCallback((id) => {
+    const layer = layers.find(layer => layer.id === id);
+    if (!layer) return;
+    
+    const newLockedState = !layer.locked;
+    handleLayerPropertyChange(id, 'locked', newLockedState);
+    // Also update with the new grid manager function
+    setLayerLock(id, newLockedState, layers, setLayers);
+    
+    // If locking the active layer, show a notification
+    if (newLockedState && id === activeLayer) {
+      showNotification("Active layer is now locked. Select another layer to draw.", "info");
+    }
+  }, [handleLayerPropertyChange, layers, setLayers, activeLayer]);
 
   const handleAddEffect = useCallback((id, effect) => {
     const layer = layers.find(layer => layer.id === id);
@@ -237,11 +264,20 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
                           value={layer.blendMode}
                           onChange={(e) => handleSetBlendMode(layer.id, e.target.value)}
                           className="blend-mode-select"
+                          disabled={layer.locked}
                         >
-                          <option value="normal">Normal</option>
-                          <option value="multiply">Multiply</option>
-                          <option value="screen">Screen</option>
-                          <option value="overlay">Overlay</option>
+                          <option value={BLEND_MODES.NORMAL}>Normal</option>
+                          <option value={BLEND_MODES.MULTIPLY}>Multiply</option>
+                          <option value={BLEND_MODES.SCREEN}>Screen</option>
+                          <option value={BLEND_MODES.OVERLAY}>Overlay</option>
+                          <option value={BLEND_MODES.DARKEN}>Darken</option>
+                          <option value={BLEND_MODES.LIGHTEN}>Lighten</option>
+                          <option value={BLEND_MODES.COLOR_DODGE}>Color Dodge</option>
+                          <option value={BLEND_MODES.COLOR_BURN}>Color Burn</option>
+                          <option value={BLEND_MODES.HARD_LIGHT}>Hard Light</option>
+                          <option value={BLEND_MODES.SOFT_LIGHT}>Soft Light</option>
+                          <option value={BLEND_MODES.DIFFERENCE}>Difference</option>
+                          <option value={BLEND_MODES.EXCLUSION}>Exclusion</option>
                         </select>
 
                         <label className="opacity-control">
@@ -252,7 +288,8 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
                             max="1"
                             step="0.01"
                             value={layer.opacity}
-                            onChange={(e) => handleLayerPropertyChange(layer.id, 'opacity', parseFloat(e.target.value))}
+                            onChange={(e) => handleOpacityChange(layer.id, parseFloat(e.target.value))}
+                            disabled={layer.locked}
                           />
                           <span>{Math.round(layer.opacity * 100)}%</span>
                         </label>
@@ -264,8 +301,9 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
                           Rename
                         </button>
                         <button 
-                          onClick={() => handleLayerPropertyChange(layer.id, 'locked', !layer.locked)}
+                          onClick={() => handleLayerLockToggle(layer.id)}
                           className={`lock-toggle ${layer.locked ? 'locked' : ''}`}
+                          title={layer.locked ? "Unlock this layer" : "Lock this layer to prevent editing"}
                         >
                           {layer.locked ? "Unlock" : "Lock"}
                         </button>

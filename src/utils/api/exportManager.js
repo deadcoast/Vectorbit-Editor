@@ -11,20 +11,9 @@
  * @returns {string} - SVG content as a string.
  */
 export const exportToSVG = (gridSize, cellColors, options = {}) => {
-  const { width = 1024, height = 1024 } = options;
-
-  let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${gridSize} ${gridSize}" width="${width}" height="${height}">`;
-
-  cellColors.forEach((color, index) => {
-    if (color) {
-      const x = index % gridSize;
-      const y = Math.floor(index / gridSize);
-      svgContent += `<rect x="${x}" y="${y}" width="1" height="1" fill="${color}" />`;
-    }
-  });
-
-  svgContent += "</svg>";
-  return svgContent;
+  // Import from svgExportUtility to use the optimized SVG export function
+  const { exportToSVGOptimized } = require('./svgExportUtility');
+  return exportToSVGOptimized(gridSize, cellColors, options);
 };
 
 /**
@@ -138,26 +127,36 @@ export const saveExportToAPI = async (endpoint, fileBlob, fileName, metadata = {
  * @param {Array<string|null>} cellColors - Array of cell colors (HEX or null).
  * @param {React.RefObject<HTMLCanvasElement>} canvasRef - Reference to the canvas element.
  * @param {Object} gridData - Full grid data for JSON export.
+ * @param {Array} layers - Optional array of layer objects for advanced SVG export.
  */
-export const exportAllFormats = (gridSize, cellColors, canvasRef, gridData) => {
-  // Export as SVG
-  const svgContent = exportToSVG(gridSize, cellColors);
-  const svgBlob = new Blob([svgContent], { type: "image/svg+xml" });
-  const svgLink = document.createElement("a");
-  svgLink.href = URL.createObjectURL(svgBlob);
-  svgLink.download = "grid.svg";
-  svgLink.click();
-
-  // Export as PNG
+export const exportAllFormats = (gridSize, cellColors, canvasRef, gridData, layers = null) => {
+  // Export to PNG
   const pngDataUrl = exportToPNG(gridSize, cellColors, canvasRef);
   const pngLink = document.createElement("a");
   pngLink.href = pngDataUrl;
-  pngLink.download = "grid.png";
+  pngLink.download = "artwork.png";
   pngLink.click();
 
-  // Export as JSON
+  // Export to SVG - use layers if available for advanced export
+  let svgContent;
+  if (layers && layers.length > 0) {
+    // Use the advanced SVG export with full vector support if layers are provided
+    const { exportLayersToSVG } = require('./svgExportUtility');
+    svgContent = exportLayersToSVG(gridSize, layers);
+  } else {
+    // Fall back to basic SVG export
+    svgContent = exportToSVG(gridSize, cellColors);
+  }
+  
+  const svgBlob = new Blob([svgContent], { type: "image/svg+xml" });
+  const svgLink = document.createElement("a");
+  svgLink.href = URL.createObjectURL(svgBlob);
+  svgLink.download = "artwork.svg";
+  svgLink.click();
+
+  // Export to JSON
   exportToJSON(gridData);
 
-  // Export as CSV
+  // Export to CSV
   exportToCSV(cellColors, gridSize);
 };

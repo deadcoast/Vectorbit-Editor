@@ -1,0 +1,209 @@
+/**
+ * Help System Component Styles
+ */
+
+.help-system-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.help-panel {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 900px;
+  height: 90vh;
+  max-height: 700px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #e0e0e0;
+  animation: panel-slide-in 0.3s ease forwards;
+}
+
+@keyframes panel-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #444;
+}
+
+.help-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.help-close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.help-close-button:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.help-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.help-sidebar {
+  width: 200px;
+  border-right: 1px solid #444;
+  padding: 16px 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.help-sidebar h3 {
+  padding: 0 16px;
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #999;
+}
+
+.help-topics-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.help-topics-list li {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.2s;
+}
+
+.help-topics-list li:hover {
+  background-color: #333;
+}
+
+.help-topics-list li.active {
+  background-color: #333;
+  border-left: 3px solid #0078ff;
+  color: #0078ff;
+}
+
+.help-shortcuts-button {
+  padding: 16px;
+  margin-top: auto;
+  border-top: 1px solid #444;
+}
+
+.help-shortcuts-button button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0078ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.help-shortcuts-button button:hover {
+  background-color: #0085ff;
+}
+
+.help-topic-content {
+  flex: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+}
+
+.help-topic-content h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #0078ff;
+}
+
+.topic-html-content {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.topic-html-content h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.topic-html-content h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+.topic-html-content p {
+  margin-bottom: 16px;
+}
+
+.topic-html-content ul {
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+
+.topic-html-content li {
+  margin-bottom: 6px;
+}
+
+.topic-html-content kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-family: monospace;
+  line-height: 1.4;
+  color: #e0e0e0;
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  margin: 0 2px;
+}
