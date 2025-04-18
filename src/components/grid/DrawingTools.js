@@ -1,7 +1,7 @@
 // src/components/Grid/DrawingTools.js
 import { debounce } from 'lodash';
 
-import { interpolateColors, generateNoise } from '../utils/colorUtils';
+import { multiplyColors, screenColors, overlayColors } from '../../utils/color/colorCore';
 
 /**
  * Brush Types and Effects Configuration
@@ -93,7 +93,10 @@ export const applyBrush = (x, y, color, brushConfig, gridSize, setCellColors) =>
       applyGradientBrush(x, y, color, size, angle, opacity, updateCell);
       break;
 
-    // ... existing brush types remain but enhanced
+    default:
+      // Default to pixel perfect brush if type is not recognized
+      applyPixelPerfectBrush(x, y, color, size, updateCell);
+      break;
   }
 
   // Apply effects
@@ -135,6 +138,7 @@ const applyAirbrush = (x, y, color, size, pressure, opacity, updateCell) => {
 };
 
 const applyTexturedBrush = (x, y, color, size, texture, opacity, updateCell) => {
+  // Generate a texture pattern based on the texture type and size
   const texturePattern = generateTexturePattern(texture, size);
 
   for (let dx = -size; dx <= size; dx++) {
@@ -146,6 +150,7 @@ const applyTexturedBrush = (x, y, color, size, texture, opacity, updateCell) => 
 };
 
 const applyDitheredBrush = (x, y, color, size, updateCell) => {
+  // Get predefined dithering patterns
   const patterns = getDitheringPatterns();
   const selectedPattern = patterns[Math.floor(Math.random() * patterns.length)];
 
@@ -175,7 +180,9 @@ const applyBrushEffect = (x, y, effect, color, size, gridSize, setCellColors) =>
       applyNeonEffect(x, y, color, size, gridSize, setCellColors);
       break;
 
-    // ... more effects
+    default:
+      // No effect applied
+      break;
   }
 };
 
@@ -197,6 +204,280 @@ const applyBlendMode = (baseColor, blendColor, mode, opacity) => {
   }
 };
 
+// Missing function implementations for brush effects
+const applySymmetricalBrush = (x, y, color, size, gridSize, updateCell) => {
+  // Apply symmetrical brush with mirrored points across the grid
+  const centerX = Math.floor(gridSize / 2);
+  const centerY = Math.floor(gridSize / 2);
+
+  // Apply the brush at the original point
+  applyPixelPerfectBrush(x, y, color, size, updateCell);
+
+  // Apply mirroring on X axis
+  const mirrorX = centerX + (centerX - x);
+  if (mirrorX >= 0 && mirrorX < gridSize) {
+    applyPixelPerfectBrush(mirrorX, y, color, size, updateCell);
+  }
+
+  // Apply mirroring on Y axis
+  const mirrorY = centerY + (centerY - y);
+  if (mirrorY >= 0 && mirrorY < gridSize) {
+    applyPixelPerfectBrush(x, mirrorY, color, size, updateCell);
+  }
+
+  // Apply mirroring on both X and Y axes
+  if (mirrorX >= 0 && mirrorX < gridSize && mirrorY >= 0 && mirrorY < gridSize) {
+    applyPixelPerfectBrush(mirrorX, mirrorY, color, size, updateCell);
+  }
+};
+
+const applyShaderBrush = (x, y, color, size, angle, updateCell) => {
+  // Apply shader brush with angular gradient
+  for (let dx = -size; dx <= size; dx++) {
+    for (let dy = -size; dy <= size; dy++) {
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance <= size) {
+        const pointAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+        const angleDiff = Math.abs((pointAngle - angle) % 360);
+        const opacity = Math.max(0, 1 - angleDiff / 180 - distance / size);
+        updateCell(x + dx, y + dy, color, opacity);
+      }
+    }
+  }
+};
+
+const applyNoiseBrush = (x, y, color, size, opacity, updateCell) => {
+  // Apply noise brush with random opacity variations
+  for (let dx = -size; dx <= size; dx++) {
+    for (let dy = -size; dy <= size; dy++) {
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance <= size) {
+        const noiseOpacity = opacity * Math.random();
+        updateCell(x + dx, y + dy, color, noiseOpacity);
+      }
+    }
+  }
+};
+
+const applyGradientBrush = (x, y, color, size, angle, opacity, updateCell) => {
+  // Apply gradient brush with directional fade
+  const radianAngle = angle * (Math.PI / 180);
+  const dirX = Math.cos(radianAngle);
+  const dirY = Math.sin(radianAngle);
+
+  for (let dx = -size; dx <= size; dx++) {
+    for (let dy = -size; dy <= size; dy++) {
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance <= size) {
+        // Calculate dot product for directional gradient
+        const dot = (dx * dirX + dy * dirY) / size;
+        const gradientOpacity = opacity * Math.max(0, 0.5 + dot * 0.5);
+        updateCell(x + dx, y + dy, color, gradientOpacity);
+      }
+    }
+  }
+};
+
+// Functions for generating patterns and textures
+const generateTexturePattern = (texture, size) => {
+  // Create a 2D array for the texture pattern
+  const pattern = Array(size * 2 + 1)
+    .fill()
+    .map(() => Array(size * 2 + 1).fill(0));
+
+  // Fill the pattern based on texture type
+  if (!texture) return pattern;
+
+  switch (texture) {
+    case 'dots':
+      // Create a dotted pattern
+      for (let i = 0; i < pattern.length; i++) {
+        for (let j = 0; j < pattern[i].length; j++) {
+          pattern[i][j] = i % 2 === 0 && j % 2 === 0 ? 1 : 0;
+        }
+      }
+      break;
+    case 'lines':
+      // Create a lined pattern
+      for (let i = 0; i < pattern.length; i++) {
+        for (let j = 0; j < pattern[i].length; j++) {
+          pattern[i][j] = i % 3 === 0 ? 1 : 0;
+        }
+      }
+      break;
+    case 'grid':
+      // Create a grid pattern
+      for (let i = 0; i < pattern.length; i++) {
+        for (let j = 0; j < pattern[i].length; j++) {
+          pattern[i][j] = i % 3 === 0 || j % 3 === 0 ? 1 : 0;
+        }
+      }
+      break;
+    default:
+      // Random noise texture
+      for (let i = 0; i < pattern.length; i++) {
+        for (let j = 0; j < pattern[i].length; j++) {
+          pattern[i][j] = Math.random();
+        }
+      }
+  }
+
+  return pattern;
+};
+
+const getDitheringPatterns = () => {
+  // Return a set of dithering patterns
+  return [
+    [
+      [1, 0, 0, 1],
+      [0, 1, 1, 0],
+      [0, 1, 1, 0],
+      [1, 0, 0, 1],
+    ],
+    [
+      [1, 0, 1, 0],
+      [0, 1, 0, 1],
+      [1, 0, 1, 0],
+      [0, 1, 0, 1],
+    ],
+    [
+      [1, 1, 0, 0],
+      [1, 0, 0, 0],
+      [0, 0, 0, 1],
+      [0, 0, 1, 1],
+    ],
+  ];
+};
+
+// Functions for special effects
+const applyGlowEffect = (x, y, color, size, gridSize, setCellColors) => {
+  const glowRadius = size * 2;
+  const glowIntensity = 0.8;
+
+  setCellColors(prev => {
+    const updatedColors = [...prev];
+
+    // Apply glow effect in a larger radius than the brush
+    for (let dx = -glowRadius; dx <= glowRadius; dx++) {
+      for (let dy = -glowRadius; dy <= glowRadius; dy++) {
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance <= glowRadius) {
+          const glowX = x + dx;
+          const glowY = y + dy;
+          const index = glowY * gridSize + glowX;
+
+          if (index >= 0 && index < gridSize * gridSize) {
+            // Calculate glow opacity based on distance
+            const opacity = glowIntensity * (1 - distance / glowRadius);
+            // Only apply glow if it would make the cell brighter
+            if (!updatedColors[index] || opacity > 0.1) {
+              updatedColors[index] = color; // Simplified for example
+            }
+          }
+        }
+      }
+    }
+
+    return updatedColors;
+  });
+};
+
+const applyBlurEffect = (x, y, size, gridSize, setCellColors) => {
+  const blurRadius = Math.max(1, Math.floor(size / 2));
+
+  setCellColors(prev => {
+    const updatedColors = [...prev];
+    const tempColors = [...prev];
+
+    // Create a list of positions to blur
+    const positions = [];
+    for (let dx = -blurRadius; dx <= blurRadius; dx++) {
+      for (let dy = -blurRadius; dy <= blurRadius; dy++) {
+        positions.push([x + dx, y + dy]);
+      }
+    }
+
+    // Apply blur to each position
+    positions.forEach(([blurX, blurY]) => {
+      const index = blurY * gridSize + blurX;
+
+      if (isValidIndex(index, gridSize)) {
+        const count = getNeighborCount(blurX, blurY, gridSize, tempColors);
+
+        if (count > 0) {
+          // Simplified color blending
+          updatedColors[index] = tempColors[index]; // Placeholder for actual blur
+        }
+      }
+    });
+
+    return updatedColors;
+  });
+};
+
+// Helper function to count valid neighbors for blur effect
+const getNeighborCount = (x, y, gridSize, colors) => {
+  let count = 0;
+
+  // Check each neighbor in a 3x3 grid
+  // Using a 3x3 grid pattern for neighbors
+  const directions = [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 0],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+  ];
+
+  directions.forEach(([bx, by]) => {
+    const sampleX = x + bx;
+    const sampleY = y + by;
+    const sampleIndex = sampleY * gridSize + sampleX;
+
+    if (isValidIndex(sampleIndex, gridSize) && colors[sampleIndex]) {
+      count++;
+    }
+  });
+
+  return count;
+};
+
+// Helper function to check if an index is valid
+const isValidIndex = (index, gridSize) => {
+  return index >= 0 && index < gridSize * gridSize;
+};
+
+const applyNeonEffect = (x, y, color, size, gridSize, setCellColors) => {
+  // Neon effect combines glow with a bright center
+  // First apply a glow effect
+  applyGlowEffect(x, y, color, size, gridSize, setCellColors);
+
+  // Then add a bright center
+  setCellColors(prev => {
+    const updatedColors = [...prev];
+
+    // Add bright center
+    for (let dx = -size / 2; dx <= size / 2; dx++) {
+      for (let dy = -size / 2; dy <= size / 2; dy++) {
+        const centerX = x + dx;
+        const centerY = y + dy;
+        const index = centerY * gridSize + centerX;
+
+        if (index >= 0 && index < gridSize * gridSize) {
+          // Make the center brighter
+          updatedColors[index] = color; // In a real implementation, we would lighten the color
+        }
+      }
+    }
+
+    return updatedColors;
+  });
+};
+
 const generateSprayPoints = (x, y, size, density) => {
   const points = [];
   const numPoints = Math.floor(size * size * density);
@@ -214,9 +495,11 @@ const generateSprayPoints = (x, y, size, density) => {
 };
 
 // Export additional utility functions
-export const getBrushPreview = brushConfig => {
-  // Generate brush preview for UI
-  // Implementation details...
+export const getBrushPreview = (brushConfig = {}) => {
+  // Generate brush preview for UI based on brush configuration
+  return {
+    previewData: { type: brushConfig.type || BRUSH_TYPES.FILLED },
+  };
 };
 
 export const getBrushSize = (pressure, baseSize) => {

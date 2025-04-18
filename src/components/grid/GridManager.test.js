@@ -7,7 +7,7 @@ it('updates the correct cell in the active layer', () => {
     { id: 1, gridData: {} },
     { id: 2, gridData: {} },
   ];
-  updateCell(0, 0, '#FF0000', 16, mockSetLayers, layers, 1);
+  updateGridCell(0, 0, '#FF0000', 16, mockSetLayers, layers, 1);
   expect(mockSetLayers).toHaveBeenCalledWith([
     { id: 1, gridData: { '0,0': '#FF0000' } },
     { id: 2, gridData: {} },

@@ -1,5 +1,6 @@
 // File: src/components/ColorPicker/ColorWheel.js
 import debounce from 'lodash.debounce';
+import PropTypes from 'prop-types';
 import React, { useContext, useState, useCallback, useRef, useMemo } from 'react';
 import { SketchPicker } from 'react-color';
 
@@ -96,10 +97,18 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
       recentColors.map((color, index) => (
         <div
           key={index}
+          aria-label={`Select color ${color}`}
           className="recent-color"
+          role="button"
           style={{ backgroundColor: color }}
+          tabIndex={0}
           title={color}
           onClick={() => handleColorChange({ hex: color })}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleColorChange({ hex: color });
+            }
+          }}
         />
       )),
     [recentColors]
@@ -141,8 +150,23 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
           {gradientStops.map((stop, index) => (
             <div
               key={index}
+              aria-label={`Gradient stop at ${stop}%`}
+              aria-valuemax="100"
+              aria-valuemin="0"
+              aria-valuenow={stop}
               className="gradient-stop"
+              role="slider"
               style={{ left: `${stop}%` }}
+              tabIndex={0}
+              onKeyDown={e => {
+                if (e.key === 'ArrowLeft') {
+                  const newValue = Math.max(0, stop - 5);
+                  setGradientStops(stops => stops.map((s, i) => (i === index ? newValue : s)));
+                } else if (e.key === 'ArrowRight') {
+                  const newValue = Math.min(100, stop + 5);
+                  setGradientStops(stops => stops.map((s, i) => (i === index ? newValue : s)));
+                }
+              }}
               onMouseDown={e => {
                 const onMouseMove = ev => handleGradientDrag(index, ev);
                 const onMouseUp = () => {
@@ -177,15 +201,28 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
 
       {/* Actions */}
       <div className="actions">
-        <button title="Add current color to palette" onClick={handleAddToPalette}>
+        <button title="Add current color to palette" onClick={() => onAddToPalette(activeColor)}>
           Add to Palette
         </button>
-        <button title="Assign current color to an anchor" onClick={handleAssignToAnchor}>
+        <button
+          title="Assign current color to an anchor"
+          onClick={() => onAssignToAnchor(activeColor)}
+        >
           Assign to Anchor
         </button>
       </div>
     </div>
   );
+};
+
+ColorWheel.propTypes = {
+  allowDynamicSelection: PropTypes.bool,
+  onAddToPalette: PropTypes.func.isRequired,
+  onAssignToAnchor: PropTypes.func.isRequired,
+};
+
+ColorWheel.defaultProps = {
+  allowDynamicSelection: false,
 };
 
 export default React.memo(ColorWheel);

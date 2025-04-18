@@ -5,7 +5,7 @@
  * in React components, preventing the entire application from crashing.
  */
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './ErrorBoundary.css';
 
 class ErrorBoundary extends Component {

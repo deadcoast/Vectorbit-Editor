@@ -1,8 +1,9 @@
 // File: src/components/ColorPicker/ColorAnchors.js
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 
+import { useAnchorHistory } from '../../state/useAnchorHistory';
 import { generateComplementary, rotateHue } from '../../utils/color/colorCore';
-import { useAnchorHistory } from '../state/useAnchorHistory';
 
 const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) => {
   const { addToHistory, undo, redo } = useAnchorHistory();
@@ -151,6 +152,12 @@ const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) =>
       </div>
     </div>
   );
+};
+
+ColorAnchors.propTypes = {
+  defaultAnchors: PropTypes.object, // Object of color anchors
+  setColorAnchors: PropTypes.func.isRequired, // Function to update color anchors
+  updateColorAnchor: PropTypes.func.isRequired, // Function to update a single anchor
 };
 
 export default ColorAnchors;

@@ -1,5 +1,6 @@
 import debounce from 'lodash.debounce';
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { createContext, useState, useEffect, useCallback } from 'react';
 
 export const ColorContext = createContext();
 
@@ -67,4 +68,13 @@ export const ColorProvider = ({ children, defaultColor = '#000000' }) => {
       {children}
     </ColorContext.Provider>
   );
+};
+
+ColorProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+  defaultColor: PropTypes.string,
+};
+
+ColorProvider.defaultProps = {
+  defaultColor: '#000000',
 };
