@@ -50,7 +50,9 @@ css
   border-radius: var(--button-radius);
   box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .color-picker-container input[type="color"]:hover {
@@ -67,7 +69,9 @@ css
   border: none;
   border-radius: var(--button-radius);
   cursor: pointer;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .color-picker-container button:hover {
@@ -109,7 +113,9 @@ css
   border: 2px solid var(--background-color-light);
   box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .gradient-stop:hover {
@@ -127,7 +133,9 @@ css
   border: none;
   border-radius: var(--button-radius-sm);
   cursor: pointer;
-  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .gradient-generator button:hover {
@@ -164,7 +172,9 @@ css
   border: 1px solid var(--border-color);
   cursor: pointer;
   position: relative;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .recent-color:hover {
@@ -211,7 +221,9 @@ css
   border: none;
   border-radius: var(--button-radius);
   cursor: pointer;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .actions button:hover {

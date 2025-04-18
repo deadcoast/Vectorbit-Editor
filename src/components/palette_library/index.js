@@ -1,2 +1,1 @@
-
-export { default } from "./PaletteLibrary";
+export { default } from './PalleteLibrary';

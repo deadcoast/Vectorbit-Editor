@@ -1,15 +1,14 @@
-
-import axios from "axios";
+import axios from 'axios';
 
 // Base URL for the API (set via environment variables or fallback to localhost)
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Create a reusable Axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000, // 10 seconds timeout
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -18,13 +17,13 @@ const api = axios.create({
  * @param {Function} requestFn - The API request function to execute.
  * @returns {Promise<any>} - The API response data.
  */
-const handleApiRequest = async (requestFn) => {
+const handleApiRequest = async requestFn => {
   try {
     const response = await requestFn();
-    console.log("API request successful:", response.data);
+    console.log('API request successful:', response.data);
     return response.data;
   } catch (error) {
-    console.error("API request failed:", error);
+    console.error('API request failed:', error);
     alert(`API Error: ${error.response?.data?.message || error.message}`);
     throw error; // Re-throw for further error handling if needed
   }
@@ -35,7 +34,7 @@ const handleApiRequest = async (requestFn) => {
  * @returns {Promise<Array>} - List of palettes.
  */
 export const fetchPalettes = async () => {
-  return handleApiRequest(() => api.get("/palettes"));
+  return handleApiRequest(() => api.get('/palettes'));
 };
 
 /**
@@ -43,12 +42,30 @@ export const fetchPalettes = async () => {
  * @param {Object} palette - Palette object to create.
  * @returns {Promise<Object>} - Created palette data.
  */
-export const createPalette = async (palette) => {
+export const createPalette = async palette => {
   if (!palette.name || !Array.isArray(palette.colors)) {
-    alert("Invalid palette data. Ensure the name and colors are provided.");
-    throw new Error("Invalid palette data.");
+    alert('Invalid palette data. Ensure the name and colors are provided.');
+    throw new Error('Invalid palette data.');
   }
-  return handleApiRequest(() => api.post("/palettes", palette));
+  return handleApiRequest(() => api.post('/palettes', palette));
+};
+
+/**
+ * Update tags for an existing palette.
+ * @param {string} paletteId - ID of the palette to update.
+ * @param {Array<string>} tags - New tags for the palette.
+ * @returns {Promise<Object>} - Updated palette data.
+ */
+export const updatePaletteTags = async (paletteId, tags) => {
+  if (!paletteId) {
+    alert('Palette ID is required to update tags.');
+    throw new Error('Missing palette ID.');
+  }
+  if (!Array.isArray(tags)) {
+    alert('Tags must be provided as an array.');
+    throw new Error('Invalid tags format.');
+  }
+  return handleApiRequest(() => api.patch(`/palettes/${paletteId}/tags`, { tags }));
 };
 
 /**
@@ -56,10 +73,10 @@ export const createPalette = async (palette) => {
  * @param {string} id - Palette ID to delete.
  * @returns {Promise<Object>} - Deleted palette confirmation.
  */
-export const deletePalette = async (id) => {
+export const deletePalette = async id => {
   if (!id) {
-    alert("Palette ID is required to delete.");
-    throw new Error("Missing palette ID.");
+    alert('Palette ID is required to delete.');
+    throw new Error('Missing palette ID.');
   }
   return handleApiRequest(() => api.delete(`/palettes/${id}`));
 };
@@ -69,7 +86,7 @@ export const deletePalette = async (id) => {
  * @returns {Promise<Array>} - List of projects.
  */
 export const fetchProjects = async () => {
-  return handleApiRequest(() => api.get("/projects"));
+  return handleApiRequest(() => api.get('/projects'));
 };
 
 /**
@@ -77,12 +94,12 @@ export const fetchProjects = async () => {
  * @param {Object} project - Project object to create.
  * @returns {Promise<Object>} - Created project data.
  */
-export const createProject = async (project) => {
+export const createProject = async project => {
   if (!project.name || !project.gridData) {
-    alert("Invalid project data. Ensure the name and grid data are provided.");
-    throw new Error("Invalid project data.");
+    alert('Invalid project data. Ensure the name and grid data are provided.');
+    throw new Error('Invalid project data.');
   }
-  return handleApiRequest(() => api.post("/projects", project));
+  return handleApiRequest(() => api.post('/projects', project));
 };
 
 /**
@@ -90,10 +107,10 @@ export const createProject = async (project) => {
  * @param {string} id - Project ID to delete.
  * @returns {Promise<Object>} - Deleted project confirmation.
  */
-export const deleteProject = async (id) => {
+export const deleteProject = async id => {
   if (!id) {
-    alert("Project ID is required to delete.");
-    throw new Error("Missing project ID.");
+    alert('Project ID is required to delete.');
+    throw new Error('Missing project ID.');
   }
   return handleApiRequest(() => api.delete(`/projects/${id}`));
 };
@@ -103,10 +120,10 @@ export const deleteProject = async (id) => {
  * @param {string} id - Project ID to fetch.
  * @returns {Promise<Object>} - Project details.
  */
-export const fetchProjectById = async (id) => {
+export const fetchProjectById = async id => {
   if (!id) {
-    alert("Project ID is required to fetch.");
-    throw new Error("Missing project ID.");
+    alert('Project ID is required to fetch.');
+    throw new Error('Missing project ID.');
   }
   return handleApiRequest(() => api.get(`/projects/${id}`));
 };
@@ -120,14 +137,14 @@ export const fetchProjectById = async (id) => {
  */
 export const uploadFile = async (file, onProgress) => {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append('file', file);
 
   return handleApiRequest(() =>
-    api.post("/upload", formData, {
+    api.post('/upload', formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
-      onUploadProgress: (progressEvent) => {
+      onUploadProgress: progressEvent => {
         if (onProgress) {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           onProgress(percentCompleted);
@@ -145,7 +162,7 @@ export const uploadFile = async (file, onProgress) => {
  * @returns {Promise<Object>} - Saved project data.
  */
 export const saveProjectWithRetry = async (projectData, retries = 3) => {
-  const trySave = async (attempt) => {
+  const trySave = async attempt => {
     try {
       return await createProject(projectData);
     } catch (error) {

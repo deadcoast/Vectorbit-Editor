@@ -1,14 +1,17 @@
 # Enhancing Bucket Fill and Rectangle Tools
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-We’ll enhance the Bucket Fill Tool to flood-fill an area with the selected color and implement the Rectangle Tool for drawing rectangles on the grid.
+We’ll enhance the Bucket Fill Tool to flood-fill an area with the selected color and implement the
+Rectangle Tool for drawing rectangles on the grid.
 
 ## Step 1: Enhance Bucket Fill Tool
 
-The Bucket Fill Tool will use a flood-fill algorithm to fill connected cells of the same color with the selected color.
+The Bucket Fill Tool will use a flood-fill algorithm to fill connected cells of the same color with
+the selected color.
 
 ### Bucket Fill for File: src/frontend/Grid.js
 
@@ -22,7 +25,7 @@ const floodFill = (index, targetColor, fillColor) => {
 
   while (queue.length > 0) {
     const currentIndex = queue.shift();
-    const currentColor = updatedColors[currentIndex] || "#f9f9f9";
+    const currentColor = updatedColors[currentIndex] || '#f9f9f9';
 
     if (currentColor === targetColor) {
       updatedColors[currentIndex] = fillColor;
@@ -35,7 +38,7 @@ const floodFill = (index, targetColor, fillColor) => {
         currentIndex + width, // Bottom
       ];
 
-      neighbors.forEach((neighbor) => {
+      neighbors.forEach(neighbor => {
         if (
           neighbor >= 0 &&
           neighbor < gridSize * gridSize && // Bounds check
@@ -51,14 +54,14 @@ const floodFill = (index, targetColor, fillColor) => {
 };
 
 // Use the Bucket Fill Tool
-const handleCellClick = (index) => {
-  const targetColor = cellColors[index] || "#f9f9f9";
-  if (activeTool === "bucket") {
+const handleCellClick = index => {
+  const targetColor = cellColors[index] || '#f9f9f9';
+  if (activeTool === 'bucket') {
     floodFill(index, targetColor, activeColor);
-  } else if (activeTool === "brush") {
-    setCellColors((prev) => ({ ...prev, [index]: activeColor }));
-  } else if (activeTool === "eraser") {
-    setCellColors((prev) => {
+  } else if (activeTool === 'brush') {
+    setCellColors(prev => ({ ...prev, [index]: activeColor }));
+  } else if (activeTool === 'eraser') {
+    setCellColors(prev => {
       const updated = { ...prev };
       delete updated[index];
       return updated;
@@ -141,14 +144,11 @@ const Toolbar = ({ setActiveTool, setActiveColor }) => {
 
 ## Step 4: Test Bucket Fill and Rectangle Tools
 
-1. Run the development server:
-   npm start
-1. Test Bucket Fill:
-   • Select the Bucket Fill Tool from the toolbar.
-   • Click on a grid cell to flood-fill all connected cells of the same color with the selected color.
-1. Test Rectangle Tool:
-   • Select the Rectangle Tool from the toolbar.
-   • Click and drag across the grid to draw a rectangle.
+1. Run the development server: npm start
+1. Test Bucket Fill: • Select the Bucket Fill Tool from the toolbar. • Click on a grid cell to
+   flood-fill all connected cells of the same color with the selected color.
+1. Test Rectangle Tool: • Select the Rectangle Tool from the toolbar. • Click and drag across the
+   grid to draw a rectangle.
 
 ## Enhancing the Grid Further and Adding Multiple Layers Export
 
@@ -156,7 +156,8 @@ We will:
 
 1. Enhance the grid with snapping and alignment features.
 
-1. Implement the foundation for multiple layers with export functionality, allowing different layers to be saved/exported.
+1. Implement the foundation for multiple layers with export functionality, allowing different layers
+   to be saved/exported.
 
 ## Step 1: Enhance the Grid with Snapping and Alignment
 
@@ -567,7 +568,7 @@ Update the App.css or LayerControls.css file to style the new layer controls.
   background-color: #555;
 }
 
-.layer-controls input[type="range"] {
+.layer-controls input[type='range'] {
   width: 100px;
   margin-left: 10px;
 }
@@ -575,18 +576,16 @@ Update the App.css or LayerControls.css file to style the new layer controls.
 
 ## Testing the Features
 
-1. Run the development server:
-   npm start
-1. Test Layer Opacity:
-   • Adjust the opacity slider for a layer and verify transparency updates.
-1. Test Layer Visibility:
-   • Toggle visibility for a layer and verify it hides or shows.
-1. Test Layer Reordering:
-   • Move layers up or down in the stack and verify the drawing order updates.
+1. Run the development server: npm start
+1. Test Layer Opacity: • Adjust the opacity slider for a layer and verify transparency updates.
+1. Test Layer Visibility: • Toggle visibility for a layer and verify it hides or shows.
+1. Test Layer Reordering: • Move layers up or down in the stack and verify the drawing order
+   updates.
 
 ## 1. Layer Grouping
 
-Layer grouping allows users to organize multiple layers into a group, making it easier to manage opacity, visibility, and transformations collectively.
+Layer grouping allows users to organize multiple layers into a group, making it easier to manage
+opacity, visibility, and transformations collectively.
 
 ## Step 1.1: Update the Layer Data Structure
 
@@ -599,16 +598,14 @@ const App = () => {
   const [layers, setLayers] = useState([
     {
       id: 1,
-      name: "Layer 1",
+      name: 'Layer 1',
       cellColors: {},
       opacity: 1,
       visible: true,
       group: null,
     },
   ]);
-  const [groups, setGroups] = useState([
-    { id: 1, name: "Group 1", layers: [] },
-  ]);
+  const [groups, setGroups] = useState([{ id: 1, name: 'Group 1', layers: [] }]);
   const [activeLayerIndex, setActiveLayerIndex] = useState(0);
 
   const addGroup = () => {
@@ -625,7 +622,7 @@ const App = () => {
     updatedLayers[layerIndex].group = groupId;
     setLayers(updatedLayers);
 
-    const updatedGroups = groups.map((group) =>
+    const updatedGroups = groups.map(group =>
       group.id === groupId
         ? { ...group, layers: [...group.layers, updatedLayers[layerIndex].id] }
         : group
@@ -639,13 +636,13 @@ const App = () => {
       <div className="group-controls">
         <button onClick={addGroup}>Add Group</button>
         <div>
-          {groups.map((group) => (
+          {groups.map(group => (
             <div key={group.id}>
               <span>{group.name}</span>
               {layers
-                .filter((layer) => layer.group === group.id)
-                .map((layer) => (
-                  <div key={layer.id} style={{ marginLeft: "20px" }}>
+                .filter(layer => layer.group === group.id)
+                .map(layer => (
+                  <div key={layer.id} style={{ marginLeft: '20px' }}>
                     {layer.name}
                   </div>
                 ))}
@@ -669,7 +666,8 @@ const App = () => {
 
 ## Step 1.2: Update Layer Rendering for Groups
 
-Ensure grouped layers are rendered together, applying group-level settings like opacity and visibility.
+Ensure grouped layers are rendered together, applying group-level settings like opacity and
+visibility.
 
 ### Group Rendering for File: src/frontend/Grid.js
 
@@ -704,7 +702,8 @@ We’ll implement:
 
 ## Step 2.1: Add Ellipse Tool
 
-The ellipse tool will calculate and render ellipses based on two points: the starting point (mouse down) and the ending point (mouse up).
+The ellipse tool will calculate and render ellipses based on two points: the starting point (mouse
+down) and the ending point (mouse up).
 
 ### Ellipse Tool for File: src/frontend/Grid.js
 
@@ -791,11 +790,8 @@ Add buttons for the Ellipse Tool and Freehand Tool.
 
 ## Step 4: Test Features
 
-1. Run the development server:
-   npm start
-1. Test Layer Grouping:
-   • Create groups and assign layers to them.
-   • Verify grouped layers are rendered and managed together.
-1. Test Advanced Tools:
-   • Use the Ellipse Tool to draw ellipses.
-   • Use the Freehand Tool to draw continuous lines.
+1. Run the development server: npm start
+1. Test Layer Grouping: • Create groups and assign layers to them. • Verify grouped layers are
+   rendered and managed together.
+1. Test Advanced Tools: • Use the Ellipse Tool to draw ellipses. • Use the Freehand Tool to draw
+   continuous lines.

@@ -100,7 +100,7 @@
 }
 
 .panel-resize-handle::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 3px;
   bottom: 3px;
@@ -121,7 +121,9 @@
   color: #999;
   cursor: pointer;
   margin-right: 4px;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 .panel-toggle-btn.active {

@@ -18,10 +18,19 @@
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "seedrandom": "^3.0.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "nodemon": "^2.0.22",
+    "prettier": "^3.5.3"
   },
   "author": "deadcoast",
   "license": "MIT",

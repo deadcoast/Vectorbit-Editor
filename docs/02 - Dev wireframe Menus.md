@@ -1,17 +1,18 @@
 # Step 1: Code for Placeholder Menus
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
 ## File: src/frontend/Menus.js
 
 ```javascript
-import React from "react";
-import "./Menus.css";
+import React from 'react';
+import './Menus.css';
 
 const Menus = () => {
-  const handleMenuClick = (menu) => {
+  const handleMenuClick = menu => {
     console.log(`Menu option selected: ${menu}`);
   };
 
@@ -20,31 +21,25 @@ const Menus = () => {
       <div className="menu">
         <span>File</span>
         <div className="dropdown">
-          <button onClick={() => handleMenuClick("New")}>New</button>
-          <button onClick={() => handleMenuClick("Open")}>Open</button>
-          <button onClick={() => handleMenuClick("Save")}>Save</button>
-          <button onClick={() => handleMenuClick("Export")}>Export</button>
+          <button onClick={() => handleMenuClick('New')}>New</button>
+          <button onClick={() => handleMenuClick('Open')}>Open</button>
+          <button onClick={() => handleMenuClick('Save')}>Save</button>
+          <button onClick={() => handleMenuClick('Export')}>Export</button>
         </div>
       </div>
       <div className="menu">
         <span>View</span>
         <div className="dropdown">
-          <button onClick={() => handleMenuClick("Toggle Grid")}>
-            Toggle Grid
-          </button>
-          <button onClick={() => handleMenuClick("Zoom In")}>Zoom In</button>
-          <button onClick={() => handleMenuClick("Zoom Out")}>Zoom Out</button>
+          <button onClick={() => handleMenuClick('Toggle Grid')}>Toggle Grid</button>
+          <button onClick={() => handleMenuClick('Zoom In')}>Zoom In</button>
+          <button onClick={() => handleMenuClick('Zoom Out')}>Zoom Out</button>
         </div>
       </div>
       <div className="menu">
         <span>Settings</span>
         <div className="dropdown">
-          <button onClick={() => handleMenuClick("Grid Size")}>
-            Grid Size
-          </button>
-          <button onClick={() => handleMenuClick("Default Settings")}>
-            Default Settings
-          </button>
+          <button onClick={() => handleMenuClick('Grid Size')}>Grid Size</button>
+          <button onClick={() => handleMenuClick('Default Settings')}>Default Settings</button>
         </div>
       </div>
     </div>
@@ -300,6 +295,5 @@ Enhance the File Menu to log realistic placeholders for now:
 
 ## Checklist Progress
 
-• Connect “Toggle Grid” to the grid system.
-• Connect grid size changes to the Settings Menu.
-• Add realistic logging for File Menu actions.
+• Connect “Toggle Grid” to the grid system. • Connect grid size changes to the Settings Menu. • Add
+realistic logging for File Menu actions.

@@ -1,6 +1,6 @@
 /**
  * Error Utilities
- * 
+ *
  * Exports all error handling utilities
  */
 

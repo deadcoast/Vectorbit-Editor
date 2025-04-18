@@ -1,12 +1,12 @@
 # Feature 1: Dynamic Grid System
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-Requirements:
-• A grid that resizes based on the selected bit size (e.g., 8bit to 1024bit).
-• Grid visualization toggling (show/hide grid).
+Requirements: • A grid that resizes based on the selected bit size (e.g., 8bit to 1024bit). • Grid
+visualization toggling (show/hide grid).
 
 ## Step 1: Front-End Grid System Code
 
@@ -112,8 +112,8 @@ background-color: #ddd;
 #### File: src/frontend/App.js
 
 ```javascript
-import React from "react";
-import Grid from "./Grid";
+import React from 'react';
+import Grid from './Grid';
 
 const App = () => {
   return (
@@ -129,9 +129,6 @@ export default App;
 
 ## Testing
 
-1. Start the development server:
-   bash
-   npm start
-1. Verify the following functionalities:
-   • The grid dynamically resizes when a new size is selected.
+1. Start the development server: bash npm start
+1. Verify the following functionalities: • The grid dynamically resizes when a new size is selected.
    • The grid visibility can be toggled on and off.

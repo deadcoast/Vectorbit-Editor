@@ -1,6 +1,6 @@
 /**
  * Error Handler Utility
- * 
+ *
  * Provides robust error handling utilities for managing, tracking,
  * and reporting errors throughout the application
  */
@@ -10,7 +10,7 @@ export const ErrorSeverity = {
   INFO: 'info',
   WARNING: 'warning',
   ERROR: 'error',
-  CRITICAL: 'critical'
+  CRITICAL: 'critical',
 };
 
 // Error categories for grouping and filtering
@@ -21,7 +21,7 @@ export const ErrorCategory = {
   SVG_PROCESSING: 'svg-processing',
   RENDERING: 'rendering',
   STORAGE: 'storage',
-  UNKNOWN: 'unknown'
+  UNKNOWN: 'unknown',
 };
 
 // Create a central error registry
@@ -34,7 +34,7 @@ class ErrorRegistry {
 
   /**
    * Register a new error in the system
-   * 
+   *
    * @param {Error} error - The error object
    * @param {Object} options - Additional options
    * @param {string} options.severity - Error severity level
@@ -48,7 +48,7 @@ class ErrorRegistry {
       severity = ErrorSeverity.ERROR,
       category = ErrorCategory.UNKNOWN,
       context = '',
-      metadata = {}
+      metadata = {},
     } = options;
 
     const errorId = this.generateErrorId();
@@ -63,12 +63,12 @@ class ErrorRegistry {
       category,
       context,
       metadata,
-      originalError: error
+      originalError: error,
     };
 
     // Add to registry
     this.errors.unshift(errorEntry);
-    
+
     // Trim the error list if it exceeds maximum size
     if (this.errors.length > this.maxErrors) {
       this.errors = this.errors.slice(0, this.maxErrors);
@@ -85,7 +85,7 @@ class ErrorRegistry {
 
   /**
    * Generate a unique error ID
-   * 
+   *
    * @returns {string} Unique error ID
    */
   generateErrorId() {
@@ -94,13 +94,13 @@ class ErrorRegistry {
 
   /**
    * Add a listener for new errors
-   * 
+   *
    * @param {Function} listener - Error listener callback
    * @returns {Function} Function to remove the listener
    */
   addErrorListener(listener) {
     this.errorListeners.push(listener);
-    
+
     // Return a function to remove this listener
     return () => {
       this.errorListeners = this.errorListeners.filter(l => l !== listener);
@@ -109,7 +109,7 @@ class ErrorRegistry {
 
   /**
    * Notify all error listeners of a new error
-   * 
+   *
    * @param {Object} errorEntry - The error entry object
    */
   notifyErrorListeners(errorEntry) {
@@ -124,14 +124,14 @@ class ErrorRegistry {
 
   /**
    * Log the error to console based on severity
-   * 
+   *
    * @param {Object} errorEntry - The error entry object
    */
   logError(errorEntry) {
     const { severity, message, context, category } = errorEntry;
-    
+
     const logMessage = `[${severity.toUpperCase()}][${category}] ${message}${context ? ` - ${context}` : ''}`;
-    
+
     switch (severity) {
       case ErrorSeverity.INFO:
         console.info(logMessage, errorEntry);
@@ -150,7 +150,7 @@ class ErrorRegistry {
 
   /**
    * Get all errors, optionally filtered
-   * 
+   *
    * @param {Object} options - Filter options
    * @param {string} options.severity - Filter by severity
    * @param {string} options.category - Filter by category
@@ -159,7 +159,7 @@ class ErrorRegistry {
    */
   getErrors(options = {}) {
     const { severity, category, since } = options;
-    
+
     return this.errors.filter(error => {
       if (severity && error.severity !== severity) return false;
       if (category && error.category !== category) return false;
@@ -170,7 +170,7 @@ class ErrorRegistry {
 
   /**
    * Clear all errors or specific errors by filter
-   * 
+   *
    * @param {Object} options - Filter options (same as getErrors)
    */
   clearErrors(options = {}) {
@@ -182,7 +182,7 @@ class ErrorRegistry {
 
     // Apply filtering to keep errors that don't match the filter
     const { severity, category, since } = options;
-    
+
     this.errors = this.errors.filter(error => {
       if (severity && error.severity === severity) return false;
       if (category && error.category === category) return false;
@@ -201,7 +201,7 @@ const errorRegistry = new ErrorRegistry();
 const ErrorHandler = {
   /**
    * Handle an error with the specified options
-   * 
+   *
    * @param {Error} error - The error object
    * @param {Object} options - Error handling options
    * @returns {string} Error ID
@@ -212,7 +212,7 @@ const ErrorHandler = {
 
   /**
    * Create a wrapped version of a function that catches and reports errors
-   * 
+   *
    * @param {Function} fn - The function to wrap
    * @param {Object} options - Error handling options
    * @returns {Function} Wrapped function
@@ -221,7 +221,7 @@ const ErrorHandler = {
     return (...args) => {
       try {
         const result = fn(...args);
-        
+
         // Handle Promise results
         if (result instanceof Promise) {
           return result.catch(error => {
@@ -229,7 +229,7 @@ const ErrorHandler = {
             throw error; // Re-throw to allow further handling
           });
         }
-        
+
         return result;
       } catch (error) {
         errorRegistry.registerError(error, options);
@@ -240,17 +240,17 @@ const ErrorHandler = {
 
   /**
    * Subscribe to error events
-   * 
+   *
    * @param {Function} listener - Error listener callback
    * @returns {Function} Unsubscribe function
    */
-  subscribeToErrors: (listener) => {
+  subscribeToErrors: listener => {
     return errorRegistry.addErrorListener(listener);
   },
 
   /**
    * Get all errors, optionally filtered
-   * 
+   *
    * @param {Object} options - Filter options
    * @returns {Array} Filtered errors
    */
@@ -260,7 +260,7 @@ const ErrorHandler = {
 
   /**
    * Clear errors based on filter criteria
-   * 
+   *
    * @param {Object} options - Filter options
    */
   clearErrors: (options = {}) => {
@@ -269,7 +269,7 @@ const ErrorHandler = {
 
   /**
    * Get the most recent error
-   * 
+   *
    * @returns {Object|null} Most recent error or null
    */
   getMostRecentError: () => {
@@ -284,7 +284,7 @@ const ErrorHandler = {
   /**
    * Error categories
    */
-  Category: ErrorCategory
+  Category: ErrorCategory,
 };
 
 export default ErrorHandler;

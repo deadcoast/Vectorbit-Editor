@@ -35,7 +35,7 @@ css
 }
 
 .layer-manager h3::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 25%;
@@ -61,7 +61,11 @@ css
 
 .layer-item.active {
   border: 2px solid var(--primary-color);
-  background: linear-gradient(to right, rgba(var(--primary-color-rgb), 0.05), rgba(255, 255, 255, 0.95));
+  background: linear-gradient(
+    to right,
+    rgba(var(--primary-color-rgb), 0.05),
+    rgba(255, 255, 255, 0.95)
+  );
   box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.1);
 }
 
@@ -208,7 +212,7 @@ css
   margin-top: 1rem;
 }
 
-.add-layer-button, 
+.add-layer-button,
 .merge-layers-button {
   flex: 1;
   padding: 0.75rem;
@@ -316,5 +320,3 @@ css
     transition: none !important;
   }
 }
-
-

@@ -1,10 +1,12 @@
 # Enhancing the Palette and Color Picker with a Palette Library
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-We will implement a palette library to allow users to save and manage their custom palettes. This will include saving palettes to a library, loading saved palettes, and reusing them in projects.
+We will implement a palette library to allow users to save and manage their custom palettes. This
+will include saving palettes to a library, loading saved palettes, and reusing them in projects.
 
 ## Step 1: Update Back-End for Palette Library
 
@@ -523,7 +525,8 @@ border-radius: 3px;
 
 2.1 Add Advanced Sorting and Filtering
 
-Allow users to sort palettes alphabetically, by creation date, or by tag. Add a search function for filtering.
+Allow users to sort palettes alphabetically, by creation date, or by tag. Add a search function for
+filtering.
 
 ### Add Sorting and Filtering in File: src/frontend/PaletteLibrary.js
 
@@ -722,20 +725,17 @@ cursor: pointer;
 
 ## Step 5: Testing
 
-1. Run the Back-End:
-   node server.js
-1. Run the Front-End:
-   npm start
-1. Test Enhancements:
-   • Add, edit, and delete palettes.
-   • Input HEX values in the color picker and ensure proper validation.
-   • Verify recent colors and live previews work as expected.
+1. Run the Back-End: node server.js
+1. Run the Front-End: npm start
+1. Test Enhancements: • Add, edit, and delete palettes. • Input HEX values in the color picker and
+   ensure proper validation. • Verify recent colors and live previews work as expected.
 
 ## Step 6: Implementing Color Theory for Palette Generation and Advanced Enhancements
 
 We will now:
 
-1. Implement color theory-based palette generation (e.g., complementary, analogous, triadic, tetradic schemes).
+1. Implement color theory-based palette generation (e.g., complementary, analogous, triadic,
+   tetradic schemes).
 1. Add advanced enhancements like random palette generation and color harmonies.
 
 ## Step 1: Color Theory-Based Palette Generation
@@ -884,7 +884,7 @@ marginRight: "5px",
 ```javascript
 const getRandomColor = () => {
   const randomHex = Math.floor(Math.random() * 16777215).toString(16);
-  return `#${randomHex.padStart(6, "0")}`;
+  return `#${randomHex.padStart(6, '0')}`;
 };
 
 const generateRandomPalette = (size = 5) => {
@@ -902,10 +902,8 @@ Integrate the random palette generator into the library.
 
 import generateRandomPalette from "../utils/randomPalette";
 
-const handleGenerateRandomPalette = () => {
-const randomPalette = generateRandomPalette();
-setGeneratedPalette(randomPalette);
-};
+const handleGenerateRandomPalette = () => { const randomPalette = generateRandomPalette();
+setGeneratedPalette(randomPalette); };
 
 Add a button for random palette generation:
 
@@ -917,7 +915,8 @@ Add a button for random palette generation:
 
 3.1 Harmonize Colors in Palettes
 
-Add a toggle to adjust generated palettes for color harmony (e.g., saturation or brightness adjustment).
+Add a toggle to adjust generated palettes for color harmony (e.g., saturation or brightness
+adjustment).
 
 ### Add Color Harmony Utility in File: src/utils/colorHarmony.js
 
@@ -939,8 +938,7 @@ const adjustSaturation = (hex, factor) => {
   return hslToHex(h, adjustedS, l);
 };
 
-const harmonizePalette = (palette, factor) =>
-  palette.map((color) => adjustSaturation(color, factor));
+const harmonizePalette = (palette, factor) => palette.map(color => adjustSaturation(color, factor));
 
 export default harmonizePalette;
 ```
@@ -982,11 +980,8 @@ border-radius: 5px;
 
 ## Step 5: Test Enhancements
 
-1. Run the Back-End:
-   node server.js
-1. Run the Front-End:
-   npm start
-1. Test Features:
-   • Generate palettes using color theory (complementary, analogous, triadic, tetradic).
-   • Generate random palettes.
-   • Test harmonization for saturation and brightness adjustments.
+1. Run the Back-End: node server.js
+1. Run the Front-End: npm start
+1. Test Features: • Generate palettes using color theory (complementary, analogous, triadic,
+   tetradic). • Generate random palettes. • Test harmonization for saturation and brightness
+   adjustments.

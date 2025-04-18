@@ -103,7 +103,9 @@ css
   border-radius: var(--button-radius);
   cursor: pointer;
   outline: 1px solid var(--border-color);
-  transition: outline 0.2s, transform 0.2s;
+  transition:
+    outline 0.2s,
+    transform 0.2s;
 }
 
 .color-anchor input[type="color"]:hover {
@@ -124,7 +126,9 @@ css
   border: none;
   border-radius: var(--button-radius);
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .color-anchor button.rename {

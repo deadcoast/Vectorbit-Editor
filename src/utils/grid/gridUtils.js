@@ -1,4 +1,30 @@
 /**
+ * Initialize a grid with specified size and default color
+ * @param {number} gridSize - Size of the grid (e.g., 16x16, 32x32).
+ * @param {string} defaultColor - Default color for uninitialized grid cells.
+ * @returns {Array} - Initialized grid data as an array.
+ */
+export const initializeGrid = (gridSize, defaultColor = '#FFFFFF') => {
+  return Array(gridSize * gridSize).fill(defaultColor);
+};
+
+/**
+ * Update a specific cell in the grid with a new color
+ * @param {Array} grid - The current grid data.
+ * @param {number} index - The index of the cell to update.
+ * @param {string} color - The new color for the cell.
+ * @returns {Array} - Updated grid data.
+ */
+export const updateGridCell = (grid, index, color) => {
+  if (index < 0 || index >= grid.length) {
+    throw new Error('Index out of bounds');
+  }
+  const newGrid = [...grid];
+  newGrid[index] = color;
+  return newGrid;
+};
+
+/**
  * Advanced Snap to Grid with Support for Rotated or Non-Uniform Grids
  * @param {number} x - X coordinate.
  * @param {number} y - Y coordinate.
@@ -33,10 +59,10 @@ export const advancedSnapToGrid = (x, y, gridSize, canvasSize, rotation = 0) => 
  * @param {Array} gridData - Array of grid cell data (e.g., colors, coordinates).
  * @param {string} fileName - File name for the exported JSON file (default: "gridData").
  */
-export const exportGridDataAsJson = (gridData, fileName = "gridData") => {
+export const exportGridDataAsJson = (gridData, fileName = 'gridData') => {
   const dataStr = JSON.stringify(gridData, null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const link = document.createElement("a");
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = `${fileName}.json`;
   link.click();
@@ -49,13 +75,13 @@ export const exportGridDataAsJson = (gridData, fileName = "gridData") => {
  */
 export const importGridDataFromJson = (file, callback) => {
   const reader = new FileReader();
-  reader.onload = (event) => {
+  reader.onload = event => {
     try {
       const gridData = JSON.parse(event.target.result);
       callback(gridData);
     } catch (err) {
-      console.error("Invalid JSON file:", err);
-      alert("Failed to load grid data. Please ensure the file is valid.");
+      console.error('Invalid JSON file:', err);
+      alert('Failed to load grid data. Please ensure the file is valid.');
     }
   };
   reader.readAsText(file);
@@ -67,7 +93,7 @@ export const importGridDataFromJson = (file, callback) => {
  * @param {string} defaultColor - Default color for uninitialized grid cells.
  * @returns {Array} - Initialized grid data as an array.
  */
-export const initializeGridData = (gridSize, defaultColor = "#FFFFFF") => {
+export const initializeGridData = (gridSize, defaultColor = '#FFFFFF') => {
   return Array(gridSize * gridSize).fill(defaultColor);
 };
 
@@ -82,7 +108,7 @@ export const initializeGridData = (gridSize, defaultColor = "#FFFFFF") => {
  */
 export const proceduralFill = (ctx, gridSize, canvasSize, options = {}) => {
   const cellSize = canvasSize / gridSize;
-  const { noiseScale = 0.1, baseColor = "#FFFFFF" } = options;
+  const { noiseScale = 0.1, baseColor = '#FFFFFF' } = options;
 
   for (let row = 0; row < gridSize; row++) {
     for (let col = 0; col < gridSize; col++) {
@@ -125,7 +151,7 @@ const adjustColor = (color, factor) => {
  * @param {string} hex - HEX color code.
  * @returns {Object} - RGB object with properties { r, g, b }.
  */
-const hexToRgb = (hex) => {
+const hexToRgb = hex => {
   const bigint = parseInt(hex.slice(1), 16);
   return {
     r: (bigint >> 16) & 255,
@@ -142,7 +168,7 @@ const hexToRgb = (hex) => {
  * @returns {string} - HEX color code.
  */
 const rgbToHex = (r, g, b) => {
-  const toHex = (value) => value.toString(16).padStart(2, "0");
+  const toHex = value => value.toString(16).padStart(2, '0');
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
@@ -167,8 +193,8 @@ export const snapToGrid = (value, gridSize, canvasSize) => {
  * @param {string} format - Image format ("png", "jpeg", etc.).
  * @param {string} fileName - File name for the exported image (default: "export").
  */
-export const exportCanvasToImage = (canvas, format = "png", fileName = "export") => {
-  const link = document.createElement("a");
+export const exportCanvasToImage = (canvas, format = 'png', fileName = 'export') => {
+  const link = document.createElement('a');
   link.href = canvas.toDataURL(`image/${format}`);
   link.download = `${fileName}.${format}`;
   link.click();
@@ -210,7 +236,7 @@ export const getGridCellIndex = (x, y, gridSize, canvasSize) => {
  * @param {number} canvasSize - Size of the canvas in pixels.
  * @param {string} gridColor - Color of the grid lines (default: "rgba(0, 0, 0, 0.1)").
  */
-export const renderGridOverlay = (ctx, gridSize, canvasSize, gridColor = "rgba(0, 0, 0, 0.1)") => {
+export const renderGridOverlay = (ctx, gridSize, canvasSize, gridColor = 'rgba(0, 0, 0, 0.1)') => {
   const cellSize = calculateCellSize(gridSize, canvasSize);
 
   ctx.strokeStyle = gridColor;
@@ -259,5 +285,25 @@ export const fillGridCell = (ctx, col, row, gridSize, canvasSize, fillColor) => 
  * @param {number} canvasSize - Size of the canvas in pixels.
  */
 export const clearGridCell = (ctx, col, row, gridSize, canvasSize) => {
-  fillGridCell(ctx, col, row, gridSize, canvasSize, "transparent");
+  fillGridCell(ctx, col, row, gridSize, canvasSize, 'transparent');
 };
+
+// Export all functions as default for module import compatibility
+const gridUtils = {
+  advancedSnapToGrid,
+  exportGridDataAsJson,
+  importGridDataFromJson,
+  initializeGrid,
+  initializeGridData,
+  proceduralFill,
+  snapToGrid,
+  exportCanvasToImage,
+  calculateCellSize,
+  getGridCellIndex,
+  updateGridCell,
+  renderGridOverlay,
+  fillGridCell,
+  clearGridCell,
+};
+
+export default gridUtils;

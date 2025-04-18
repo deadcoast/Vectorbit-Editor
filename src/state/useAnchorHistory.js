@@ -1,6 +1,5 @@
-
 // File: src/state/useAnchorHistory.js
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 /**
  * Custom Hook for managing anchor history with advanced features.
@@ -18,7 +17,7 @@ export const useAnchorHistory = () => {
    * @param {Object} newAnchors - The new state of the anchors.
    */
   const addToHistory = useCallback(
-    (newAnchors) => {
+    newAnchors => {
       const truncatedHistory = history.slice(0, historyIndex + 1);
       const updatedHistory = [...truncatedHistory, newAnchors];
 
@@ -40,10 +39,10 @@ export const useAnchorHistory = () => {
    */
   const undo = useCallback(() => {
     if (historyIndex > 0) {
-      setHistoryIndex((prevIndex) => prevIndex - 1);
+      setHistoryIndex(prevIndex => prevIndex - 1);
       return history[historyIndex - 1];
     }
-    console.warn("No more undo steps available.");
+    console.warn('No more undo steps available.');
     return null;
   }, [history, historyIndex]);
 
@@ -54,10 +53,10 @@ export const useAnchorHistory = () => {
    */
   const redo = useCallback(() => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex((prevIndex) => prevIndex + 1);
+      setHistoryIndex(prevIndex => prevIndex + 1);
       return history[historyIndex + 1];
     }
-    console.warn("No more redo steps available.");
+    console.warn('No more redo steps available.');
     return null;
   }, [history, historyIndex]);
 
@@ -67,7 +66,7 @@ export const useAnchorHistory = () => {
   const clearHistory = useCallback(() => {
     setHistory([]);
     setHistoryIndex(-1);
-    console.log("Anchor history cleared.");
+    console.log('Anchor history cleared.');
   }, []);
 
   /**
@@ -77,12 +76,12 @@ export const useAnchorHistory = () => {
    * @returns {Object|null} - The anchors at the target index or null if invalid.
    */
   const jumpTo = useCallback(
-    (index) => {
+    index => {
       if (index >= 0 && index < history.length) {
         setHistoryIndex(index);
         return history[index];
       }
-      console.warn("Invalid history index.");
+      console.warn('Invalid history index.');
       return null;
     },
     [history]
@@ -94,13 +93,13 @@ export const useAnchorHistory = () => {
    * @param {string} key - The key to use for localStorage.
    */
   const saveHistoryToLocalStorage = useCallback(
-    (key = "anchorHistory") => {
+    (key = 'anchorHistory') => {
       try {
         const historyData = JSON.stringify({ history, historyIndex });
         localStorage.setItem(key, historyData);
-        console.log("Anchor history saved to localStorage.");
+        console.log('Anchor history saved to localStorage.');
       } catch (err) {
-        console.error("Failed to save history to localStorage:", err);
+        console.error('Failed to save history to localStorage:', err);
       }
     },
     [history, historyIndex]
@@ -111,34 +110,31 @@ export const useAnchorHistory = () => {
    *
    * @param {string} key - The key to use for localStorage.
    */
-  const loadHistoryFromLocalStorage = useCallback(
-    (key = "anchorHistory") => {
-      try {
-        const savedData = localStorage.getItem(key);
-        if (savedData) {
-          const { history: loadedHistory, historyIndex: loadedIndex } = JSON.parse(savedData);
-          setHistory(loadedHistory || []);
-          setHistoryIndex(loadedIndex || -1);
-          console.log("Anchor history loaded from localStorage.");
-        }
-      } catch (err) {
-        console.error("Failed to load history from localStorage:", err);
+  const loadHistoryFromLocalStorage = useCallback((key = 'anchorHistory') => {
+    try {
+      const savedData = localStorage.getItem(key);
+      if (savedData) {
+        const { history: loadedHistory, historyIndex: loadedIndex } = JSON.parse(savedData);
+        setHistory(loadedHistory || []);
+        setHistoryIndex(loadedIndex || -1);
+        console.log('Anchor history loaded from localStorage.');
       }
-    },
-    []
-  );
+    } catch (err) {
+      console.error('Failed to load history from localStorage:', err);
+    }
+  }, []);
 
   /**
    * Set a custom maximum length for the history array.
    *
    * @param {number} length - Maximum length of the history array.
    */
-  const setHistoryLimit = useCallback((length) => {
+  const setHistoryLimit = useCallback(length => {
     if (length > 0) {
       setMaxHistoryLength(length);
       console.log(`Max history length set to ${length}.`);
     } else {
-      console.warn("Invalid history length.");
+      console.warn('Invalid history length.');
     }
   }, []);
 

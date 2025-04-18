@@ -1,6 +1,6 @@
 /**
  * Shortcuts Components
- * 
+ *
  * Exports all keyboard shortcuts related components
  */
 

@@ -15,7 +15,8 @@
      - Identify the missing pieces
      - Implement the missing pieces
      - Test the implementation
-2. DOCUMENT THE DATA IN THE [ANALYSIS-DOCUMENTATION](docs/ARCHITECTURE-2.0/ANALYSIS-DOCUMENTATION.md) FILE:
+2. DOCUMENT THE DATA IN THE
+   [ANALYSIS-DOCUMENTATION](docs/ARCHITECTURE-2.0/ANALYSIS-DOCUMENTATION.md) FILE:
    - Add new changes
    - Add new additions
    - Add new deletions

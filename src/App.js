@@ -1,64 +1,60 @@
-import React, { useState, useRef, useEffect } from "react";
-import Grid from "./components/Grid";
-import Controls from "./components/Toolbar/Controls.js";
-import {
-  handleNewFile,
-  handleOpenFile,
-  handleSaveFile,
-} from "./utils/fileHandlers";
-import { useAnchorHistory } from "./state/useAnchorHistory";
-import { usePresetStorage } from "./state/presets";
-import { renderGridOverlay } from "./utils/grid/gridUtils";
-import "./App.css";
+import { useState, useRef, useEffect } from 'react';
+
+import Grid from './components/grid/Grid';
+import Controls from './components/Toolbar/Controls.js';
+import { usePresetStorage } from './state/presets';
+import { useAnchorHistory } from './state/useAnchorHistory';
+import { handleNewFile, handleOpenFile, handleSaveFile } from './utils/fileHandlers';
+import { renderGridOverlay } from './utils/grid/gridUtils';
+import './App.css';
 
 const App = () => {
   const [gridSize, setGridSize] = useState(16); // Initial grid size
   const [gridVisible, setGridVisible] = useState(true); // Grid visibility toggle
-  const [activeTool, setActiveTool] = useState("brush"); // Active tool selection
-  const [activeColor, setActiveColor] = useState("#000000"); // Initial color
-  const [exportFormat, setExportFormat] = useState("png"); // Add state for export format
+  const [activeTool, setActiveTool] = useState('brush'); // Active tool selection
+  const [activeColor, setActiveColor] = useState('#000000'); // Initial color
+  const [exportFormat, setExportFormat] = useState('png'); // Add state for export format
   const [layers, setLayers] = useState([
     {
-      id: "layer-1",
-      name: "Background",
+      id: 'layer-1',
+      name: 'Background',
       visible: true,
       opacity: 1,
       gridData: {},
     },
   ]); // Layer management
-  const [activeLayer, setActiveLayer] = useState("layer-1"); // Active layer selection
+  const [activeLayer, setActiveLayer] = useState('layer-1'); // Active layer selection
 
   const gridCanvasRef = useRef(null); // Ref for the grid canvas
-  const { addToHistory, undo, redo, history, historyIndex } =
-    useAnchorHistory(); // Undo/Redo integration
+  const { addToHistory, undo, redo, history, historyIndex } = useAnchorHistory(); // Undo/Redo integration
   const { presets, savePreset, deletePreset } = usePresetStorage(); // Preset management
 
   // Handlers for file operations
   const createNewFile = () => {
     handleNewFile(() => {
       setGridSize(16);
-      setActiveTool("brush");
-      setActiveColor("#000000");
+      setActiveTool('brush');
+      setActiveColor('#000000');
       setLayers([
         {
-          id: "layer-1",
-          name: "Background",
+          id: 'layer-1',
+          name: 'Background',
           visible: true,
           opacity: 1,
           gridData: {},
         },
       ]);
-      setActiveLayer("layer-1");
+      setActiveLayer('layer-1');
     });
   };
 
   const openExistingFile = () => {
-    handleOpenFile((loadedState) => {
+    handleOpenFile(loadedState => {
       setGridSize(loadedState.gridSize || 16);
       setLayers(loadedState.layers || []);
-      setActiveLayer(loadedState.activeLayer || "layer-1");
-      setActiveColor(loadedState.activeColor || "#000000");
-      console.log("File opened successfully:", loadedState);
+      setActiveLayer(loadedState.activeLayer || 'layer-1');
+      setActiveColor(loadedState.activeColor || '#000000');
+      console.log('File opened successfully:', loadedState);
     });
   };
 
@@ -82,7 +78,7 @@ const App = () => {
 
   // Toggle grid visibility
   const toggleGridVisibility = () => {
-    setGridVisible((prev) => !prev);
+    setGridVisible(prev => !prev);
   };
 
   // Undo and redo operations
@@ -90,7 +86,7 @@ const App = () => {
     const previousState = undo();
     if (previousState) {
       setLayers(previousState.layers || []);
-      setActiveLayer(previousState.activeLayer || "layer-1");
+      setActiveLayer(previousState.activeLayer || 'layer-1');
     }
   };
 
@@ -98,7 +94,7 @@ const App = () => {
     const nextState = redo();
     if (nextState) {
       setLayers(nextState.layers || []);
-      setActiveLayer(nextState.activeLayer || "layer-1");
+      setActiveLayer(nextState.activeLayer || 'layer-1');
     }
   };
 
@@ -110,7 +106,7 @@ const App = () => {
   // Render grid overlay dynamically
   useEffect(() => {
     if (gridVisible && gridCanvasRef.current) {
-      const ctx = gridCanvasRef.current.getContext("2d");
+      const ctx = gridCanvasRef.current.getContext('2d');
       renderGridOverlay(ctx, gridSize, 512); // Assuming 512px canvas size
     }
   }, [gridVisible, gridSize]);
@@ -124,42 +120,42 @@ const App = () => {
       <main className="main">
         {/* Controls Component */}
         <Controls
-          toggleGrid={toggleGridVisibility}
-          setGridSize={setGridSize}
-          setActiveTool={setActiveTool}
-          setActiveColor={setActiveColor}
+          availableTools={['brush', 'eraser', 'fill']}
+          exportFormat={exportFormat}
+          gridOverlay={gridVisible}
           handleNewFile={createNewFile}
           handleOpenFile={openExistingFile}
           handleSaveFile={saveCurrentFile}
-          undo={handleUndo}
           redo={handleRedo}
-          exportFormat={exportFormat}
-          setExportFormat={setExportFormat}
-          saveDefaultExportFormat={saveDefaultExportFormat}
-          state={{ activeColor, canvasRef: gridCanvasRef }}
           resetState={createNewFile}
-          setState={(newState) => {
+          saveDefaultExportFormat={saveDefaultExportFormat}
+          setActiveColor={setActiveColor}
+          setActiveTool={setActiveTool}
+          setExportFormat={setExportFormat}
+          setGridOverlay={setGridVisible}
+          setGridSize={setGridSize}
+          setState={newState => {
             setGridSize(newState.gridSize || 16);
             setLayers(newState.layers || []);
-            setActiveLayer(newState.activeLayer || "layer-1");
-            setActiveColor(newState.activeColor || "#000000");
+            setActiveLayer(newState.activeLayer || 'layer-1');
+            setActiveColor(newState.activeColor || '#000000');
           }}
-          gridOverlay={gridVisible}
-          setGridOverlay={setGridVisible}
-          availableTools={["brush", "eraser", "fill"]}
+          state={{ activeColor, canvasRef: gridCanvasRef }}
+          toggleGrid={toggleGridVisibility}
+          undo={handleUndo}
         />
 
         {/* Grid Component */}
         <Grid
           ref={gridCanvasRef}
+          activeColor={activeColor}
+          activeLayer={activeLayer}
+          activeTool={activeTool}
           gridSize={gridSize}
           gridVisible={gridVisible}
-          activeTool={activeTool}
-          activeColor={activeColor}
           layers={layers}
-          activeLayer={activeLayer}
-          setLayers={setLayers}
           setGridOverlay={setGridVisible} // Pass the setter function
+          setLayers={setLayers}
         />
       </main>
 

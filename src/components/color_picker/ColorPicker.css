@@ -51,7 +51,9 @@ css
   cursor: pointer;
   border: 2px solid var(--background-color);
   box-shadow: var(--shadow-sm);
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .gradient-stop:hover {
@@ -79,7 +81,9 @@ css
   cursor: pointer;
   border: 1px solid var(--border-color);
   position: relative;
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .color-history-item:hover {

@@ -1,10 +1,10 @@
-
 // File: src/components/ColorPicker/ColorWheel.js
-import React, { useContext, useState, useCallback, useRef, useMemo } from "react";
-import { SketchPicker } from "react-color";
-import debounce from "lodash.debounce";
-import { ColorContext } from "./ColorContext";
-import "./ColorWheel.css";
+import debounce from 'lodash.debounce';
+import React, { useContext, useState, useCallback, useRef, useMemo } from 'react';
+import { SketchPicker } from 'react-color';
+
+import { ColorContext } from './ColorContext';
+import './ColorWheel.css';
 
 const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = false }) => {
   const { activeColor, setActiveColor, recentColors, addToRecentColors } = useContext(ColorContext);
@@ -16,11 +16,11 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
 
   // Debounced color change handler for smoother UI
   const debouncedColorChange = useCallback(
-    debounce((color) => setActiveColor(color), 300),
+    debounce(color => setActiveColor(color), 300),
     []
   );
 
-  const handleColorChange = (color) => {
+  const handleColorChange = color => {
     const hexColor = color.hex || color;
     setActiveColor(hexColor);
     addToRecentColors(hexColor);
@@ -32,7 +32,7 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
   const handleGradientDrag = (index, event) => {
     const rect = gradientPreviewRef.current.getBoundingClientRect();
     const percentage = snapToGrid(((event.clientX - rect.left) / rect.width) * 100);
-    setGradientStops((stops) =>
+    setGradientStops(stops =>
       stops.map((stop, i) => (i === index ? Math.min(Math.max(percentage, 0), 100) : stop))
     );
   };
@@ -42,12 +42,12 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
     setGradientStops([...gradientStops, 50]); // Add a stop at the center
   };
 
-  const removeGradientStop = (index) => {
-    setGradientStops((stops) => stops.filter((_, i) => i !== index));
+  const removeGradientStop = index => {
+    setGradientStops(stops => stops.filter((_, i) => i !== index));
   };
 
   // Gradient history management
-  const addGradientToHistory = (gradient) => {
+  const addGradientToHistory = gradient => {
     const newHistory = [...gradientHistory.slice(0, gradientIndex + 1), gradient];
     setGradientHistory(newHistory);
     setGradientIndex(newHistory.length - 1);
@@ -76,19 +76,19 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
 
   // Apply gradient preset
   const gradientPresets = [
-    "linear-gradient(to right, #ff7e5f, #feb47b)",
-    "linear-gradient(to right, #6a11cb, #2575fc)",
+    'linear-gradient(to right, #ff7e5f, #feb47b)',
+    'linear-gradient(to right, #6a11cb, #2575fc)',
   ];
 
-  const applyGradientPreset = (preset) => {
+  const applyGradientPreset = preset => {
     const stops = [0, 100]; // Example, based on preset
     setGradientStops(stops);
   };
 
   const gradientStyle = {
     background: `linear-gradient(to right, ${gradientStops
-      .map((stop) => `${activeColor} ${stop}%`)
-      .join(", ")})`,
+      .map(stop => `${activeColor} ${stop}%`)
+      .join(', ')})`,
   };
 
   const renderedRecentColors = useMemo(
@@ -98,9 +98,9 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
           key={index}
           className="recent-color"
           style={{ backgroundColor: color }}
-          onClick={() => handleColorChange({ hex: color })}
           title={color}
-        ></div>
+          onClick={() => handleColorChange({ hex: color })}
+        />
       )),
     [recentColors]
   );
@@ -109,7 +109,7 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
     <div className="color-wheel">
       {/* Current Color Preview */}
       <div className="color-preview" title="Current selected color">
-        <span style={{ backgroundColor: activeColor }}></span>
+        <span style={{ backgroundColor: activeColor }} />
         <span>{activeColor}</span>
       </div>
 
@@ -118,53 +118,53 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
         {showAdvancedPicker ? (
           <SketchPicker
             color={activeColor}
-            onChangeComplete={handleColorChange}
             title="Advanced Color Picker"
+            onChangeComplete={handleColorChange}
           />
         ) : (
           <input
+            title="Basic Color Picker"
             type="color"
             value={activeColor}
-            onChange={(e) => handleColorChange({ hex: e.target.value })}
-            title="Basic Color Picker"
+            onChange={e => handleColorChange({ hex: e.target.value })}
           />
         )}
-        <button onClick={togglePicker} title="Toggle Picker">
-          {showAdvancedPicker ? "Basic Picker" : "Advanced Picker"}
+        <button title="Toggle Picker" onClick={togglePicker}>
+          {showAdvancedPicker ? 'Basic Picker' : 'Advanced Picker'}
         </button>
       </div>
 
       {/* Gradient Editor */}
       <div className="gradient-generator">
         <h4>Gradient Editor</h4>
-        <div className="gradient-preview" ref={gradientPreviewRef} style={gradientStyle}>
+        <div ref={gradientPreviewRef} className="gradient-preview" style={gradientStyle}>
           {gradientStops.map((stop, index) => (
             <div
               key={index}
               className="gradient-stop"
               style={{ left: `${stop}%` }}
-              onMouseDown={(e) => {
-                const onMouseMove = (ev) => handleGradientDrag(index, ev);
+              onMouseDown={e => {
+                const onMouseMove = ev => handleGradientDrag(index, ev);
                 const onMouseUp = () => {
-                  window.removeEventListener("mousemove", onMouseMove);
-                  window.removeEventListener("mouseup", onMouseUp);
+                  window.removeEventListener('mousemove', onMouseMove);
+                  window.removeEventListener('mouseup', onMouseUp);
                 };
-                window.addEventListener("mousemove", onMouseMove);
-                window.addEventListener("mouseup", onMouseUp);
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
               }}
-            ></div>
+            />
           ))}
         </div>
-        <button onClick={addGradientStop} title="Add Gradient Stop">
+        <button title="Add Gradient Stop" onClick={addGradientStop}>
           Add Stop
         </button>
-        <button onClick={removeGradientStop} title="Remove Gradient Stop">
+        <button title="Remove Gradient Stop" onClick={removeGradientStop}>
           Remove Stop
         </button>
-        <button onClick={undoGradient} title="Undo Gradient">
+        <button title="Undo Gradient" onClick={undoGradient}>
           Undo
         </button>
-        <button onClick={redoGradient} title="Redo Gradient">
+        <button title="Redo Gradient" onClick={redoGradient}>
           Redo
         </button>
       </div>
@@ -177,10 +177,10 @@ const ColorWheel = ({ onAddToPalette, onAssignToAnchor, allowDynamicSelection = 
 
       {/* Actions */}
       <div className="actions">
-        <button onClick={handleAddToPalette} title="Add current color to palette">
+        <button title="Add current color to palette" onClick={handleAddToPalette}>
           Add to Palette
         </button>
-        <button onClick={handleAssignToAnchor} title="Assign current color to an anchor">
+        <button title="Assign current color to an anchor" onClick={handleAssignToAnchor}>
           Assign to Anchor
         </button>
       </div>

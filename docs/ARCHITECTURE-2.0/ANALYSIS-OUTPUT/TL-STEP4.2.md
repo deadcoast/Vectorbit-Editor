@@ -48,9 +48,11 @@
 
 ### 4.1 Implementation of Section 4.1: Layer Management Enhancement
 
-This implementation addresses the "Enhance Layer Management" task from Section 4.1 "Core Feature Completion & Refinement" of the OVERVIEW-TASKLIST.md document:
+This implementation addresses the "Enhance Layer Management" task from Section 4.1 "Core Feature
+Completion & Refinement" of the OVERVIEW-TASKLIST.md document:
 
 1. **Blend Mode Support**
+
    - Implemented 16 different blend modes for layers including:
      - Normal, Multiply, Screen, Overlay
      - Darken, Lighten, Color Dodge, Color Burn
@@ -60,11 +62,13 @@ This implementation addresses the "Enhance Layer Management" task from Section 4
    - Integrated blend modes into the layer rendering system
 
 2. **Layer Opacity Controls**
+
    - Enhanced the layer opacity slider with real-time updates
    - Implemented opacity handling in the blend processor
    - Added validation to ensure opacity values stay within proper range (0-1)
 
 3. **Layer Locking**
+
    - Implemented comprehensive layer locking system
    - Added validation in all drawing functions to respect locked status
    - Added visual indicators for locked layers in the UI
@@ -79,11 +83,13 @@ This implementation addresses the "Enhance Layer Management" task from Section 4
 The layer management enhancements were implemented through several coordinated changes:
 
 1. **BlendModeProcessor.js**
+
    - New utility module for handling all blend mode calculations
    - Provides the core algorithms for blending colors with different modes
    - Includes opacity handling and layer stack processing
 
 2. **GridManager.js**
+
    - Enhanced to validate layer properties before allowing edits
    - Added functions for efficiently setting layer properties
    - Implemented renderLayers for composite rendering with proper blending
@@ -107,7 +113,9 @@ const layers = [
     opacity: 1.0,
     locked: false,
     blendMode: 'normal',
-    gridData: { /* pixel data */ }
+    gridData: {
+      /* pixel data */
+    },
   },
   {
     id: 'layer2',
@@ -116,8 +124,10 @@ const layers = [
     opacity: 0.8,
     locked: false,
     blendMode: 'multiply',
-    gridData: { /* pixel data */ }
-  }
+    gridData: {
+      /* pixel data */
+    },
+  },
 ];
 
 // Getting the composite color for a pixel
@@ -134,6 +144,7 @@ setLayerLock('layer2', true, layers, setLayers);
 To complete the remaining items in Section 4.1 of the roadmap, focus should be placed on:
 
 1. **SVG Export Support**
+
    - Implement full vector export capability
    - Ensure vector data is preserved accurately
 

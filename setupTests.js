@@ -1,21 +1,20 @@
-
 /**
  * Jest Setup Tests
  * Initializes global utilities, mock configurations, and quality-of-life features for VectorBit.
  */
 
 // Extend Jest matchers with @testing-library/jest-dom
-import "@testing-library/jest-dom/extend-expect";
+import '@testing-library/jest-dom/extend-expect';
 
 // Mock console to ensure clean test output and track warnings/errors
 global.console = {
   ...console,
   log: jest.fn(),
-  warn: jest.fn((message) => {
+  warn: jest.fn(message => {
     console.warn(`Warning: ${message}`);
     throw new Error(`Warning: ${message}`);
   }),
-  error: jest.fn((message) => {
+  error: jest.fn(message => {
     console.error(`Error: ${message}`);
     throw new Error(`Error: ${message}`);
   }),
@@ -23,7 +22,7 @@ global.console = {
 
 // Polyfill for window.matchMedia (used by libraries like Material-UI, TailwindCSS, or styled-components)
 if (!window.matchMedia) {
-  window.matchMedia = jest.fn().mockImplementation((query) => ({
+  window.matchMedia = jest.fn().mockImplementation(query => ({
     matches: false,
     media: query,
     onchange: null,
@@ -65,13 +64,13 @@ global.fetch = jest.fn(() =>
 );
 
 // Mock environment variables for consistent testing behavior
-process.env.REACT_APP_API_URL = "http://localhost:5000";
-process.env.REACT_APP_DEFAULT_GRID_SIZE = "16";
-process.env.REACT_APP_DEFAULT_COLOR = "#ffffff";
+process.env.REACT_APP_API_URL = 'http://localhost:5000';
+process.env.REACT_APP_DEFAULT_GRID_SIZE = '16';
+process.env.REACT_APP_DEFAULT_COLOR = '#ffffff';
 
 // Utility for mocking dates
 const RealDate = Date;
-global.mockDate = (isoDate) => {
+global.mockDate = isoDate => {
   const mockDate = new Date(isoDate);
   global.Date = class extends RealDate {
     constructor() {
@@ -120,14 +119,14 @@ global.File = class {
     this.name = name;
     this.lastModified = new Date();
     this.size = options.size || 0;
-    this.type = options.type || "text/plain";
+    this.type = options.type || 'text/plain';
   }
 };
 
 global.Blob = class {
   constructor(parts, options = {}) {
     this.parts = parts;
-    this.type = options.type || "text/plain";
+    this.type = options.type || 'text/plain';
   }
 };
 
@@ -137,4 +136,4 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-console.log("Global test setup completed.");
+console.log('Global test setup completed.');

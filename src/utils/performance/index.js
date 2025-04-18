@@ -1,11 +1,12 @@
 /**
  * Performance Utilities
- * 
+ *
  * Exports all performance optimization related utilities
  */
 
 export { default as CanvasOptimizer } from './CanvasOptimizer';
-export { default as LazyLoader,
+export {
+  default as LazyLoader,
   lazyComponent,
   LazyContainer,
   preloadComponent,
@@ -13,5 +14,5 @@ export { default as LazyLoader,
   configureLazyLoader,
   getResourceState,
   clearResourceCache,
-  initializeLazyLoader
+  initializeLazyLoader,
 } from './LazyLoader';

@@ -13,7 +13,9 @@ body {
   background-color: var(--background-color);
   color: var(--font-color);
   line-height: 1.8;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   overflow-x: hidden;
 }
 
@@ -32,7 +34,12 @@ body::-webkit-scrollbar-track {
 }
 
 /* Heading Styles */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Roboto", sans-serif;
   color: var(--primary-color);
   margin-bottom: 15px;
@@ -51,7 +58,9 @@ h3 {
   font-size: 1.8rem;
 }
 
-h4, h5, h6 {
+h4,
+h5,
+h6 {
   font-size: 1.5rem;
   font-weight: 500;
 }
@@ -66,7 +75,10 @@ button {
   background-color: var(--primary-color);
   color: white;
   font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   box-shadow: var(--box-shadow);
 }
 
@@ -91,7 +103,9 @@ button:disabled {
 a {
   color: var(--secondary-color);
   text-decoration: none;
-  transition: color 0.3s ease, transform 0.2s ease;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
 }
 
 a:hover {
@@ -100,17 +114,23 @@ a:hover {
 }
 
 /* Form Inputs */
-input, select, textarea {
+input,
+select,
+textarea {
   font-size: 1rem;
   padding: 12px;
   border: 1px solid var(--border-color);
   border-radius: var(--button-radius);
   outline: none;
   background-color: var(--input-background);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 8px var(--primary-color);
 }
@@ -140,7 +160,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
   margin: 20px 0;
   padding-left: 40px;
   list-style-position: inside;
@@ -209,7 +230,9 @@ ul li {
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 .tooltip:hover::after {

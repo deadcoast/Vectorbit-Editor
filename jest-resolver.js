@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path');
 
 /**
  * Custom Jest Resolver for Advanced File Handling
@@ -11,20 +11,18 @@ const path = require("path");
  * @returns {string} - The resolved module path.
  */
 module.exports = (request, options) => {
-  const SUPPORTED_EXTENSIONS = [".svg", ".svgx"]; // Extensions handled by the resolver
+  const SUPPORTED_EXTENSIONS = ['.svg', '.svgx']; // Extensions handled by the resolver
   const MODULE_ALIASES = {
-    "@/components": "src/components",
-    "@/utils": "src/utils",
-    "@/assets": "src/assets",
-    "@/styles": "src/styles",
+    '@/components': 'src/components',
+    '@/utils': 'src/utils',
+    '@/assets': 'src/assets',
+    '@/styles': 'src/styles',
   };
 
   /**
    * Resolve SVG files or other custom extensions
    */
-  const isSupportedExtension = SUPPORTED_EXTENSIONS.some((ext) =>
-    request.endsWith(ext)
-  );
+  const isSupportedExtension = SUPPORTED_EXTENSIONS.some(ext => request.endsWith(ext));
   if (isSupportedExtension) {
     const resolvedPath = path.join(options.basedir, request);
     console.log(`[Resolver] Resolved SVG or Custom File: ${resolvedPath}`);

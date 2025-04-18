@@ -1,4 +1,3 @@
-
 /**
  * Jest Transformer for SVG Files
  * Converts SVG files into valid JavaScript modules for Jest tests.
@@ -18,12 +17,17 @@ module.exports = {
     const svgContent = `
       module.exports = {
         __esModule: true,
-        default: "<svg />",
-        raw: ${JSON.stringify(sourceText || "")},
+        default: ${JSON.stringify(sourceText)},
+        raw: ${JSON.stringify(sourceText || '')},
         path: ${JSON.stringify(sourcePath)},
+        metadata: {
+          width: '24',
+          height: '24',
+        },
       };
     `;
-    console.log(`[SVG Transformer] Processed: ${sourcePath}`);
+    // Disabled for production
+    // console.log(\`[SVG Transformer] Processed: \${sourcePath}\`);
     return { code: svgContent };
   },
 
@@ -38,13 +42,8 @@ module.exports = {
    * @returns {string} - Unique cache key.
    */
   getCacheKey(fileData, filePath, configString, options) {
-    const cacheKey = `${fileData}-${filePath}-${configString}-${JSON.stringify(
-      options
-    )}`;
-    console.log(`[SVG Transformer] Cache Key Generated: ${cacheKey}`);
-    return cacheKey;
-  },
-};getCacheKey(fileData, filePath, configString, options) {
+    // Disabled for production
+    // console.log(`[SVG Transformer] Cache Key Generated: ${cacheKey}`);
     return `${fileData}-${filePath}-${configString}-${JSON.stringify(options)}`;
   },
 };

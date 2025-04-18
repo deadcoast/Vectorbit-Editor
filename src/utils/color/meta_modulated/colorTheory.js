@@ -1,15 +1,14 @@
-
 /**
  * Generate a complementary color palette based on color theory.
  * @param {string} color - Base color in HEX format.
  * @returns {Array<string>} - Array of complementary colors.
  */
-export const generateComplementary = (color) => {
+export const generateComplementary = color => {
   const complement = `#${color
     .slice(1)
     .match(/.{2}/g)
-    .map((hex) => (255 - parseInt(hex, 16)).toString(16).padStart(2, "0"))
-    .join("")}`;
+    .map(hex => (255 - parseInt(hex, 16)).toString(16).padStart(2, '0'))
+    .join('')}`;
   return [color, complement];
 };
 
@@ -20,7 +19,7 @@ export const generateComplementary = (color) => {
  * @returns {Array<string>} - Array of analogous colors.
  */
 export const generateAnalogous = (color, step = 30) => {
-  return [-step, 0, step].map((angle) => adjustHue(color, angle));
+  return [-step, 0, step].map(angle => adjustHue(color, angle));
 };
 
 /**
@@ -28,8 +27,8 @@ export const generateAnalogous = (color, step = 30) => {
  * @param {string} color - Base color in HEX format.
  * @returns {Array<string>} - Array of triadic colors.
  */
-export const generateTriadic = (color) => {
-  return [0, 120, 240].map((angle) => adjustHue(color, angle));
+export const generateTriadic = color => {
+  return [0, 120, 240].map(angle => adjustHue(color, angle));
 };
 
 /**
@@ -37,8 +36,8 @@ export const generateTriadic = (color) => {
  * @param {string} color - Base color in HEX format.
  * @returns {Array<string>} - Array of tetradic colors.
  */
-export const generateTetradic = (color) => {
-  return [0, 90, 180, 270].map((angle) => adjustHue(color, angle));
+export const generateTetradic = color => {
+  return [0, 90, 180, 270].map(angle => adjustHue(color, angle));
 };
 
 /**
@@ -49,14 +48,15 @@ export const generateTetradic = (color) => {
  * @returns {Array<string>} - Array of monochromatic colors.
  */
 export const generateMonochromatic = (color, steps = 5) => {
-  const [r, g, b] = color.slice(1).match(/.{2}/g).map((hex) => parseInt(hex, 16));
+  const [r, g, b] = color
+    .slice(1)
+    .match(/.{2}/g)
+    .map(hex => parseInt(hex, 16));
   const hsv = rgbToHsv(r, g, b);
   return Array.from({ length: steps }, (_, i) => {
     const factor = (i + 1) / steps;
     const [newR, newG, newB] = hsvToRgb(hsv[0], hsv[1], hsv[2] * factor);
-    return `#${[newR, newG, newB]
-      .map((val) => val.toString(16).padStart(2, "0"))
-      .join("")}`;
+    return `#${[newR, newG, newB].map(val => val.toString(16).padStart(2, '0')).join('')}`;
   });
 };
 
@@ -66,8 +66,12 @@ export const generateMonochromatic = (color, steps = 5) => {
  * @returns {Array<string>} - Array of random colors.
  */
 export const generateRandomPalette = (size = 5) => {
-  return Array.from({ length: size }, () =>
-    `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`
+  return Array.from(
+    { length: size },
+    () =>
+      `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')}`
   );
 };
 
@@ -78,13 +82,14 @@ export const generateRandomPalette = (size = 5) => {
  * @returns {string} - Adjusted color in HEX format.
  */
 const adjustHue = (color, angle) => {
-  const [r, g, b] = color.slice(1).match(/.{2}/g).map((hex) => parseInt(hex, 16));
+  const [r, g, b] = color
+    .slice(1)
+    .match(/.{2}/g)
+    .map(hex => parseInt(hex, 16));
   const hsv = rgbToHsv(r, g, b);
   hsv[0] = (hsv[0] + angle + 360) % 360; // Ensure hue stays within 0-360
   const [newR, newG, newB] = hsvToRgb(hsv[0], hsv[1], hsv[2]);
-  return `#${[newR, newG, newB]
-    .map((val) => val.toString(16).padStart(2, "0"))
-    .join("")}`;
+  return `#${[newR, newG, newB].map(val => val.toString(16).padStart(2, '0')).join('')}`;
 };
 
 /**
@@ -129,7 +134,7 @@ const rgbToHsv = (r, g, b) => {
  */
 const hsvToRgb = (h, s, v) => {
   const c = v * s;
-  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = v - c;
 
   let [r, g, b] = [0, 0, 0];
@@ -137,20 +142,16 @@ const hsvToRgb = (h, s, v) => {
   if (h >= 0 && h < 60) {
     [r, g, b] = [c, x, 0];
   } else if (h >= 60 && h < 120) {
-           [r, g, b] = [x, c, 0];
-         } else if (h >= 120 && h < 180) {
-                  [r, g, b] = [0, c, x];
-                } else if (h >= 180 && h < 240) {
-                                    [r, g, b] = [0, x, c];
-                                  } else if (h >= 240 && h < 300) {
-                                           [r, g, b] = [x, 0, c];
-                                         } else if (h >= 300 && h <= 360) {
-                                                  [r, g, b] = [c, 0, x];
-                                                }
+    [r, g, b] = [x, c, 0];
+  } else if (h >= 120 && h < 180) {
+    [r, g, b] = [0, c, x];
+  } else if (h >= 180 && h < 240) {
+    [r, g, b] = [0, x, c];
+  } else if (h >= 240 && h < 300) {
+    [r, g, b] = [x, 0, c];
+  } else if (h >= 300 && h <= 360) {
+    [r, g, b] = [c, 0, x];
+  }
 
-  return [
-    Math.round((r + m) * 255),
-    Math.round((g + m) * 255),
-    Math.round((b + m) * 255),
-  ];
+  return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
 };

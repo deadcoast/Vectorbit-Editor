@@ -39,7 +39,9 @@ css
   border: 2px solid transparent;
   border-radius: var(--button-radius);
   cursor: pointer;
-  transition: border-color var(--transition-fast), transform var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .preset-gradient:hover {
@@ -104,7 +106,9 @@ css
   cursor: pointer;
   border-radius: var(--button-radius);
   outline: 1px solid var(--border-color);
-  transition: transform var(--transition-fast), outline var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    outline var(--transition-fast);
 }
 
 .color-anchor input[type="color"]:hover {
@@ -139,7 +143,9 @@ css
   border: 1px solid var(--border-color);
   border-radius: var(--button-radius);
   cursor: pointer;
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .recent-colors span:hover {

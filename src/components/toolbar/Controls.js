@@ -1,11 +1,12 @@
-import React from "react";
-import "./Controls.css";
+import PropTypes from 'prop-types';
+
+import './Controls.css';
 import {
   handleNewFile,
   handleOpenFile,
   handleSaveFile,
   exportFile,
-} from "../../utils/fileHandlers";
+} from '../../utils/fileHandlers';
 
 const Controls = ({
   toggleGrid,
@@ -30,18 +31,18 @@ const Controls = ({
         <div className="menu">
           <span>File</span>
           <div className="dropdown">
-            <button onClick={() => handleNewFile(resetState)} title="Create a new file">
+            <button title="Create a new file" onClick={() => handleNewFile(resetState)}>
               New
             </button>
-            <button onClick={() => handleOpenFile(setState)} title="Open an existing file">
+            <button title="Open an existing file" onClick={() => handleOpenFile(setState)}>
               Open
             </button>
-            <button onClick={() => handleSaveFile(state)} title="Save the current file">
+            <button title="Save the current file" onClick={() => handleSaveFile(state)}>
               Save
             </button>
             <button
-              onClick={() => exportFile(state.canvasRef.current, state, exportFormat)}
               title={`Export file as ${exportFormat.toUpperCase()}`}
+              onClick={() => exportFile(state.canvasRef.current, state, exportFormat)}
             >
               Export
             </button>
@@ -52,17 +53,17 @@ const Controls = ({
         <div className="menu">
           <span>Settings</span>
           <div className="dropdown">
-            {[8, 16, 32, 64, 128].map((size) => (
+            {[8, 16, 32, 64, 128].map(size => (
               <button
                 key={size}
-                onClick={() => setGridSize(size)}
                 title={`Set grid to ${size}x${size}`}
+                onClick={() => setGridSize(size)}
               >
                 Grid: {size}x{size}
               </button>
             ))}
-            <button onClick={toggleGrid} title="Toggle grid visibility">
-              {gridOverlay ? "Hide Grid" : "Show Grid"}
+            <button title="Toggle grid visibility" onClick={toggleGrid}>
+              {gridOverlay ? 'Hide Grid' : 'Show Grid'}
             </button>
           </div>
         </div>
@@ -74,16 +75,16 @@ const Controls = ({
             <label>
               Format:
               <select
-                value={exportFormat}
-                onChange={(e) => setExportFormat(e.target.value)}
                 title="Select export format"
+                value={exportFormat}
+                onChange={e => setExportFormat(e.target.value)}
               >
                 <option value="svg">SVG</option>
                 <option value="png">PNG</option>
                 <option value="jpg">JPG</option>
               </select>
             </label>
-            <button onClick={saveDefaultExportFormat} title="Save as default export format">
+            <button title="Save as default export format" onClick={saveDefaultExportFormat}>
               Save Format
             </button>
           </div>
@@ -92,11 +93,11 @@ const Controls = ({
 
       {/* Toolbar */}
       <div className="toolbar">
-        {availableTools.map((tool) => (
+        {availableTools.map(tool => (
           <button
             key={tool}
-            onClick={() => setActiveTool(tool)}
             title={`Select ${tool.charAt(0).toUpperCase() + tool.slice(1)} Tool`}
+            onClick={() => setActiveTool(tool)}
           >
             {tool.charAt(0).toUpperCase() + tool.slice(1)}
           </button>
@@ -105,13 +106,36 @@ const Controls = ({
           Color:
           <input
             type="color"
-            onChange={(e) => setActiveColor(e.target.value)}
             value={state.activeColor}
+            onChange={e => setActiveColor(e.target.value)}
           />
         </label>
       </div>
     </div>
   );
+};
+
+Controls.propTypes = {
+  availableTools: PropTypes.arrayOf(PropTypes.string).isRequired,
+  exportFormat: PropTypes.shape({
+    toUpperCase: PropTypes.func.isRequired,
+  }).isRequired,
+  gridOverlay: PropTypes.bool.isRequired,
+  resetState: PropTypes.func.isRequired,
+  saveDefaultExportFormat: PropTypes.func.isRequired,
+  setActiveColor: PropTypes.func.isRequired,
+  setActiveTool: PropTypes.func.isRequired,
+  setExportFormat: PropTypes.func.isRequired,
+  setGridOverlay: PropTypes.func.isRequired,
+  setGridSize: PropTypes.func.isRequired,
+  setState: PropTypes.func.isRequired,
+  state: PropTypes.shape({
+    activeColor: PropTypes.string.isRequired,
+    canvasRef: PropTypes.shape({
+      current: PropTypes.object,
+    }),
+  }).isRequired,
+  toggleGrid: PropTypes.func.isRequired,
 };
 
 export default Controls;

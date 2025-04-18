@@ -1,43 +1,32 @@
 # Enhancing the Brush for Pixel Art Consistency
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-We will enhance the brush to ensure it always draws square blocks that align perfectly with the grid, regardless of the grid bit size. The brush will dynamically adjust to the grid cell size to maintain pixel-perfect alignment.
+We will enhance the brush to ensure it always draws square blocks that align perfectly with the
+grid, regardless of the grid bit size. The brush will dynamically adjust to the grid cell size to
+maintain pixel-perfect alignment.
 
 ## Step 1: Update Brush Logic
 
-The brush should draw in grid-aligned blocks. This requires calculating the exact grid cell size and ensuring the brush respects these boundaries.
+The brush should draw in grid-aligned blocks. This requires calculating the exact grid cell size and
+ensuring the brush respects these boundaries.
 
 ### File: src/frontend/Grid.js
 
-const handleMouseDown = (event) => {
-if (activeTool === "brush") {
-const canvas = canvasRef.current;
-const rect = canvas.getBoundingClientRect();
-const x = Math.floor((event.clientX - rect.left) / cellSize);
-const y = Math.floor((event.clientY - rect.top) / cellSize);
-applyBrush(x, y);
-setIsDrawing(true);
-}
-};
+const handleMouseDown = (event) => { if (activeTool === "brush") { const canvas = canvasRef.current;
+const rect = canvas.getBoundingClientRect(); const x = Math.floor((event.clientX - rect.left) /
+cellSize); const y = Math.floor((event.clientY - rect.top) / cellSize); applyBrush(x, y);
+setIsDrawing(true); } };
 
-const handleMouseMove = (event) => {
-if (isDrawing && activeTool === "brush") {
-const canvas = canvasRef.current;
-const rect = canvas.getBoundingClientRect();
-const x = Math.floor((event.clientX - rect.left) / cellSize);
-const y = Math.floor((event.clientY - rect.top) / cellSize);
-applyBrush(x, y);
-}
-};
+const handleMouseMove = (event) => { if (isDrawing && activeTool === "brush") { const canvas =
+canvasRef.current; const rect = canvas.getBoundingClientRect(); const x =
+Math.floor((event.clientX - rect.left) / cellSize); const y = Math.floor((event.clientY - rect.top)
+/ cellSize); applyBrush(x, y); } };
 
-const handleMouseUp = () => {
-if (isDrawing) {
-setIsDrawing(false);
-}
-};
+const handleMouseUp = () => { if (isDrawing) { setIsDrawing(false); } };
 
 ## Step 2: Calculate Grid Cell Size
 
@@ -45,33 +34,23 @@ Ensure the grid dynamically adjusts to the correct cell size based on the bit si
 
 const [cellSize, setCellSize] = useState(32); // Default cell size
 
-useEffect(() => {
-const calculateCellSize = () => {
-const canvas = canvasRef.current;
-if (canvas) {
-const gridDimension = canvas.width; // Assume square grid
-const newCellSize = gridDimension / gridSize;
-setCellSize(newCellSize);
-}
-};
+useEffect(() => { const calculateCellSize = () => { const canvas = canvasRef.current; if (canvas) {
+const gridDimension = canvas.width; // Assume square grid const newCellSize = gridDimension /
+gridSize; setCellSize(newCellSize); } };
 
-calculateCellSize();
-}, [gridSize]);
+calculateCellSize(); }, [gridSize]);
 
 Step 3: Brush Implementation
 
 The brush will paint square cells that align perfectly with the grid.
 
-const applyBrush = (x, y) => {
-const updatedColors = { ...cellColors };
-const index = y \* gridSize + x;
+const applyBrush = (x, y) => { const updatedColors = { ...cellColors }; const index = y \*
+gridSize + x;
 
-if (index >= 0 && index < gridSize \* gridSize) {
-updatedColors[index] = activeColor; // Paint the cell
-}
+if (index >= 0 && index < gridSize \* gridSize) { updatedColors[index] = activeColor; // Paint the
+cell }
 
-setCellColors(updatedColors);
-};
+setCellColors(updatedColors); };
 
 ## Step 4: Enhance Brush Preview
 
@@ -79,33 +58,18 @@ Show a preview of the brush size as the user moves the mouse over the grid.
 
 const [hoverCell, setHoverCell] = useState(null);
 
-const handleMouseOver = (event) => {
-if (activeTool === "brush") {
-const canvas = canvasRef.current;
-const rect = canvas.getBoundingClientRect();
-const x = Math.floor((event.clientX - rect.left) / cellSize);
-const y = Math.floor((event.clientY - rect.top) / cellSize);
-setHoverCell({ x, y });
-}
-};
+const handleMouseOver = (event) => { if (activeTool === "brush") { const canvas = canvasRef.current;
+const rect = canvas.getBoundingClientRect(); const x = Math.floor((event.clientX - rect.left) /
+cellSize); const y = Math.floor((event.clientY - rect.top) / cellSize); setHoverCell({ x, y }); } };
 
-const handleMouseOut = () => {
-setHoverCell(null); // Clear hover preview when the mouse leaves the canvas
-};
+const handleMouseOut = () => { setHoverCell(null); // Clear hover preview when the mouse leaves the
+canvas };
 
 Render the hover preview:
 
-const renderHoverPreview = (ctx) => {
-if (hoverCell) {
-ctx.fillStyle = "rgba(0, 0, 0, 0.2)"; // Semi-transparent preview
-ctx.fillRect(
-hoverCell.x _cellSize,
-hoverCell.y_ cellSize,
-cellSize,
-cellSize
-);
-}
-};
+const renderHoverPreview = (ctx) => { if (hoverCell) { ctx.fillStyle = "rgba(0, 0, 0, 0.2)"; //
+Semi-transparent preview ctx.fillRect( hoverCell.x _cellSize, hoverCell.y_ cellSize, cellSize,
+cellSize ); } };
 
 Call renderHoverPreview in the canvas rendering logic.
 
@@ -213,24 +177,13 @@ Show a preview of the eraser’s action, similar to the brush preview.
 
 #### Eraser Preview for File: src/frontend/Grid.js
 
-const renderEraserPreview = (ctx) => {
-if (hoverCell && activeTool === "eraser") {
-ctx.fillStyle = "rgba(255, 255, 255, 0.5)"; // Semi-transparent white
-ctx.fillRect(
-hoverCell.x _cellSize,
-hoverCell.y_ cellSize,
-cellSize,
-cellSize
-);
-}
-};
+const renderEraserPreview = (ctx) => { if (hoverCell && activeTool === "eraser") { ctx.fillStyle =
+"rgba(255, 255, 255, 0.5)"; // Semi-transparent white ctx.fillRect( hoverCell.x _cellSize,
+hoverCell.y_ cellSize, cellSize, cellSize ); } };
 
 Add the preview rendering to the canvas logic:
 
-const renderCanvas = (ctx) => {
-renderGrid(ctx);
-renderHoverPreview(ctx);
-renderEraserPreview(ctx);
+const renderCanvas = (ctx) => { renderGrid(ctx); renderHoverPreview(ctx); renderEraserPreview(ctx);
 };
 
 ## Step 2: Implement Multiple Brush Types
@@ -283,12 +236,12 @@ Let users choose the brush type from a dropdown menu.
 ### Brush Type Dropdown for File: src/frontend/Toolbar.js
 
 ```javascript
-const [brushType, setBrushType] = useState("filled");
+const [brushType, setBrushType] = useState('filled');
 
 return (
   <div className="toolbar">
     <label>Brush Type:</label>
-    <select value={brushType} onChange={(e) => setBrushType(e.target.value)}>
+    <select value={brushType} onChange={e => setBrushType(e.target.value)}>
       <option value="filled">Filled</option>
       <option value="outline">Outline</option>
       <option value="patterned">Patterned</option>
@@ -300,7 +253,7 @@ return (
 Update handleMouseDown to pass the selected brush type:
 
 ```javascript
-if (activeTool === "brush") {
+if (activeTool === 'brush') {
   applyBrush(x, y, brushType);
 }
 ```
@@ -396,14 +349,9 @@ return () => window.removeEventListener("keydown", handleKeyDown);
 
 ## Step 5: Test the Features
 
-1. Run the Development Server:
-   npm start
-1. Test the Eraser Tool:
-   • Erase cells accurately on different grid sizes.
-   • Verify the eraser preview aligns with the grid.
-1. Test Brush Types:
-   • Use filled, outline, and patterned brushes.
-   • Verify alignment with the grid.
-1. Test QoL Enhancements:
-   • Undo and redo brush/eraser actions.
-   • Use the E shortcut to toggle between the brush and eraser.
+1. Run the Development Server: npm start
+1. Test the Eraser Tool: • Erase cells accurately on different grid sizes. • Verify the eraser
+   preview aligns with the grid.
+1. Test Brush Types: • Use filled, outline, and patterned brushes. • Verify alignment with the grid.
+1. Test QoL Enhancements: • Undo and redo brush/eraser actions. • Use the E shortcut to toggle
+   between the brush and eraser.

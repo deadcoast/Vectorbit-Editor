@@ -13,7 +13,9 @@ css
   box-shadow: var(--shadow-lg);
   font-family: "Roboto", sans-serif;
   color: var(--font-color);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .controls:hover {
@@ -81,7 +83,9 @@ css
   color: var(--font-color);
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .dropdown button:hover {
@@ -105,7 +109,10 @@ css
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
 }
 
 .toolbar button:hover {
@@ -125,7 +132,9 @@ css
   border-radius: var(--button-radius-circle);
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .toolbar input[type="color"]:hover {

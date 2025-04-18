@@ -1,22 +1,23 @@
+import React, { useState, useCallback, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-import React, { useState, useCallback, useEffect } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useAnchorHistory } from "../state/useAnchorHistory";
+import { BLEND_MODES } from '../../utils/blend/BlendModeProcessor';
+import { setLayerLock, setLayerOpacity, setLayerBlendMode } from '../grid/GridManager';
+import { useAnchorHistory } from '../state/useAnchorHistory';
+
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { BLEND_MODES } from "../../utils/blend/BlendModeProcessor";
-import { setLayerLock, setLayerOpacity, setLayerBlendMode } from "../grid/GridManager";
-import "./LayerManager.css";
+import './LayerManager.css';
 
 const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
   const [renamingLayer, setRenamingLayer] = useState(null);
-  const [newLayerName, setNewLayerName] = useState("");
+  const [newLayerName, setNewLayerName] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState('');
   const { addToHistory, undo, redo } = useAnchorHistory();
 
   // Maximum number of layers allowed
   const MAX_LAYERS = 50;
-  
+
   // Layer template for consistent layer creation
   const createLayerTemplate = (name, options = {}) => ({
     id: `layer-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -28,13 +29,13 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
     mask: null,
     effects: [],
     gridData: {},
-    ...options
+    ...options,
   });
 
   // Enhanced layer management functions
   const handleAddLayer = useCallback(() => {
     if (layers.length >= MAX_LAYERS) {
-      showNotification("Maximum layer limit reached", "error");
+      showNotification('Maximum layer limit reached', 'error');
       return;
     }
 
@@ -45,126 +46,153 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
     setActiveLayer(newLayer.id);
   }, [layers, setLayers, addToHistory, setActiveLayer]);
 
-  const handleDuplicateLayer = useCallback((layerId) => {
-    const sourceLayers = layers.find(layer => layer.id === layerId);
-    if (!sourceLayers) {
-      return;
-    }
+  const handleDuplicateLayer = useCallback(
+    layerId => {
+      const sourceLayers = layers.find(layer => layer.id === layerId);
+      if (!sourceLayers) {
+        return;
+      }
 
-    const duplicatedLayer = {
-      ...createLayerTemplate(`${sourceLayers.name} Copy`),
-      gridData: { ...sourceLayers.gridData },
-      opacity: sourceLayers.opacity,
-      blendMode: sourceLayers.blendMode,
-    };
+      const duplicatedLayer = {
+        ...createLayerTemplate(`${sourceLayers.name} Copy`),
+        gridData: { ...sourceLayers.gridData },
+        opacity: sourceLayers.opacity,
+        blendMode: sourceLayers.blendMode,
+      };
 
-    const updatedLayers = [...layers, duplicatedLayer];
-    setLayers(updatedLayers);
-    addToHistory(updatedLayers);
-  }, [layers, setLayers, addToHistory]);
+      const updatedLayers = [...layers, duplicatedLayer];
+      setLayers(updatedLayers);
+      addToHistory(updatedLayers);
+    },
+    [layers, setLayers, addToHistory]
+  );
 
-  const handleRemoveLayer = useCallback((id) => {
-    if (layers.length === 1) {
-      showNotification("Cannot delete the only layer", "error");
-      return;
-    }
+  const handleRemoveLayer = useCallback(
+    id => {
+      if (layers.length === 1) {
+        showNotification('Cannot delete the only layer', 'error');
+        return;
+      }
 
-    const updatedLayers = layers.filter(layer => layer.id !== id);
-    setLayers(updatedLayers);
-    addToHistory(updatedLayers);
+      const updatedLayers = layers.filter(layer => layer.id !== id);
+      setLayers(updatedLayers);
+      addToHistory(updatedLayers);
 
-    // If deleting active layer, select another layer
-    if (id === activeLayer) {
-      setActiveLayer(updatedLayers[updatedLayers.length - 1].id);
-    }
-  }, [layers, activeLayer, setLayers, setActiveLayer, addToHistory]);
+      // If deleting active layer, select another layer
+      if (id === activeLayer) {
+        setActiveLayer(updatedLayers[updatedLayers.length - 1].id);
+      }
+    },
+    [layers, activeLayer, setLayers, setActiveLayer, addToHistory]
+  );
 
-  const handleLayerPropertyChange = useCallback((id, property, value) => {
-    const updatedLayers = layers.map(layer =>
-      layer.id === id ? { ...layer, [property]: value } : layer
-    );
-    setLayers(updatedLayers);
-    addToHistory(updatedLayers);
-  }, [layers, setLayers, addToHistory]);
+  const handleLayerPropertyChange = useCallback(
+    (id, property, value) => {
+      const updatedLayers = layers.map(layer =>
+        layer.id === id ? { ...layer, [property]: value } : layer
+      );
+      setLayers(updatedLayers);
+      addToHistory(updatedLayers);
+    },
+    [layers, setLayers, addToHistory]
+  );
 
   // Layer organization functions
-  const handleMoveLayer = useCallback((sourceIndex, destinationIndex) => {
-    const updatedLayers = Array.from(layers);
-    const [removed] = updatedLayers.splice(sourceIndex, 1);
-    updatedLayers.splice(destinationIndex, 0, removed);
-    setLayers(updatedLayers);
-    addToHistory(updatedLayers);
-  }, [layers, setLayers, addToHistory]);
+  const handleMoveLayer = useCallback(
+    (sourceIndex, destinationIndex) => {
+      const updatedLayers = Array.from(layers);
+      const [removed] = updatedLayers.splice(sourceIndex, 1);
+      updatedLayers.splice(destinationIndex, 0, removed);
+      setLayers(updatedLayers);
+      addToHistory(updatedLayers);
+    },
+    [layers, setLayers, addToHistory]
+  );
 
-  const handleMergeLayers = useCallback((topLayerId, bottomLayerId) => {
-    const topLayer = layers.find(layer => layer.id === topLayerId);
-    const bottomLayer = layers.find(layer => layer.id === bottomLayerId);
-    
-    if (!topLayer || !bottomLayer) {
-      return;
-    }
+  const handleMergeLayers = useCallback(
+    (topLayerId, bottomLayerId) => {
+      const topLayer = layers.find(layer => layer.id === topLayerId);
+      const bottomLayer = layers.find(layer => layer.id === bottomLayerId);
 
-    const mergedGridData = { ...bottomLayer.gridData };
-    Object.entries(topLayer.gridData).forEach(([key, value]) => {
-      if (value) {
-        mergedGridData[key] = value;
+      if (!topLayer || !bottomLayer) {
+        return;
       }
-    });
 
-    const mergedLayer = createLayerTemplate(`Merged Layer`, {
-      gridData: mergedGridData,
-      opacity: Math.max(topLayer.opacity, bottomLayer.opacity)
-    });
+      const mergedGridData = { ...bottomLayer.gridData };
+      Object.entries(topLayer.gridData).forEach(([key, value]) => {
+        if (value) {
+          mergedGridData[key] = value;
+        }
+      });
 
-    const updatedLayers = layers.filter(
-      layer => layer.id !== topLayerId && layer.id !== bottomLayerId
-    );
-    updatedLayers.push(mergedLayer);
-    
-    setLayers(updatedLayers);
-    addToHistory(updatedLayers);
-    setActiveLayer(mergedLayer.id);
-  }, [layers, setLayers, setActiveLayer, addToHistory]);
+      const mergedLayer = createLayerTemplate(`Merged Layer`, {
+        gridData: mergedGridData,
+        opacity: Math.max(topLayer.opacity, bottomLayer.opacity),
+      });
+
+      const updatedLayers = layers.filter(
+        layer => layer.id !== topLayerId && layer.id !== bottomLayerId
+      );
+      updatedLayers.push(mergedLayer);
+
+      setLayers(updatedLayers);
+      addToHistory(updatedLayers);
+      setActiveLayer(mergedLayer.id);
+    },
+    [layers, setLayers, setActiveLayer, addToHistory]
+  );
 
   // Layer effects and blending modes
-  const handleSetBlendMode = useCallback((id, blendMode) => {
-    handleLayerPropertyChange(id, 'blendMode', blendMode);
-    // Also update with the new grid manager function
-    setLayerBlendMode(id, blendMode, layers, setLayers);
-  }, [handleLayerPropertyChange, layers, setLayers]);
-  
+  const handleSetBlendMode = useCallback(
+    (id, blendMode) => {
+      handleLayerPropertyChange(id, 'blendMode', blendMode);
+      // Also update with the new grid manager function
+      setLayerBlendMode(id, blendMode, layers, setLayers);
+    },
+    [handleLayerPropertyChange, layers, setLayers]
+  );
+
   // Layer opacity control
-  const handleOpacityChange = useCallback((id, opacity) => {
-    handleLayerPropertyChange(id, 'opacity', opacity);
-    // Also update with the new grid manager function
-    setLayerOpacity(id, opacity, layers, setLayers);
-  }, [handleLayerPropertyChange, layers, setLayers]);
-  
+  const handleOpacityChange = useCallback(
+    (id, opacity) => {
+      handleLayerPropertyChange(id, 'opacity', opacity);
+      // Also update with the new grid manager function
+      setLayerOpacity(id, opacity, layers, setLayers);
+    },
+    [handleLayerPropertyChange, layers, setLayers]
+  );
+
   // Layer locking functionality
-  const handleLayerLockToggle = useCallback((id) => {
-    const layer = layers.find(layer => layer.id === id);
-    if (!layer) return;
-    
-    const newLockedState = !layer.locked;
-    handleLayerPropertyChange(id, 'locked', newLockedState);
-    // Also update with the new grid manager function
-    setLayerLock(id, newLockedState, layers, setLayers);
-    
-    // If locking the active layer, show a notification
-    if (newLockedState && id === activeLayer) {
-      showNotification("Active layer is now locked. Select another layer to draw.", "info");
-    }
-  }, [handleLayerPropertyChange, layers, setLayers, activeLayer]);
+  const handleLayerLockToggle = useCallback(
+    id => {
+      const layer = layers.find(layer => layer.id === id);
+      if (!layer) return;
 
-  const handleAddEffect = useCallback((id, effect) => {
-    const layer = layers.find(layer => layer.id === id);
-    if (!layer) {
-      return;
-    }
+      const newLockedState = !layer.locked;
+      handleLayerPropertyChange(id, 'locked', newLockedState);
+      // Also update with the new grid manager function
+      setLayerLock(id, newLockedState, layers, setLayers);
 
-    const updatedEffects = [...layer.effects, effect];
-    handleLayerPropertyChange(id, 'effects', updatedEffects);
-  }, [layers, handleLayerPropertyChange]);
+      // If locking the active layer, show a notification
+      if (newLockedState && id === activeLayer) {
+        showNotification('Active layer is now locked. Select another layer to draw.', 'info');
+      }
+    },
+    [handleLayerPropertyChange, layers, setLayers, activeLayer]
+  );
+
+  const handleAddEffect = useCallback(
+    (id, effect) => {
+      const layer = layers.find(layer => layer.id === id);
+      if (!layer) {
+        return;
+      }
+
+      const updatedEffects = [...layer.effects, effect];
+      handleLayerPropertyChange(id, 'effects', updatedEffects);
+    },
+    [layers, handleLayerPropertyChange]
+  );
 
   // Notification system
   const showNotification = (message, type = 'info') => {
@@ -175,9 +203,9 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
 
   // Keyboard shortcuts
   useEffect(() => {
-    const handleKeyboard = (e) => {
+    const handleKeyboard = e => {
       if (e.ctrlKey) {
-        switch(e.key) {
+        switch (e.key) {
           case 'j':
             handleAddLayer();
             break;
@@ -204,7 +232,7 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
   return (
     <div className="layer-manager">
       <h3>Layer Manager</h3>
-      
+
       {showAlert && (
         <Alert variant="destructive">
           <AlertTitle>Error</AlertTitle>
@@ -212,38 +240,44 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
         </Alert>
       )}
 
-      <DragDropContext onDragEnd={(result) => {
-        if (!result.destination) {
-          return;
-        }
-        handleMoveLayer(result.source.index, result.destination.index);
-      }}>
+      <DragDropContext
+        onDragEnd={result => {
+          if (!result.destination) {
+            return;
+          }
+          handleMoveLayer(result.source.index, result.destination.index);
+        }}
+      >
         <Droppable droppableId="layers">
-          {(provided) => (
+          {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {layers.map((layer, index) => (
                 <Draggable key={layer.id} draggableId={layer.id} index={index}>
-                  {(provided) => (
+                  {provided => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className={`layer-item ${layer.id === activeLayer ? "active" : ""}`}
+                      className={`layer-item ${layer.id === activeLayer ? 'active' : ''}`}
                     >
                       {renamingLayer === layer.id ? (
                         <div className="rename-input">
                           <input
+                            placeholder="Rename layer..."
                             type="text"
                             value={newLayerName}
-                            onChange={(e) => setNewLayerName(e.target.value)}
-                            placeholder="Rename layer..."
-                            onKeyPress={(e) => {
+                            onChange={e => setNewLayerName(e.target.value)}
+                            onKeyPress={e => {
                               if (e.key === 'Enter') {
                                 handleLayerPropertyChange(layer.id, 'name', newLayerName);
                               }
                             }}
                           />
-                          <button onClick={() => handleLayerPropertyChange(layer.id, 'name', newLayerName)}>
+                          <button
+                            onClick={() =>
+                              handleLayerPropertyChange(layer.id, 'name', newLayerName)
+                            }
+                          >
                             Save
                           </button>
                           <button onClick={() => setRenamingLayer(null)}>Cancel</button>
@@ -251,20 +285,22 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
                       ) : (
                         <span onClick={() => setActiveLayer(layer.id)}>{layer.name}</span>
                       )}
-                      
+
                       <div className="layer-controls">
-                        <button 
-                          onClick={() => handleLayerPropertyChange(layer.id, 'visible', !layer.visible)}
+                        <button
                           className={`visibility-toggle ${layer.visible ? '' : 'hidden'}`}
+                          onClick={() =>
+                            handleLayerPropertyChange(layer.id, 'visible', !layer.visible)
+                          }
                         >
-                          {layer.visible ? "Hide" : "Show"}
+                          {layer.visible ? 'Hide' : 'Show'}
                         </button>
-                        
+
                         <select
-                          value={layer.blendMode}
-                          onChange={(e) => handleSetBlendMode(layer.id, e.target.value)}
                           className="blend-mode-select"
                           disabled={layer.locked}
+                          value={layer.blendMode}
+                          onChange={e => handleSetBlendMode(layer.id, e.target.value)}
                         >
                           <option value={BLEND_MODES.NORMAL}>Normal</option>
                           <option value={BLEND_MODES.MULTIPLY}>Multiply</option>
@@ -283,33 +319,35 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
                         <label className="opacity-control">
                           Opacity:
                           <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            value={layer.opacity}
-                            onChange={(e) => handleOpacityChange(layer.id, parseFloat(e.target.value))}
                             disabled={layer.locked}
+                            max="1"
+                            min="0"
+                            step="0.01"
+                            type="range"
+                            value={layer.opacity}
+                            onChange={e =>
+                              handleOpacityChange(layer.id, parseFloat(e.target.value))
+                            }
                           />
                           <span>{Math.round(layer.opacity * 100)}%</span>
                         </label>
 
-                        <button onClick={() => handleDuplicateLayer(layer.id)}>
-                          Duplicate
-                        </button>
-                        <button onClick={() => setRenamingLayer(layer.id)}>
-                          Rename
-                        </button>
-                        <button 
-                          onClick={() => handleLayerLockToggle(layer.id)}
+                        <button onClick={() => handleDuplicateLayer(layer.id)}>Duplicate</button>
+                        <button onClick={() => setRenamingLayer(layer.id)}>Rename</button>
+                        <button
                           className={`lock-toggle ${layer.locked ? 'locked' : ''}`}
-                          title={layer.locked ? "Unlock this layer" : "Lock this layer to prevent editing"}
+                          title={
+                            layer.locked
+                              ? 'Unlock this layer'
+                              : 'Lock this layer to prevent editing'
+                          }
+                          onClick={() => handleLayerLockToggle(layer.id)}
                         >
-                          {layer.locked ? "Unlock" : "Lock"}
+                          {layer.locked ? 'Unlock' : 'Lock'}
                         </button>
-                        <button 
-                          onClick={() => handleRemoveLayer(layer.id)}
+                        <button
                           className="delete-button"
+                          onClick={() => handleRemoveLayer(layer.id)}
                         >
                           Delete
                         </button>
@@ -325,15 +363,15 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
       </DragDropContext>
 
       <div className="layer-actions">
-        <button 
+        <button
           className="add-layer-button"
-          onClick={handleAddLayer}
           disabled={layers.length >= MAX_LAYERS}
+          onClick={handleAddLayer}
         >
           + Add Layer
         </button>
         {layers.length >= 2 && (
-          <button 
+          <button
             className="merge-layers-button"
             onClick={() => {
               const activeIndex = layers.findIndex(layer => layer.id === activeLayer);
@@ -351,4 +389,3 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
 };
 
 export default React.memo(LayerManager);
-

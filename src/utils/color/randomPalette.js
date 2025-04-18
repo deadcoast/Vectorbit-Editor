@@ -1,13 +1,10 @@
-
 /**
- * Generate a random HEX color.
- * @returns {string} - Random HEX color code (e.g., "#AABBCC").
+ * Helper: Generate a random number within a range.
+ * @param {number} min - Minimum value.
+ * @param {number} max - Maximum value.
+ * @returns {number} - Random number within range.
  */
-const randomHex = () => {
-  return `#${Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, "0")}`;
-};
+const randomInRange = (min, max) => Math.random() * (max - min) + min;
 
 /**
  * Generate a random palette using Color Dispositionalism.
@@ -17,7 +14,7 @@ const randomHex = () => {
  * @param {number} size - Number of colors in the palette (default: 5).
  * @returns {Array<string>} - Array of HEX color codes.
  */
-export const generatePaletteByDisposition = (disposition = "calm", size = 5) => {
+export const generatePaletteByDisposition = (disposition = 'calm', size = 5) => {
   const dispositionRanges = {
     calm: { hue: [180, 240], saturation: [20, 50], lightness: [70, 90] },
     energetic: { hue: [0, 60], saturation: [70, 100], lightness: [50, 70] },
@@ -26,7 +23,7 @@ export const generatePaletteByDisposition = (disposition = "calm", size = 5) => 
   };
 
   const { hue, saturation, lightness } =
-    dispositionRanges[disposition] || dispositionRanges["calm"];
+    dispositionRanges[disposition] || dispositionRanges['calm'];
 
   return Array.from({ length: size }, () => {
     const h = randomInRange(hue[0], hue[1]);
@@ -80,7 +77,7 @@ export const generatePaletteByChromaticSynergy = (size = 5) => {
  * @param {number} wavelength - Wavelength in nanometers.
  * @returns {Object} - RGB object with properties { r, g, b }.
  */
-const wavelengthToRgb = (wavelength) => {
+const wavelengthToRgb = wavelength => {
   let r, g, b;
 
   if (wavelength >= 380 && wavelength < 440) {
@@ -111,11 +108,13 @@ const wavelengthToRgb = (wavelength) => {
     r = g = b = 0;
   }
 
-  const factor = wavelength >= 380 && wavelength < 420
-    ? 0.3 + 0.7 * (wavelength - 380) / 40
-    : wavelength > 700 && wavelength <= 780
-    ? 0.3 + 0.7 * (780 - wavelength) / 80
-    : 1;
+  // Calculate intensity factor based on wavelength
+  let factor = 1;
+  if (wavelength >= 380 && wavelength < 420) {
+    factor = 0.3 + (0.7 * (wavelength - 380)) / 40;
+  } else if (wavelength > 700 && wavelength <= 780) {
+    factor = 0.3 + (0.7 * (780 - wavelength)) / 80;
+  }
 
   return {
     r: Math.round(r * factor * 255),
@@ -132,7 +131,7 @@ const wavelengthToRgb = (wavelength) => {
  * @returns {string} - HEX color code.
  */
 const rgbToHex = (r, g, b) => {
-  const toHex = (value) => value.toString(16).padStart(2, "0");
+  const toHex = value => value.toString(16).padStart(2, '0');
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
@@ -144,32 +143,29 @@ const rgbToHex = (r, g, b) => {
  * @returns {string} - HEX color code.
  */
 const hslToHex = (h, s, l) => {
-  const chroma = (1 - Math.abs(2 * l / 100 - 1)) * (s / 100);
-  const x = chroma * (1 - Math.abs((h / 60) % 2 - 1));
+  const chroma = (1 - Math.abs((2 * l) / 100 - 1)) * (s / 100);
+  const x = chroma * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = l / 100 - chroma / 2;
 
   let [r, g, b] = [0, 0, 0];
   if (h >= 0 && h < 60) {
     [r, g, b] = [chroma, x, 0];
   } else if (h >= 60 && h < 120) {
-           [r, g, b] = [x, chroma, 0];
-         } else if (h >= 120 && h < 180) {
-                  [r, g, b] = [0, chroma, x];
-                } else if (h >= 180 && h < 240) [r, g, b] = [0, x, chroma];
-                             else if (h >= 240 && h < 300) [r, g, b] = [x, 0, chroma];
-                             else if (h >= 300 && h <= 360) [r, g, b] = [chroma, 0, x];
+    [r, g, b] = [x, chroma, 0];
+  } else if (h >= 120 && h < 180) {
+    [r, g, b] = [0, chroma, x];
+  } else if (h >= 180 && h < 240) [r, g, b] = [0, x, chroma];
+  else if (h >= 240 && h < 300) [r, g, b] = [x, 0, chroma];
+  else if (h >= 300 && h <= 360) [r, g, b] = [chroma, 0, x];
 
-  return rgbToHex(
-    Math.round((r + m) * 255),
-    Math.round((g + m) * 255),
-    Math.round((b + m) * 255)
-  );
+  return rgbToHex(Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255));
 };
 
-/**
- * Helper: Generate a random number within a range.
- * @param {number} min - Minimum value.
- * @param {number} max - Maximum value.
- * @returns {number} - Random number within range.
- */
-const randomInRange = (min, max) => Math.random() * (max - min) + min;
+// Export as default for module compatibility
+const randomPalette = {
+  generatePaletteByDisposition,
+  generatePaletteByResonance,
+  generatePaletteByChromaticSynergy,
+};
+
+export default randomPalette;

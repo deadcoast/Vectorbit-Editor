@@ -3,119 +3,117 @@
  *
  * Provides a user interface for viewing and customizing keyboard shortcuts
  */
-import React, { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
-import { useShortcuts } from "../../utils/shortcuts/KeyboardShortcuts";
-import "./ShortcutsManager.css";
+import PropTypes from 'prop-types';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-const ShortcutsManager = ({
-  isOpen,
-  onClose,
-  title = "Keyboard Shortcuts",
-}) => {
-  const {
-    getContexts,
-    getShortcutsByContext,
-    customizeShortcut,
-    resetShortcuts,
-  } = useShortcuts();
+import { useShortcuts } from '../../utils/shortcuts/KeyboardShortcuts';
+import './ShortcutsManager.css';
 
-  const [activeTab, setActiveTab] = useState("global");
+const ShortcutsManager = ({ isOpen, onClose, title = 'Keyboard Shortcuts' }) => {
+  const { getContexts, getShortcutsByContext, customizeShortcut, resetShortcuts } = useShortcuts();
+
+  const [activeTab, setActiveTab] = useState('global');
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [customizingShortcut, setCustomizingShortcut] = useState(null);
   const [keysPressed, setKeysPressed] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [filteredShortcuts, setFilteredShortcuts] = useState({});
 
   const keyListenerRef = useRef(null);
   const contexts = getContexts();
 
   // Format key for display
-  const formatKey = (key) => {
+  const formatKey = key => {
     switch (key) {
-      case " ":
-        return "Space";
-      case "ArrowUp":
-        return "↑";
-      case "ArrowDown":
-        return "↓";
-      case "ArrowLeft":
-        return "←";
-      case "ArrowRight":
-        return "→";
-      case "Control":
-        return "Ctrl";
-      case "Meta":
-        return navigator.platform.includes("Mac") ? "⌘" : "Win";
-      case "Alt":
-        return navigator.platform.includes("Mac") ? "Option" : "Alt";
-      case "Shift":
-        return "Shift";
-      case "Escape":
-        return "Esc";
-      case "Delete":
-        return "Del";
-      case "Backspace":
-        return "⌫";
-      case "Enter":
-        return "↵";
-      case "Tab":
-        return "⇥";
+      case ' ':
+        return 'Space';
+      case 'ArrowUp':
+        return '↑';
+      case 'ArrowDown':
+        return '↓';
+      case 'ArrowLeft':
+        return '←';
+      case 'ArrowRight':
+        return '→';
+      case 'Control':
+        return 'Ctrl';
+      case 'Meta':
+        return navigator.platform.includes('Mac') ? '⌘' : 'Win';
+      case 'Alt':
+        return navigator.platform.includes('Mac') ? 'Option' : 'Alt';
+      case 'Shift':
+        return 'Shift';
+      case 'Escape':
+        return 'Esc';
+      case 'Delete':
+        return 'Del';
+      case 'Backspace':
+        return '⌫';
+      case 'Enter':
+        return '↵';
+      case 'Tab':
+        return '⇥';
       default:
         return key.length === 1 ? key.toUpperCase() : key;
     }
   };
 
   // Format shortcut keys for display
-  const formatShortcut = (keys) => {
+  const formatShortcut = keys => {
     return keys
-      .map((combo) => {
-        return combo.split("+").map(formatKey).join(" + ");
+      .map(combo => {
+        return combo.split('+').map(formatKey).join(' + ');
       })
-      .join(" or ");
+      .join(' or ');
   };
 
   // Handle key down while customizing
-  const handleKeyDown = (event) => {
-    if (!isCustomizing) return;
+  const handleKeyDown = useCallback(
+    event => {
+      if (!isCustomizing) return;
 
-    event.preventDefault();
+      event.preventDefault();
 
-    const { key } = event;
+      const { key } = event;
 
-    // Ignore standalone modifier keys
-    if (["Control", "Alt", "Shift", "Meta"].includes(key)) {
-      return;
-    }
+      // Ignore standalone modifier keys
+      if (['Control', 'Alt', 'Shift', 'Meta'].includes(key)) {
+        return;
+      }
 
-    const modifiers = [];
-    if (event.ctrlKey) modifiers.push("Control");
-    if (event.altKey) modifiers.push("Alt");
-    if (event.shiftKey) modifiers.push("Shift");
-    if (event.metaKey) modifiers.push("Meta");
+      const modifiers = [];
+      if (event.ctrlKey) modifiers.push('Control');
+      if (event.altKey) modifiers.push('Alt');
+      if (event.shiftKey) modifiers.push('Shift');
+      if (event.metaKey) modifiers.push('Meta');
 
-    const combination = [...modifiers, key].join("+");
-    setKeysPressed([combination]);
-  };
+      const combination = [...modifiers, key].join('+');
+      setKeysPressed([combination]);
+    },
+    [isCustomizing, setKeysPressed]
+  );
 
   // Handle key up while customizing
-  const handleKeyUp = (event) => {
-    if (!isCustomizing || !customizingShortcut) return;
+  const handleKeyUp = useCallback(
+    event => {
+      if (!isCustomizing || !customizingShortcut) return;
 
-    // Check if all modifiers are released
-    if (
-      !event.ctrlKey &&
-      !event.altKey &&
-      !event.shiftKey &&
-      !event.metaKey &&
-      keysPressed.length > 0
-    ) {
-      applyCustomShortcut();
-    }
-  };
+      // Check if all modifiers are released
+      if (
+        !event.ctrlKey &&
+        !event.altKey &&
+        !event.shiftKey &&
+        !event.metaKey &&
+        keysPressed.length > 0
+      ) {
+        applyCustomShortcut();
+      }
+    },
+    [isCustomizing, customizingShortcut, keysPressed, applyCustomShortcut]
+  );
 
   // Apply custom shortcut
-  const applyCustomShortcut = () => {
+  const applyCustomShortcut = useCallback(() => {
     if (!customizingShortcut || keysPressed.length === 0) return;
 
     const { id, context } = customizingShortcut;
@@ -127,9 +125,16 @@ const ShortcutsManager = ({
       setKeysPressed([]);
     } else {
       // Handle error
-      console.error("Failed to customize shortcut");
+      console.error('Failed to customize shortcut');
     }
-  };
+  }, [
+    customizingShortcut,
+    keysPressed,
+    customizeShortcut,
+    setIsCustomizing,
+    setCustomizingShortcut,
+    setKeysPressed,
+  ]);
 
   // Start customizing a shortcut
   const startCustomizing = (id, context) => {
@@ -147,7 +152,7 @@ const ShortcutsManager = ({
 
   // Reset all shortcuts to defaults
   const handleResetShortcuts = () => {
-    if (window.confirm("Reset all shortcuts to default values?")) {
+    if (window.confirm('Reset all shortcuts to default values?')) {
       resetShortcuts();
     }
   };
@@ -162,7 +167,7 @@ const ShortcutsManager = ({
     const term = searchTerm.toLowerCase();
     const filtered = {};
 
-    contexts.forEach((context) => {
+    contexts.forEach(context => {
       const shortcuts = getShortcutsByContext(context);
       const matchingShortcuts = {};
 
@@ -170,7 +175,7 @@ const ShortcutsManager = ({
         if (
           id.toLowerCase().includes(term) ||
           shortcut.description.toLowerCase().includes(term) ||
-          shortcut.keys.some((key) => key.toLowerCase().includes(term))
+          shortcut.keys.some(key => key.toLowerCase().includes(term))
         ) {
           matchingShortcuts[id] = shortcut;
         }
@@ -187,15 +192,15 @@ const ShortcutsManager = ({
   // Setup key listeners for customizing shortcuts
   useEffect(() => {
     if (isCustomizing) {
-      window.addEventListener("keydown", handleKeyDown);
-      window.addEventListener("keyup", handleKeyUp);
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keyup', handleKeyUp);
     }
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [isCustomizing, keysPressed, customizingShortcut]);
+  }, [isCustomizing, keysPressed, customizingShortcut, handleKeyDown, handleKeyUp]);
 
   // Automatically focus the customizing shortcut
   useEffect(() => {
@@ -218,13 +223,13 @@ const ShortcutsManager = ({
   const renderTabs = () => {
     return (
       <div className="shortcuts-tabs">
-        {contexts.map((context) => (
+        {contexts.map(context => (
           <button
             key={context}
-            className={`tab-button ${activeTab === context ? "active" : ""}`}
+            className={`tab-button ${activeTab === context ? 'active' : ''}`}
             onClick={() => {
               setActiveTab(context);
-              setSearchTerm("");
+              setSearchTerm('');
             }}
           >
             {context.charAt(0).toUpperCase() + context.slice(1)}
@@ -239,9 +244,7 @@ const ShortcutsManager = ({
     return (
       <div key={context} className="shortcuts-section">
         {searchTerm && (
-          <h3 className="context-heading">
-            {context.charAt(0).toUpperCase() + context.slice(1)}
-          </h3>
+          <h3 className="context-heading">{context.charAt(0).toUpperCase() + context.slice(1)}</h3>
         )}
 
         <table className="shortcuts-table">
@@ -261,19 +264,16 @@ const ShortcutsManager = ({
                   customizingShortcut &&
                   customizingShortcut.id === id &&
                   customizingShortcut.context === context ? (
-                    <div
-                      className="key-listener"
+                    <button
                       ref={keyListenerRef}
-                      tabIndex={0}
+                      aria-label="Press keys to set shortcut"
+                      className="key-listener"
+                      type="button"
                     >
-                      {keysPressed.length > 0
-                        ? formatShortcut(keysPressed)
-                        : "Press keys..."}
-                    </div>
+                      {keysPressed.length > 0 ? formatShortcut(keysPressed) : 'Press keys...'}
+                    </button>
                   ) : (
-                    <div className="key-combination">
-                      {formatShortcut(shortcut.keys)}
-                    </div>
+                    <div className="key-combination">{formatShortcut(shortcut.keys)}</div>
                   )}
                 </td>
                 <td className="shortcut-actions">
@@ -284,23 +284,20 @@ const ShortcutsManager = ({
                     <>
                       <button
                         className="action-button apply"
-                        onClick={applyCustomShortcut}
                         disabled={keysPressed.length === 0}
+                        onClick={applyCustomShortcut}
                       >
                         Apply
                       </button>
-                      <button
-                        className="action-button cancel"
-                        onClick={cancelCustomizing}
-                      >
+                      <button className="action-button cancel" onClick={cancelCustomizing}>
                         Cancel
                       </button>
                     </>
                   ) : (
                     <button
                       className="action-button edit"
-                      onClick={() => startCustomizing(id, context)}
                       disabled={isCustomizing}
+                      onClick={() => startCustomizing(id, context)}
                     >
                       Edit
                     </button>
@@ -326,11 +323,11 @@ const ShortcutsManager = ({
 
         <div className="shortcuts-search">
           <input
-            type="text"
-            placeholder="Search shortcuts..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
             disabled={isCustomizing}
+            placeholder="Search shortcuts..."
+            type="text"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
 
@@ -342,18 +339,12 @@ const ShortcutsManager = ({
               renderShortcutsTable(context, shortcuts)
             )
           ) : (
-            <div className="no-results">
-              No shortcuts found matching "{searchTerm}"
-            </div>
+            <div className="no-results">No shortcuts found matching &quot;{searchTerm}&quot;</div>
           )}
         </div>
 
         <div className="shortcuts-footer">
-          <button
-            className="reset-button"
-            onClick={handleResetShortcuts}
-            disabled={isCustomizing}
-          >
+          <button className="reset-button" disabled={isCustomizing} onClick={handleResetShortcuts}>
             Reset to Defaults
           </button>
         </div>

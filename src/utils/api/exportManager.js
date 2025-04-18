@@ -1,3 +1,9 @@
+/**
+ * Export Manager
+ * Utilities for exporting grid data in various formats (SVG, PNG, JSON, CSV)
+ */
+
+import axios from 'axios';
 
 /**
  * Export grid data to SVG format.
@@ -31,7 +37,7 @@ export const exportToPNG = (gridSize, cellColors, canvasRef, options = {}) => {
   const { scale = 64 } = options; // Default scale makes 16x16 grid render as 1024x1024
 
   const canvas = canvasRef.current;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
 
   const canvasSize = gridSize * scale;
   canvas.width = canvasSize;
@@ -46,7 +52,7 @@ export const exportToPNG = (gridSize, cellColors, canvasRef, options = {}) => {
     }
   });
 
-  return canvas.toDataURL("image/png");
+  return canvas.toDataURL('image/png');
 };
 
 /**
@@ -56,10 +62,10 @@ export const exportToPNG = (gridSize, cellColors, canvasRef, options = {}) => {
  * @param {Object} gridData - Grid data including colors and metadata.
  * @param {string} fileName - Name of the exported JSON file (default: "gridData.json").
  */
-export const exportToJSON = (gridData, fileName = "gridData.json") => {
+export const exportToJSON = (gridData, fileName = 'gridData.json') => {
   const dataStr = JSON.stringify(gridData, null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const link = document.createElement("a");
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = fileName;
   link.click();
@@ -73,8 +79,8 @@ export const exportToJSON = (gridData, fileName = "gridData.json") => {
  * @param {number} gridSize - The size of the grid (e.g., 16x16).
  * @param {string} fileName - Name of the exported CSV file (default: "gridData.csv").
  */
-export const exportToCSV = (cellColors, gridSize, fileName = "gridData.csv") => {
-  let csvContent = "row,col,color\n";
+export const exportToCSV = (cellColors, gridSize, fileName = 'gridData.csv') => {
+  let csvContent = 'row,col,color\n';
 
   cellColors.forEach((color, index) => {
     if (color) {
@@ -84,8 +90,8 @@ export const exportToCSV = (cellColors, gridSize, fileName = "gridData.csv") => 
     }
   });
 
-  const blob = new Blob([csvContent], { type: "text/csv" });
-  const link = document.createElement("a");
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = fileName;
   link.click();
@@ -104,17 +110,17 @@ export const exportToCSV = (cellColors, gridSize, fileName = "gridData.csv") => 
 export const saveExportToAPI = async (endpoint, fileBlob, fileName, metadata = {}) => {
   try {
     const formData = new FormData();
-    formData.append("file", fileBlob, fileName);
-    formData.append("metadata", JSON.stringify(metadata));
+    formData.append('file', fileBlob, fileName);
+    formData.append('metadata', JSON.stringify(metadata));
 
     const response = await axios.post(endpoint, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
 
-    console.log("File uploaded successfully:", response.data);
+    // console.log('File uploaded successfully:', response.data);
     return response.data;
   } catch (error) {
-    console.error("Error uploading file to API:", error);
+    console.error('Error uploading file to API:', error);
     throw error;
   }
 };
@@ -132,9 +138,9 @@ export const saveExportToAPI = async (endpoint, fileBlob, fileName, metadata = {
 export const exportAllFormats = (gridSize, cellColors, canvasRef, gridData, layers = null) => {
   // Export to PNG
   const pngDataUrl = exportToPNG(gridSize, cellColors, canvasRef);
-  const pngLink = document.createElement("a");
+  const pngLink = document.createElement('a');
   pngLink.href = pngDataUrl;
-  pngLink.download = "artwork.png";
+  pngLink.download = 'artwork.png';
   pngLink.click();
 
   // Export to SVG - use layers if available for advanced export
@@ -147,11 +153,11 @@ export const exportAllFormats = (gridSize, cellColors, canvasRef, gridData, laye
     // Fall back to basic SVG export
     svgContent = exportToSVG(gridSize, cellColors);
   }
-  
-  const svgBlob = new Blob([svgContent], { type: "image/svg+xml" });
-  const svgLink = document.createElement("a");
+
+  const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
+  const svgLink = document.createElement('a');
   svgLink.href = URL.createObjectURL(svgBlob);
-  svgLink.download = "artwork.svg";
+  svgLink.download = 'artwork.svg';
   svgLink.click();
 
   // Export to JSON

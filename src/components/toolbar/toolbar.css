@@ -11,7 +11,9 @@ css
   border: 1px solid var(--border-color);
   border-radius: var(--button-radius);
   box-shadow: var(--shadow-lg);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .toolbar:hover {
@@ -46,7 +48,10 @@ css
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
 }
 
 .tool-buttons button:hover {
@@ -80,7 +85,9 @@ css
   color: white;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .advanced-tools button:hover {

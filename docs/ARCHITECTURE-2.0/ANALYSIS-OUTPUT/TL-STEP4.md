@@ -47,20 +47,25 @@
 
 ### 4.1 Implementation of Section 4.1: Core Feature Completion
 
-This implementation addresses several key items from Section 4.1 "Core Feature Completion & Refinement" of the OVERVIEW-TASKLIST.md document:
+This implementation addresses several key items from Section 4.1 "Core Feature Completion &
+Refinement" of the OVERVIEW-TASKLIST.md document:
 
 1. **Procedural Pattern Generation Integration**
+
    - Implemented a complete procedural pattern generation system in ProceduralGenerator.js
    - Integrated pattern generation with the brush system in BrushManager.js
-   - Added support for various pattern types including solid, dot, line, noise, crosshatch, dither, checker, perlin, and flow field
+   - Added support for various pattern types including solid, dot, line, noise, crosshatch, dither,
+     checker, perlin, and flow field
 
 2. **PresetEditor Component**
+
    - Created a complete PresetEditor component for managing presets
    - Implemented brush, pattern, and gradient preset management
    - Added persistence using localStorage
    - Implemented preview functionality for different preset types
 
 3. **Symmetry Tools**
+
    - Implemented symmetry drawing modes in the brush system
    - Added support for horizontal, vertical, quad, radial, and mirror symmetry
    - Created functions to apply symmetry to both cell collections and coordinates
@@ -85,7 +90,7 @@ const pattern = generatePattern({
   primaryColor: '#FF0000',
   secondaryColor: '#FFFFFF',
   density: 0.5,
-  angle: 45
+  angle: 45,
 });
 
 // Use the pattern with a brush
@@ -95,8 +100,8 @@ const brushSettings = {
     type: PATTERN_TYPES.CROSSHATCH,
     scale: 2,
     density: 0.5,
-    angle: 45
-  }
+    angle: 45,
+  },
 };
 ```
 
@@ -105,14 +110,17 @@ const brushSettings = {
 To complete the Section 4 roadmap implementation, the following items need attention:
 
 1. **SVG Export Support**
+
    - Enhance the export functionality to properly support SVG format
    - Ensure vector data is correctly preserved during export
 
 2. **Layer Management Features**
+
    - Implement layer locking, opacity control, and merging
    - Add support for layer blending modes
 
 3. **Selection Tools & Transformations**
+
    - Add selection tools (marquee, lasso) for selecting regions
    - Implement transformation capabilities for selections
 

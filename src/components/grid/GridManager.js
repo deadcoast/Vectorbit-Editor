@@ -6,14 +6,9 @@
  * @param {Array} oldCellColors - The array of cell colors from the old grid.
  * @param {Function} setCellColors - State setter for the new cell colors.
  */
-export const resizeGrid = (
-  newSize,
-  oldGridSize,
-  oldCellColors,
-  setCellColors
-) => {
+export const resizeGrid = (newSize, oldGridSize, oldCellColors, setCellColors) => {
   const scale = newSize / oldGridSize;
-  const resizedGrid = Array(newSize * newSize).fill("#FFFFFF");
+  const resizedGrid = Array(newSize * newSize).fill('#FFFFFF');
 
   for (let y = 0; y < oldGridSize; y++) {
     for (let x = 0; x < oldGridSize; x++) {
@@ -39,7 +34,7 @@ export const resizeGrid = (
  * @param {Function} setCellColors - State setter for the cell colors.
  */
 export const updateGridCell = (x, y, color, gridSize, setCellColors) => {
-  setCellColors((prev) => {
+  setCellColors(prev => {
     const updatedColors = [...prev];
     const index = y * gridSize + x;
 
@@ -64,25 +59,17 @@ export const updateGridCell = (x, y, color, gridSize, setCellColors) => {
  * @param {number} activeLayer - The ID of the active layer.
  * @returns {boolean} - Whether the update was successful (false if layer was locked)
  */
-export const updateCell = (
-  x,
-  y,
-  color,
-  gridSize,
-  setLayers,
-  layers,
-  activeLayer
-) => {
+export const updateCell = (x, y, color, gridSize, setLayers, layers, activeLayer) => {
   // Find the active layer
-  const activeLayerObj = layers.find((layer) => layer.id === activeLayer);
+  const activeLayerObj = layers.find(layer => layer.id === activeLayer);
 
   // Check if the layer is locked or not visible
   if (!activeLayerObj || activeLayerObj.locked || !activeLayerObj.visible) {
-    console.warn("Cannot edit: layer is locked, hidden, or does not exist");
+    console.warn('Cannot edit: layer is locked, hidden, or does not exist');
     return false;
   }
 
-  const updatedLayers = layers.map((layer) =>
+  const updatedLayers = layers.map(layer =>
     layer.id === activeLayer
       ? {
           ...layer,
@@ -105,11 +92,7 @@ export const updateCell = (
  * @param {Function} setCellColors - State setter for the cell colors.
  * @param {string} defaultColor - Default color for new cells (default: #FFFFFF).
  */
-export const initializeGrid = (
-  gridSize,
-  setCellColors,
-  defaultColor = "#FFFFFF"
-) => {
+export const initializeGrid = (gridSize, setCellColors, defaultColor = '#FFFFFF') => {
   const initialGrid = Array(gridSize * gridSize).fill(defaultColor);
   setCellColors(initialGrid);
 };
@@ -121,11 +104,7 @@ export const initializeGrid = (
  * @param {Function} setCellColors - State setter for the cell colors.
  * @param {string} defaultColor - Default color for cleared cells (default: #FFFFFF).
  */
-export const clearGrid = (
-  gridSize,
-  setCellColors,
-  defaultColor = "#FFFFFF"
-) => {
+export const clearGrid = (gridSize, setCellColors, defaultColor = '#FFFFFF') => {
   const clearedGrid = Array(gridSize * gridSize).fill(defaultColor);
   setCellColors(clearedGrid);
 };
@@ -161,12 +140,12 @@ export const floodFill = (
 
   // For layered implementation when checking locked status
   if (
-    typeof cellColors === "object" &&
-    "locked" in cellColors &&
+    typeof cellColors === 'object' &&
+    'locked' in cellColors &&
     respectLock &&
     (cellColors.locked || !cellColors.visible)
   ) {
-    console.warn("Cannot edit: layer is locked or hidden");
+    console.warn('Cannot edit: layer is locked or hidden');
     return false;
   }
 
@@ -237,34 +216,32 @@ export const toggleGridOverlay = (showGrid, setGridOverlay) => {
 export const renderLayers = (layers, gridSize, canvas) => {
   if (!canvas) return;
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
   const cellSize = canvas.width / gridSize;
 
   // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Import dynamically to avoid circular dependencies
-  import("../utils/blend/BlendModeProcessor.js").then(
-    ({ getCompositePixelColor }) => {
-      // Filter visible layers
-      const visibleLayers = layers.filter((layer) => layer.visible);
+  import('../../utils/blend/BlendModeProcessor.js').then(({ getCompositePixelColor }) => {
+    // Filter visible layers
+    const visibleLayers = layers.filter(layer => layer.visible);
 
-      // Render each cell with proper blending
-      for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
-          const cellKey = `${x},${y}`;
+    // Render each cell with proper blending
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        const cellKey = `${x},${y}`;
 
-          // Get the composite color for this cell across all layers
-          const compositeColor = getCompositePixelColor(visibleLayers, x, y);
+        // Get the composite color for this cell across all layers
+        const compositeColor = getCompositePixelColor(visibleLayers, x, y);
 
-          if (compositeColor) {
-            ctx.fillStyle = compositeColor;
-            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-          }
+        if (compositeColor) {
+          ctx.fillStyle = compositeColor;
+          ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
         }
       }
     }
-  );
+  });
 };
 
 /**
@@ -276,9 +253,7 @@ export const renderLayers = (layers, gridSize, canvas) => {
  * @param {Function} setLayers - State setter for the layers
  */
 export const setLayerLock = (layerId, locked, layers, setLayers) => {
-  const updatedLayers = layers.map((layer) =>
-    layer.id === layerId ? { ...layer, locked } : layer
-  );
+  const updatedLayers = layers.map(layer => (layer.id === layerId ? { ...layer, locked } : layer));
   setLayers(updatedLayers);
 };
 
@@ -292,7 +267,7 @@ export const setLayerLock = (layerId, locked, layers, setLayers) => {
  */
 export const setLayerOpacity = (layerId, opacity, layers, setLayers) => {
   const clampedOpacity = Math.min(1, Math.max(0, opacity));
-  const updatedLayers = layers.map((layer) =>
+  const updatedLayers = layers.map(layer =>
     layer.id === layerId ? { ...layer, opacity: clampedOpacity } : layer
   );
   setLayers(updatedLayers);
@@ -307,7 +282,7 @@ export const setLayerOpacity = (layerId, opacity, layers, setLayers) => {
  * @param {Function} setLayers - State setter for the layers
  */
 export const setLayerBlendMode = (layerId, blendMode, layers, setLayers) => {
-  const updatedLayers = layers.map((layer) =>
+  const updatedLayers = layers.map(layer =>
     layer.id === layerId ? { ...layer, blendMode } : layer
   );
   setLayers(updatedLayers);

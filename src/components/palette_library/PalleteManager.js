@@ -1,4 +1,3 @@
-
 // File: src/components/PalleteLibrary/PalleteManager.js
 import {
   fetchPalettes,
@@ -6,30 +5,30 @@ import {
   deletePalette,
   updatePaletteTags,
   togglePaletteSharing,
-} from "../api/api";
+} from '../api/api';
+import harmonizePalette from '../utils/colorHarmony';
 import {
   generateComplementary,
   generateAnalogous,
   generateTriadic,
   generateTetradic,
-} from "../utils/colorTheory";
-import generateRandomPalette from "../utils/randomPalette";
-import harmonizePalette from "../utils/colorHarmony";
+} from '../utils/colorTheory';
+import generateRandomPalette from '../utils/randomPalette';
 
 /**
  * Load palettes from the API and set the state.
  * Provides fallback to ensure application stability.
  * @param {Function} setPalettes - State setter for palettes.
  */
-export const loadPalettes = async (setPalettes) => {
+export const loadPalettes = async setPalettes => {
   try {
     const fetchedPalettes = await fetchPalettes();
     setPalettes(fetchedPalettes);
-    console.log("Palettes loaded successfully.");
+    console.log('Palettes loaded successfully.');
   } catch (err) {
-    console.error("Failed to load palettes:", err);
+    console.error('Failed to load palettes:', err);
     setPalettes([]); // Fallback to an empty array
-    alert("Unable to load palettes. Please check your connection.");
+    alert('Unable to load palettes. Please check your connection.');
   }
 };
 
@@ -40,20 +39,15 @@ export const loadPalettes = async (setPalettes) => {
  * @param {Function} setPalettes - State setter for palettes.
  * @param {Function} setPaletteName - State setter for palette name input.
  */
-export const savePalette = async (
-  paletteName,
-  currentColors,
-  setPalettes,
-  setPaletteName
-) => {
+export const savePalette = async (paletteName, currentColors, setPalettes, setPaletteName) => {
   if (!paletteName.trim()) {
-    return alert("Palette name cannot be empty.");
+    return alert('Palette name cannot be empty.');
   }
   if (currentColors.length === 0) {
-    return alert("Palette must contain at least one color.");
+    return alert('Palette must contain at least one color.');
   }
   if (currentColors.length > 10) {
-    return alert("A palette cannot contain more than 10 colors.");
+    return alert('A palette cannot contain more than 10 colors.');
   }
 
   try {
@@ -61,12 +55,12 @@ export const savePalette = async (
       name: paletteName,
       colors: currentColors,
     });
-    setPalettes((prev) => [...prev, newPalette]);
-    setPaletteName("");
-    alert("Palette saved successfully!");
+    setPalettes(prev => [...prev, newPalette]);
+    setPaletteName('');
+    alert('Palette saved successfully!');
   } catch (err) {
-    console.error("Failed to save palette:", err);
-    alert("An error occurred while saving the palette. Please try again.");
+    console.error('Failed to save palette:', err);
+    alert('An error occurred while saving the palette. Please try again.');
   }
 };
 
@@ -76,17 +70,17 @@ export const savePalette = async (
  * @param {Function} setPalettes - State setter for palettes.
  */
 export const deletePaletteById = async (id, setPalettes) => {
-  if (!confirm("Are you sure you want to delete this palette? This action is irreversible.")) {
+  if (!confirm('Are you sure you want to delete this palette? This action is irreversible.')) {
     return;
   }
 
   try {
     await deletePalette(id);
-    setPalettes((prev) => prev.filter((palette) => palette._id !== id));
-    alert("Palette deleted successfully!");
+    setPalettes(prev => prev.filter(palette => palette._id !== id));
+    alert('Palette deleted successfully!');
   } catch (err) {
-    console.error("Failed to delete palette:", err);
-    alert("An error occurred while deleting the palette. Please try again.");
+    console.error('Failed to delete palette:', err);
+    alert('An error occurred while deleting the palette. Please try again.');
   }
 };
 
@@ -98,28 +92,28 @@ export const deletePaletteById = async (id, setPalettes) => {
  */
 export const generatePalette = (baseColor, scheme) => {
   if (!baseColor) {
-    console.error("Base color is required for palette generation.");
-    alert("Please provide a base color.");
+    console.error('Base color is required for palette generation.');
+    alert('Please provide a base color.');
     return [];
   }
 
   try {
     switch (scheme) {
-      case "complementary":
+      case 'complementary':
         return generateComplementary(baseColor);
-      case "analogous":
+      case 'analogous':
         return generateAnalogous(baseColor);
-      case "triadic":
+      case 'triadic':
         return generateTriadic(baseColor);
-      case "tetradic":
+      case 'tetradic':
         return generateTetradic(baseColor);
       default:
         console.warn(`Unknown color scheme: ${scheme}`);
         return [];
     }
   } catch (err) {
-    console.error("Failed to generate palette:", err);
-    alert("An error occurred while generating the palette.");
+    console.error('Failed to generate palette:', err);
+    alert('An error occurred while generating the palette.');
     return [];
   }
 };
@@ -128,14 +122,14 @@ export const generatePalette = (baseColor, scheme) => {
  * Generate a random palette and set it in the state.
  * @param {Function} setGeneratedPalette - State setter for generated palettes.
  */
-export const generateRandomPaletteAndSet = (setGeneratedPalette) => {
+export const generateRandomPaletteAndSet = setGeneratedPalette => {
   try {
     const randomPalette = generateRandomPalette();
     setGeneratedPalette(randomPalette);
-    console.log("Random palette generated successfully.");
+    console.log('Random palette generated successfully.');
   } catch (err) {
-    console.error("Failed to generate random palette:", err);
-    alert("An error occurred while generating a random palette.");
+    console.error('Failed to generate random palette:', err);
+    alert('An error occurred while generating a random palette.');
   }
 };
 
@@ -146,18 +140,22 @@ export const generateRandomPaletteAndSet = (setGeneratedPalette) => {
  * @param {Function} setGeneratedPalette - State setter for generated palettes.
  * @param {number} saturationLevel - Saturation adjustment factor.
  */
-export const harmonizePaletteAndSet = (generatedPalette, setGeneratedPalette, saturationLevel = 1.2) => {
+export const harmonizePaletteAndSet = (
+  generatedPalette,
+  setGeneratedPalette,
+  saturationLevel = 1.2
+) => {
   if (!generatedPalette || generatedPalette.length === 0) {
-    return alert("No palette available for harmonization.");
+    return alert('No palette available for harmonization.');
   }
 
   try {
     const harmonized = harmonizePalette(generatedPalette, saturationLevel);
     setGeneratedPalette(harmonized);
-    console.log("Palette harmonized successfully.");
+    console.log('Palette harmonized successfully.');
   } catch (err) {
-    console.error("Failed to harmonize palette:", err);
-    alert("An error occurred while harmonizing the palette.");
+    console.error('Failed to harmonize palette:', err);
+    alert('An error occurred while harmonizing the palette.');
   }
 };
 
@@ -169,14 +167,10 @@ export const harmonizePaletteAndSet = (generatedPalette, setGeneratedPalette, sa
 export const togglePaletteSharedStatus = async (id, setPalettes) => {
   try {
     const updatedPalette = await togglePaletteSharing(id);
-    setPalettes((prev) =>
-      prev.map((palette) => (palette._id === id ? updatedPalette : palette))
-    );
-    alert(
-      `Palette sharing ${updatedPalette.shared ? "enabled" : "disabled"} successfully!`
-    );
+    setPalettes(prev => prev.map(palette => (palette._id === id ? updatedPalette : palette)));
+    alert(`Palette sharing ${updatedPalette.shared ? 'enabled' : 'disabled'} successfully!`);
   } catch (err) {
-    console.error("Failed to toggle palette sharing:", err);
+    console.error('Failed to toggle palette sharing:', err);
     alert("An error occurred while updating the palette's sharing status.");
   }
 };

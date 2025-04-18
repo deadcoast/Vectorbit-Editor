@@ -1,6 +1,6 @@
 /**
  * Help System Components
- * 
+ *
  * Exports all help-related components and utilities
  */
 

@@ -1,18 +1,19 @@
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import Grid from "./Grid";
-import { floodFill, toggleGridOverlay } from "./GridManager";
+import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
 
-describe("Grid Component with Flood Fill and Overlay Toggle", () => {
+import Grid from './Grid';
+import { floodFill, toggleGridOverlay } from './GridManager';
+
+describe('Grid Component with Flood Fill and Overlay Toggle', () => {
   const mockSetLayers = jest.fn();
   const mockSetGridOverlay = jest.fn();
   const mockLayers = [
     {
       id: 1,
       gridData: {
-        "0,0": "#000000",
-        "1,0": "#000000",
-        "1,1": "#FFFFFF",
+        '0,0': '#000000',
+        '1,0': '#000000',
+        '1,1': '#FFFFFF',
       },
     },
   ];
@@ -22,8 +23,8 @@ describe("Grid Component with Flood Fill and Overlay Toggle", () => {
     layers: mockLayers,
     activeLayer: 1,
     setLayers: mockSetLayers,
-    activeTool: "fill",
-    activeColor: "#FF0000",
+    activeTool: 'fill',
+    activeColor: '#FF0000',
     gridOverlay: false,
     setGridOverlay: mockSetGridOverlay,
   };
@@ -32,43 +33,43 @@ describe("Grid Component with Flood Fill and Overlay Toggle", () => {
     jest.clearAllMocks();
   });
 
-  it("fills the connected region with the active color using the fill tool", () => {
+  it('fills the connected region with the active color using the fill tool', () => {
     const { container } = render(<Grid {...defaultProps} />);
-    const cells = container.querySelectorAll(".grid-cell");
+    const cells = container.querySelectorAll('.grid-cell');
     fireEvent.click(cells[0]); // Click on the top-left cell (0, 0)
 
     expect(mockSetLayers).toHaveBeenCalledWith([
       {
         id: 1,
         gridData: {
-          "0,0": "#FF0000", // Filled
-          "1,0": "#FF0000", // Filled
-          "1,1": "#FFFFFF", // Unchanged
+          '0,0': '#FF0000', // Filled
+          '1,0': '#FF0000', // Filled
+          '1,1': '#FFFFFF', // Unchanged
         },
       },
     ]);
   });
 
-  it("does not fill cells that do not match the target color", () => {
+  it('does not fill cells that do not match the target color', () => {
     const { container } = render(<Grid {...defaultProps} />);
-    const cells = container.querySelectorAll(".grid-cell");
+    const cells = container.querySelectorAll('.grid-cell');
     fireEvent.click(cells[3]); // Click on a cell outside the region (3, 0)
 
     expect(mockSetLayers).toHaveBeenCalledWith([
       {
         id: 1,
         gridData: {
-          "0,0": "#000000", // Unchanged
-          "1,0": "#000000", // Unchanged
-          "1,1": "#FFFFFF", // Unchanged
+          '0,0': '#000000', // Unchanged
+          '1,0': '#000000', // Unchanged
+          '1,1': '#FFFFFF', // Unchanged
         },
       },
     ]);
   });
 
-  it("toggles the grid overlay on and off", () => {
+  it('toggles the grid overlay on and off', () => {
     const { getByText } = render(<Grid {...defaultProps} />);
-    const toggleButton = getByText("Show Grid");
+    const toggleButton = getByText('Show Grid');
 
     fireEvent.click(toggleButton); // Enable overlay
     expect(mockSetGridOverlay).toHaveBeenCalledWith(true);

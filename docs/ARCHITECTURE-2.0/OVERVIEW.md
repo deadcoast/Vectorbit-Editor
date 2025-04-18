@@ -1,8 +1,14 @@
 # Vectorbit
 
-Please sync these files as a project map and explanation. I need a succinct plan that incorporates my repository structure, the descriptions of all the features I have, and a clear description of all the projects features. See files below and create one new one.
+Please sync these files as a project map and explanation. I need a succinct plan that incorporates
+my repository structure, the descriptions of all the features I have, and a clear description of all
+the projects features. See files below and create one new one.
 
-Vectorbit is a pixelart illustrating software that allows you to customize the bit ratio in a grid format. Utilizing a grid format, and pixel art, the files should be created as vector files for optimizing resizing mid project. The reason for this; if I start a project in 8 bit, but want more detail, I should be able to resize to a larger bit grid ratio without losing quality of the pixel art.
+Vectorbit is a pixelart illustrating software that allows you to customize the bit ratio in a grid
+format. Utilizing a grid format, and pixel art, the files should be created as vector files for
+optimizing resizing mid project. The reason for this; if I start a project in 8 bit, but want more
+detail, I should be able to resize to a larger bit grid ratio without losing quality of the pixel
+art.
 
 - standard bit grid size [sbgs] are; 8bit, 16bit, 32bit, 64bit, 128bit, 256bit, 512bit, 1024bit.
 
@@ -197,11 +203,14 @@ Key Features of the Structure:
 
 UNIQUE CUSTOM CODED DYNAMIC COLOR REPLACEMENT:
 
-**NOTE:** _BELOW IS JUST AN EXAMPLE OF THE FUNCTION FOR YOUR UNDERSTANDING, THE CURRENT CODE IS MUCH MORE DEVELOPED AT THIS TIME._
+**NOTE:** _BELOW IS JUST AN EXAMPLE OF THE FUNCTION FOR YOUR UNDERSTANDING, THE CURRENT CODE IS MUCH
+MORE DEVELOPED AT THIS TIME._
 
 Implementing “Color Anchors” for Dynamic Color Replacement
 
-The Color Anchors feature will allow users to define specific color roles (base, secondary, accent) and dynamically update them across the grid. Here’s how to implement this feature in an integrated manner with the brush and palette tools.
+The Color Anchors feature will allow users to define specific color roles (base, secondary, accent)
+and dynamically update them across the grid. Here’s how to implement this feature in an integrated
+manner with the brush and palette tools.
 
 #### Step 1: Data Structure for Color Anchors
 
@@ -242,7 +251,7 @@ File: src/frontend/Grid.js
 ```javascript
 const applyColorAnchors = (updatedAnchor, newColor) => {
   const updatedColors = { ...cellColors };
-  Object.keys(updatedColors).forEach((index) => {
+  Object.keys(updatedColors).forEach(index => {
     if (updatedColors[index] === colorAnchors[updatedAnchor]) {
       updatedColors[index] = newColor;
     }
@@ -263,7 +272,7 @@ Create a UI for managing and updating the color anchors.
 File: src/frontend/ColorAnchors.js
 
 ```javascript
-import { useColorAnchors } from "../state/colorAnchors";
+import { useColorAnchors } from '../state/colorAnchors';
 
 const ColorAnchors = ({ onClose }) => {
   const { colorAnchors, updateColorAnchor } = useColorAnchors();
@@ -275,13 +284,14 @@ const ColorAnchors = ({ onClose }) => {
   return (
     <div className="color-anchors-popup">
       <h3>Color Anchors</h3>
-      {Object.keys(colorAnchors).map((anchor) => (
+      {Object.keys(colorAnchors).map(anchor => (
         <div key={anchor} className="color-anchor">
-          <label>{anchor.replace(/([A-Z])/g, " $1")}</label>
-          \<input
+          <label>{anchor.replace(/([A-Z])/g, ' $1')}</label>
+          \
+          <input
             type="color"
             value={colorAnchors[anchor]}
-            onChange={(e) => handleColorChange(anchor, e.target.value)}
+            onChange={e => handleColorChange(anchor, e.target.value)}
           />
         </div>
       ))}
@@ -358,11 +368,11 @@ Add an “Assign to Anchor” option in the palette UI:
 ```javascript
 <div className="palette-color">
   <span style={{ backgroundColor: color }} />
-  <select onChange={(e) => assignToAnchor(color, e.target.value)}>
+  <select onChange={e => assignToAnchor(color, e.target.value)}>
     <option value="">Assign to Anchor</option>
-    {Object.keys(colorAnchors).map((anchor) => (
+    {Object.keys(colorAnchors).map(anchor => (
       <option key={anchor} value={anchor}>
-        {anchor.replace(/([A-Z])/g, " $1")}
+        {anchor.replace(/([A-Z])/g, ' $1')}
       </option>
     ))}
   </select>
@@ -396,7 +406,7 @@ File: src/frontend/ColorAnchors.css
   flex: 1;
 }
 
-.color-anchor input[type="color"] {
+.color-anchor input[type='color'] {
   width: 50px;
   height: 30px;
   border: none;
@@ -406,14 +416,10 @@ File: src/frontend/ColorAnchors.css
 
 #### Step 8: Testing
 
-1. Grid Updates:
-   • Set a base color on the grid and replace it via the color anchor.
-2. Brush Updates:
-   • Use the brush tool with color anchors and verify dynamic updates.
-3. Palette Integration:
-   • Assign a palette color to an anchor and check grid synchronization.
-4. UI Functionality:
-   • Open the Color Anchors pop-up, update colors, and verify updates.
+1. Grid Updates: • Set a base color on the grid and replace it via the color anchor.
+2. Brush Updates: • Use the brush tool with color anchors and verify dynamic updates.
+3. Palette Integration: • Assign a palette color to an anchor and check grid synchronization.
+4. UI Functionality: • Open the Color Anchors pop-up, update colors, and verify updates.
 
 ### Future Enhancements
 
@@ -440,7 +446,7 @@ export const useAnchorHistory = () => {
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
-  const addToHistory = (newAnchors) => {
+  const addToHistory = newAnchors => {
     const newHistory = [...history.slice(0, historyIndex + 1), newAnchors];
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
@@ -448,7 +454,7 @@ export const useAnchorHistory = () => {
 
   const undo = () => {
     if (historyIndex > 0) {
-      setHistoryIndex((prev) => prev - 1);
+      setHistoryIndex(prev => prev - 1);
       return history[historyIndex - 1];
     }
     return null;
@@ -456,7 +462,7 @@ export const useAnchorHistory = () => {
 
   const redo = () => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex((prev) => prev + 1);
+      setHistoryIndex(prev => prev + 1);
       return history[historyIndex + 1];
     }
     return null;
@@ -476,16 +482,17 @@ export const useAnchorHistory = () => {
 
 #### Step 4: Undo/Redo Across Components
 
-• Expand the undo and redo features of ColorAnchors.js to include recent colors and gradients for consistency.
+• Expand the undo and redo features of ColorAnchors.js to include recent colors and gradients for
+consistency.
 
 #### Step 5: Debounced State Updates
 
-• Extend debounce functionality to other interactive features like gradients and anchors for smoother UI performance (ColorWheel.js).
+• Extend debounce functionality to other interactive features like gradients and anchors for
+smoother UI performance (ColorWheel.js).
 
 #### UI Changes for Toolbar (from src/components/Toolbar)
 
-1. Integrate Color Tools:
-   • Add separate buttons for “Gradient Editor,” “Color Anchors,” and “Eye Dropper” to improve accessibility.
-   • Include an indicator for the currently active tool.
-2. Palette and Anchor Manager Shortcuts:
-   • Provide shortcuts to quickly open Palette and Color Anchor managers.
+1. Integrate Color Tools: • Add separate buttons for “Gradient Editor,” “Color Anchors,” and “Eye
+   Dropper” to improve accessibility. • Include an indicator for the currently active tool.
+2. Palette and Anchor Manager Shortcuts: • Provide shortcuts to quickly open Palette and Color
+   Anchor managers.

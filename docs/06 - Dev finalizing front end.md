@@ -1,10 +1,12 @@
 # Finalizing Outstanding Front-End Features
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-Below is the step-by-step implementation plan to finalize all outstanding front-end features. This includes dynamic grid resizing, full drawing tool functionality, menus, and export options.
+Below is the step-by-step implementation plan to finalize all outstanding front-end features. This
+includes dynamic grid resizing, full drawing tool functionality, menus, and export options.
 
 ## Step 1: Finalize Dynamic Grid Resizing
 
@@ -97,10 +99,10 @@ setCellColors(updatedColors);
 Modify applyBrush to support erasing:
 
 ```javascript
-const handleCellClick = (index) => {
-  if (activeTool === "brush") {
+const handleCellClick = index => {
+  if (activeTool === 'brush') {
     applyBrush(index, brushSize);
-  } else if (activeTool === "eraser") {
+  } else if (activeTool === 'eraser') {
     applyBrush(index, brushSize, true); // Pass a flag for erasing
   }
 };
@@ -121,11 +123,11 @@ const saveProject = () => {
     cellColors,
   };
   const blob = new Blob([JSON.stringify(projectData)], {
-    type: "application/json",
+    type: 'application/json',
   });
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = "project.json";
+  link.download = 'project.json';
   link.click();
 };
 ```
@@ -133,10 +135,10 @@ const saveProject = () => {
 ### Load Project
 
 ```javascript
-const loadProject = (event) => {
+const loadProject = event => {
   const file = event.target.files[0];
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = e => {
     const projectData = JSON.parse(e.target.result);
     setGridSize(projectData.gridSize);
     setCellColors(projectData.cellColors);
@@ -188,17 +190,11 @@ link.click();
 
 ## Step 5: Test All Features
 
-1. Grid Resizing:
-   • Test resizing the grid while retaining art proportions.
-   • Verify all standard bit sizes (8x8 to 1024x1024).
-1. Drawing Tools:
-   • Test the brush tool with adjustable sizes.
-   • Test the eraser tool.
-1. Menus:
-   • Verify saving and loading projects.
-   • Test all export options (.svg, .png, .jpg).
-1. Final Integration:
-   • Ensure all components (menus, tools, grid, export) work together seamlessly.
+1. Grid Resizing: • Test resizing the grid while retaining art proportions. • Verify all standard
+   bit sizes (8x8 to 1024x1024).
+1. Drawing Tools: • Test the brush tool with adjustable sizes. • Test the eraser tool.
+1. Menus: • Verify saving and loading projects. • Test all export options (.svg, .png, .jpg).
+1. Final Integration: • Ensure all components (menus, tools, grid, export) work together seamlessly.
 
 ## Next Steps
 
@@ -265,19 +261,19 @@ pixelart-backend/
 #### File: server.js
 
 ```javascript
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const projectsRouter = require("./routes/projects");
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const projectsRouter = require('./routes/projects');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use("/projects", projectsRouter);
+app.use('/projects', projectsRouter);
 
 // MongoDB Connection
 mongoose
@@ -285,8 +281,8 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Start Server
 const PORT = process.env.PORT || 5000;
@@ -300,7 +296,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 #### File: models/Project.js
 
 ```javascript
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -309,7 +305,7 @@ const projectSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Project", projectSchema);
+module.exports = mongoose.model('Project', projectSchema);
 ```
 
 ### 2.2 Create API Routes
@@ -317,12 +313,12 @@ module.exports = mongoose.model("Project", projectSchema);
 #### File: routes/projects.js
 
 ```javascript
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Project = require("../models/Project");
+const Project = require('../models/Project');
 
 // Create a new project
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const { name, gridSize, cellColors } = req.body;
 
   try {
@@ -330,58 +326,52 @@ router.post("/", async (req, res) => {
     await newProject.save();
     res.status(201).json(newProject);
   } catch (err) {
-    res.status(500).json({ error: "Failed to create project" });
+    res.status(500).json({ error: 'Failed to create project' });
   }
 });
 
 // Fetch all projects
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const projects = await Project.find();
     res.status(200).json(projects);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch projects" });
+    res.status(500).json({ error: 'Failed to fetch projects' });
   }
 });
 
 // Fetch a single project by ID
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
-    if (!project) return res.status(404).json({ error: "Project not found" });
+    if (!project) return res.status(404).json({ error: 'Project not found' });
     res.status(200).json(project);
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch project" });
+    res.status(500).json({ error: 'Failed to fetch project' });
   }
 });
 
 // Update a project
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const updatedProject = await Project.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-      }
-    );
-    if (!updatedProject)
-      return res.status(404).json({ error: "Project not found" });
+    const updatedProject = await Project.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!updatedProject) return res.status(404).json({ error: 'Project not found' });
     res.status(200).json(updatedProject);
   } catch (err) {
-    res.status(500).json({ error: "Failed to update project" });
+    res.status(500).json({ error: 'Failed to update project' });
   }
 });
 
 // Delete a project
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const deletedProject = await Project.findByIdAndDelete(req.params.id);
-    if (!deletedProject)
-      return res.status(404).json({ error: "Project not found" });
+    if (!deletedProject) return res.status(404).json({ error: 'Project not found' });
     res.status(200).json(deletedProject);
   } catch (err) {
-    res.status(500).json({ error: "Failed to delete project" });
+    res.status(500).json({ error: 'Failed to delete project' });
   }
 });
 
@@ -401,29 +391,29 @@ npm install multer
 ### File: routes/projects.js (Updated Snippet)
 
 ```javascript
-const multer = require("multer");
-const sharp = require("sharp");
+const multer = require('multer');
+const sharp = require('sharp');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Convert SVG to PNG
-router.post("/convert/png", upload.single("file"), async (req, res) => {
+router.post('/convert/png', upload.single('file'), async (req, res) => {
   try {
-    const pngBuffer = await sharp(req.file.buffer).toFormat("png").toBuffer();
-    res.type("image/png").send(pngBuffer);
+    const pngBuffer = await sharp(req.file.buffer).toFormat('png').toBuffer();
+    res.type('image/png').send(pngBuffer);
   } catch (err) {
-    res.status(500).json({ error: "Failed to convert SVG to PNG" });
+    res.status(500).json({ error: 'Failed to convert SVG to PNG' });
   }
 });
 
 // Convert SVG to JPG
-router.post("/convert/jpg", upload.single("file"), async (req, res) => {
+router.post('/convert/jpg', upload.single('file'), async (req, res) => {
   try {
     const jpgBuffer = await sharp(req.file.buffer).jpeg().toBuffer();
-    res.type("image/jpeg").send(jpgBuffer);
+    res.type('image/jpeg').send(jpgBuffer);
   } catch (err) {
-    res.status(500).json({ error: "Failed to convert SVG to JPG" });
+    res.status(500).json({ error: 'Failed to convert SVG to JPG' });
   }
 });
 ```
@@ -438,22 +428,22 @@ Send project data to the back-end API.
 
 ```javascript
 const saveProjectToServer = async () => {
-  const projectData = { name: "My Project", gridSize, cellColors };
+  const projectData = { name: 'My Project', gridSize, cellColors };
 
   try {
-    const response = await fetch("<http://localhost:5000/projects>", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('<http://localhost:5000/projects>', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(projectData),
     });
 
     if (response.ok) {
-      alert("Project saved successfully!");
+      alert('Project saved successfully!');
     } else {
-      alert("Failed to save project.");
+      alert('Failed to save project.');
     }
   } catch (err) {
-    alert("Error saving project.");
+    alert('Error saving project.');
   }
 };
 ```
@@ -465,48 +455,43 @@ Upload the SVG and fetch the converted file.
 ### SVG and Fetch converted File: src/frontend/Grid.js
 
 ```javascript
-const exportImage = async (format) => {
+const exportImage = async format => {
   const canvas = canvasRef.current;
-  const svgBlob = new Blob([canvas.toDataURL("image/svg+xml")], {
-    type: "image/svg+xml",
+  const svgBlob = new Blob([canvas.toDataURL('image/svg+xml')], {
+    type: 'image/svg+xml',
   });
 
   const formData = new FormData();
-  formData.append("file", svgBlob);
+  formData.append('file', svgBlob);
 
   try {
-    const response = await fetch(
-      `http://localhost:5000/projects/convert/${format}`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const response = await fetch(`http://localhost:5000/projects/convert/${format}`, {
+      method: 'POST',
+      body: formData,
+    });
 
     if (response.ok) {
       const blob = await response.blob();
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = `pixel-art.${format}`;
       link.click();
     } else {
-      alert("Failed to export image.");
+      alert('Failed to export image.');
     }
   } catch (err) {
-    alert("Error exporting image.");
+    alert('Error exporting image.');
   }
 };
 ```
 
 ## Step 5: Testing
 
-1. Run the back-end server:
-   node server.js
-1. Test Persistent Storage:
-   • Save a project via the front-end and verify it is stored in MongoDB.
-   • Fetch and load projects into the grid.
-1. Test SVG-to-PNG/JPG Conversion:
-   • Export SVG files and verify the PNG/JPG conversion works correctly.
+1. Run the back-end server: node server.js
+1. Test Persistent Storage: • Save a project via the front-end and verify it is stored in MongoDB. •
+   Fetch and load projects into the grid.
+1. Test SVG-to-PNG/JPG Conversion: • Export SVG files and verify the PNG/JPG conversion works
+   correctly.
 
 Next Steps:
 
@@ -518,7 +503,8 @@ After completing front-end features, the next step is back-end integration for:
 
 ## Integrating a Back-End Using Node.js with Express
 
-We will set up a Node.js back-end with Express for handling file storage, export functionality, and API endpoints. Below is a thorough implementation plan.
+We will set up a Node.js back-end with Express for handling file storage, export functionality, and
+API endpoints. Below is a thorough implementation plan.
 
 ## Step 1: Initialize the Back-End
 
@@ -544,13 +530,9 @@ npm init -y
 npm install express body-parser mongoose multer sharp cors dotenv
 ```
 
-• express: Web framework for building APIs.
-• body-parser: Middleware to parse JSON request bodies.
-• mongoose: ORM for MongoDB.
-• multer: For handling file uploads.
-• sharp: For SVG-to-PNG/JPG conversion.
-• cors: To handle cross-origin requests.
-• dotenv: To manage environment variables.
+• express: Web framework for building APIs. • body-parser: Middleware to parse JSON request bodies.
+• mongoose: ORM for MongoDB. • multer: For handling file uploads. • sharp: For SVG-to-PNG/JPG
+conversion. • cors: To handle cross-origin requests. • dotenv: To manage environment variables.
 
 ## 2.1 Server Configuration
 
@@ -559,14 +541,14 @@ Create a new file server.js:
 ### Create Server in File: server.js
 
 ```javascript
-require("dotenv").config();
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const mongoose = require("mongoose");
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
 
 // Import routes
-const projectsRouter = require("./routes/projects");
+const projectsRouter = require('./routes/projects');
 
 const app = express();
 
@@ -575,7 +557,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
-app.use("/projects", projectsRouter);
+app.use('/projects', projectsRouter);
 
 // Connect to MongoDB
 mongoose
@@ -583,8 +565,8 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Start the server
 const PORT = process.env.PORT || 5000;
@@ -700,29 +682,29 @@ Update routes/projects.js to handle file uploads and conversions.
 ### Add Conversion Routes in File: routes/projects.js
 
 ```javascript
-const multer = require("multer");
-const sharp = require("sharp");
+const multer = require('multer');
+const sharp = require('sharp');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Convert SVG to PNG
-router.post("/convert/png", upload.single("file"), async (req, res) => {
+router.post('/convert/png', upload.single('file'), async (req, res) => {
   try {
-    const pngBuffer = await sharp(req.file.buffer).toFormat("png").toBuffer();
-    res.type("image/png").send(pngBuffer);
+    const pngBuffer = await sharp(req.file.buffer).toFormat('png').toBuffer();
+    res.type('image/png').send(pngBuffer);
   } catch (err) {
-    res.status(500).json({ error: "Failed to convert SVG to PNG" });
+    res.status(500).json({ error: 'Failed to convert SVG to PNG' });
   }
 });
 
 // Convert SVG to JPG
-router.post("/convert/jpg", upload.single("file"), async (req, res) => {
+router.post('/convert/jpg', upload.single('file'), async (req, res) => {
   try {
     const jpgBuffer = await sharp(req.file.buffer).jpeg().toBuffer();
-    res.type("image/jpeg").send(jpgBuffer);
+    res.type('image/jpeg').send(jpgBuffer);
   } catch (err) {
-    res.status(500).json({ error: "Failed to convert SVG to JPG" });
+    res.status(500).json({ error: 'Failed to convert SVG to JPG' });
   }
 });
 ```
@@ -771,16 +753,16 @@ Centralize all API calls in a single file for maintainability.
 ### Create API Utility in File: src/api/api.js
 
 ```javascript
-import axios from "axios";
+import axios from 'axios';
 
-const API_BASE_URL = "<http://localhost:5000>";
+const API_BASE_URL = '<http://localhost:5000>';
 
-export const createProject = async (project) => {
+export const createProject = async project => {
   try {
     const response = await axios.post(`${API_BASE_URL}/projects`, project);
     return response.data;
   } catch (error) {
-    console.error("Error creating project:", error);
+    console.error('Error creating project:', error);
     throw error;
   }
 };
@@ -790,17 +772,17 @@ export const fetchProjects = async () => {
     const response = await axios.get(`${API_BASE_URL}/projects`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching projects:", error);
+    console.error('Error fetching projects:', error);
     throw error;
   }
 };
 
-export const fetchProjectById = async (id) => {
+export const fetchProjectById = async id => {
   try {
     const response = await axios.get(`${API_BASE_URL}/projects/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching project by ID:", error);
+    console.error('Error fetching project by ID:', error);
     throw error;
   }
 };
@@ -810,53 +792,45 @@ export const updateProject = async (id, project) => {
     const response = await axios.put(`${API_BASE_URL}/projects/${id}`, project);
     return response.data;
   } catch (error) {
-    console.error("Error updating project:", error);
+    console.error('Error updating project:', error);
     throw error;
   }
 };
 
-export const deleteProject = async (id) => {
+export const deleteProject = async id => {
   try {
     const response = await axios.delete(`${API_BASE_URL}/projects/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Error deleting project:", error);
+    console.error('Error deleting project:', error);
     throw error;
   }
 };
 
-export const convertSvgToPng = async (file) => {
+export const convertSvgToPng = async file => {
   try {
     const formData = new FormData();
-    formData.append("file", file);
-    const response = await axios.post(
-      `${API_BASE_URL}/projects/convert/png`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    formData.append('file', file);
+    const response = await axios.post(`${API_BASE_URL}/projects/convert/png`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return response.data;
   } catch (error) {
-    console.error("Error converting SVG to PNG:", error);
+    console.error('Error converting SVG to PNG:', error);
     throw error;
   }
 };
 
-export const convertSvgToJpg = async (file) => {
+export const convertSvgToJpg = async file => {
   try {
     const formData = new FormData();
-    formData.append("file", file);
-    const response = await axios.post(
-      `${API_BASE_URL}/projects/convert/jpg`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    formData.append('file', file);
+    const response = await axios.post(`${API_BASE_URL}/projects/convert/jpg`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return response.data;
   } catch (error) {
-    console.error("Error converting SVG to JPG:", error);
+    console.error('Error converting SVG to JPG:', error);
     throw error;
   }
 };
@@ -869,11 +843,11 @@ Add a “Save Project” button to the front-end and implement the save logic.
 ### Add Save Project Button in File: src/frontend/Grid.js
 
 ```javascript
-import { createProject } from "../api/api";
+import { createProject } from '../api/api';
 
 const saveProject = async () => {
   const projectData = {
-    name: "My Project",
+    name: 'My Project',
     gridSize,
     cellColors,
   };
@@ -882,7 +856,7 @@ const saveProject = async () => {
     const savedProject = await createProject(projectData);
     alert(`Project saved successfully! ID: ${savedProject._id}`);
   } catch (error) {
-    alert("Failed to save project.");
+    alert('Failed to save project.');
   }
 };
 ```
@@ -946,23 +920,23 @@ Upload the current SVG to the back-end for conversion.
 ### Upload SVG to Back-End in File: src/frontend/Grid.js
 
 ```javascript
-import { convertSvgToPng, convertSvgToJpg } from "../api/api";
+import { convertSvgToPng, convertSvgToJpg } from '../api/api';
 
-const exportToImage = async (format) => {
+const exportToImage = async format => {
   const canvas = canvasRef.current;
-  const svgBlob = new Blob([canvas.toDataURL("image/svg+xml")], {
-    type: "image/svg+xml",
+  const svgBlob = new Blob([canvas.toDataURL('image/svg+xml')], {
+    type: 'image/svg+xml',
   });
 
   try {
     let response;
-    if (format === "png") {
+    if (format === 'png') {
       response = await convertSvgToPng(svgBlob);
-    } else if (format === "jpg") {
+    } else if (format === 'jpg') {
       response = await convertSvgToJpg(svgBlob);
     }
 
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = URL.createObjectURL(new Blob([response]));
     link.download = `pixel-art.${format}`;
     link.click();
@@ -975,8 +949,8 @@ const exportToImage = async (format) => {
 Add buttons for exporting to PNG and JPG;
 
 ```html
-<button onClick={() => exportToImage("png")}>Export to PNG</button>
-<button onClick={() => exportToImage("jpg")}>Export to JPG</button>
+<button onClick="{()" ="">exportToImage("png")}>Export to PNG</button>
+<button onClick="{()" ="">exportToImage("jpg")}>Export to JPG</button>
 ```
 
 ## 3.2 Test Front-End and Back-End Integration
@@ -999,23 +973,17 @@ npm start
 
 ## 3.2.3 Test Features
 
-• Save Project: Verify that project data is saved in the back-end and accessible via the API.
-• Load Projects: Ensure projects can be fetched and loaded into the grid.
-• Export Options: Test exporting SVG to PNG and JPG via the back-end.
+• Save Project: Verify that project data is saved in the back-end and accessible via the API. • Load
+Projects: Ensure projects can be fetched and loaded into the grid. • Export Options: Test exporting
+SVG to PNG and JPG via the back-end.
 
 ## 3.2.4 Test All Features
 
-1. Grid Resizing:
-   • Test resizing the grid while retaining art proportions.
-   • Verify all standard bit sizes (8x8 to 1024x1024).
-1. Drawing Tools:
-   • Test the brush tool with adjustable sizes.
-   • Test the eraser tool.
-1. Menus:
-   • Verify saving and loading projects.
-   • Test all export options (.svg, .png, .jpg).
-1. Final Integration:
-   • Ensure all components (menus, tools, grid, export) work together seamlessly.
+1. Grid Resizing: • Test resizing the grid while retaining art proportions. • Verify all standard
+   bit sizes (8x8 to 1024x1024).
+1. Drawing Tools: • Test the brush tool with adjustable sizes. • Test the eraser tool.
+1. Menus: • Verify saving and loading projects. • Test all export options (.svg, .png, .jpg).
+1. Final Integration: • Ensure all components (menus, tools, grid, export) work together seamlessly.
 
 Enhancing Custom Palette Storage, Settings, and Zoom Features
 
@@ -1192,14 +1160,11 @@ window.removeEventListener("keydown", handleKeyDown);
    node server.js
    ```
 
-1. Test Palette Storage:
-   • Save a custom palette to a project.
-   • Reload the project and verify the palette is restored.
+1. Test Palette Storage: • Save a custom palette to a project. • Reload the project and verify the
+   palette is restored.
 
-1. Test Format Presets:
-   • Save a default file format.
-   • Verify the correct format is pre-selected during export.
+1. Test Format Presets: • Save a default file format. • Verify the correct format is pre-selected
+   during export.
 
-1. Test Enhanced Zoom:
-   • Use the zoom controls and keyboard shortcuts.
-   • Ensure the grid scales smoothly and maintains proper alignment.
+1. Test Enhanced Zoom: • Use the zoom controls and keyboard shortcuts. • Ensure the grid scales
+   smoothly and maintains proper alignment.

@@ -1,10 +1,13 @@
 # Implementing “Color Anchors” for Dynamic Color Replacement
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-The Color Anchors feature will allow users to define specific color roles (base, secondary, accent) and dynamically update them across the grid. Here’s how to implement this feature in an integrated manner with the brush and palette tools.
+The Color Anchors feature will allow users to define specific color roles (base, secondary, accent)
+and dynamically update them across the grid. Here’s how to implement this feature in an integrated
+manner with the brush and palette tools.
 
 ## Step 1: Data Structure for Color Anchors
 
@@ -14,28 +17,28 @@ Define a structure to store the color anchors and track their usage.
 
 ```javascript
 const defaultAnchors = {
-  baseColor: "#ffffff",
+  baseColor: '#ffffff',
 
-  baseColor2: "#ffffff",
+  baseColor2: '#ffffff',
 
-  secondaryColor: "#cccccc",
+  secondaryColor: '#cccccc',
 
-  secondaryColor2: "#cccccc",
+  secondaryColor2: '#cccccc',
 
-  accentColor: "#ff0000",
+  accentColor: '#ff0000',
 
-  accentColor2: "#00ff00",
+  accentColor2: '#00ff00',
 
-  accentColor3: "#0000ff",
+  accentColor3: '#0000ff',
 
-  accentColor4: "#ffff00",
+  accentColor4: '#ffff00',
 };
 
 export const useColorAnchors = () => {
   const [colorAnchors, setColorAnchors] = useState(defaultAnchors);
 
   const updateColorAnchor = (anchor, newColor) => {
-    setColorAnchors((prev) => ({
+    setColorAnchors(prev => ({
       ...prev,
 
       [anchor]: newColor,
@@ -56,7 +59,7 @@ When a color anchor is updated, automatically replace all instances of that colo
 const applyColorAnchors = (updatedAnchor, newColor) => {
   const updatedColors = { ...cellColors };
 
-  Object.keys(updatedColors).forEach((index) => {
+  Object.keys(updatedColors).forEach(index => {
     if (updatedColors[index] === colorAnchors[updatedAnchor]) {
       updatedColors[index] = newColor;
     }
@@ -79,7 +82,7 @@ Create a UI for managing and updating the color anchors.
 ### File: src/frontend/ColorAnchors.js
 
 ```javascript
-import { useColorAnchors } from "../state/colorAnchors";
+import { useColorAnchors } from '../state/colorAnchors';
 
 const ColorAnchors = ({ onClose }) => {
   const { colorAnchors, updateColorAnchor } = useColorAnchors();
@@ -90,18 +93,19 @@ const ColorAnchors = ({ onClose }) => {
 
   return (
     <div className="color-anchors-popup">
-            <h3>Color Anchors</h3>     {" "}
-      {Object.keys(colorAnchors).map((anchor) => (
+            <h3>Color Anchors</h3>     {' '}
+      {Object.keys(colorAnchors).map(anchor => (
         <div key={anchor} className="color-anchor">
-                    <label>{anchor.replace(/([A-Z])/g, " $1")}</label>
-                    <input
+                    <label>{anchor.replace(/([A-Z])/g, ' $1')}</label>         {' '}
+          <input
             type="color"
             value={colorAnchors[anchor]}
-            onChange={(e) => handleColorChange(anchor, e.target.value)}
-          />       {" "}
+            onChange={e => handleColorChange(anchor, e.target.value)}
+          />
+                 {' '}
         </div>
       ))}
-            <button onClick={onClose}>Close</button>   {" "}
+            <button onClick={onClose}>Close</button>   {' '}
     </div>
   );
 };
@@ -121,9 +125,7 @@ const [isAnchorsPopupOpen, setAnchorsPopupOpen] = useState(false);
 <button onClick={() => setAnchorsPopupOpen(true)}>Color Anchors</button>;
 
 {
-  isAnchorsPopupOpen && (
-    <ColorAnchors onClose={() => setAnchorsPopupOpen(false)} />
-  );
+  isAnchorsPopupOpen && <ColorAnchors onClose={() => setAnchorsPopupOpen(false)} />;
 }
 ```
 
@@ -263,14 +265,10 @@ Add an “Assign to Anchor” option in the palette UI:
 
 ## Step 8: Testing
 
-1. Grid Updates:
-   • Set a base color on the grid and replace it via the color anchor.
-1. Brush Updates:
-   • Use the brush tool with color anchors and verify dynamic updates.
-1. Palette Integration:
-   • Assign a palette color to an anchor and check grid synchronization.
-1. UI Functionality:
-   • Open the Color Anchors pop-up, update colors, and verify updates.
+1. Grid Updates: • Set a base color on the grid and replace it via the color anchor.
+1. Brush Updates: • Use the brush tool with color anchors and verify dynamic updates.
+1. Palette Integration: • Assign a palette color to an anchor and check grid synchronization.
+1. UI Functionality: • Open the Color Anchors pop-up, update colors, and verify updates.
 
 ## Future Enhancements
 
@@ -293,7 +291,7 @@ export const useAnchorHistory = () => {
 
   const [historyIndex, setHistoryIndex] = useState(-1);
 
-  const addToHistory = (newAnchors) => {
+  const addToHistory = newAnchors => {
     const newHistory = [...history.slice(0, historyIndex + 1), newAnchors];
 
     setHistory(newHistory);
@@ -303,7 +301,7 @@ export const useAnchorHistory = () => {
 
   const undo = () => {
     if (historyIndex > 0) {
-      setHistoryIndex((prev) => prev - 1);
+      setHistoryIndex(prev => prev - 1);
 
       return history[historyIndex - 1];
     }
@@ -313,7 +311,7 @@ export const useAnchorHistory = () => {
 
   const redo = () => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex((prev) => prev + 1);
+      setHistoryIndex(prev => prev + 1);
 
       return history[historyIndex + 1];
     }
@@ -332,7 +330,7 @@ Save anchor changes to the history when updated.
 #### Save Anchor Changes function in File: src/frontend/ColorAnchors.js
 
 ```javascript
-import { useAnchorHistory } from "../state/anchorHistory";
+import { useAnchorHistory } from '../state/anchorHistory';
 
 const { addToHistory, undo, redo } = useAnchorHistory();
 
@@ -358,19 +356,20 @@ const handleRedo = () => {
 
 return (
   <div>
-        <h3>Color Anchors</h3>    <button onClick={handleUndo}>Undo</button>   {" "}
-    <button onClick={handleRedo}>Redo</button>   {" "}
-    {Object.keys(colorAnchors).map((anchor) => (
+        <h3>Color Anchors</h3>    <button onClick={handleUndo}>Undo</button>   {' '}
+    <button onClick={handleRedo}>Redo</button>   {' '}
+    {Object.keys(colorAnchors).map(anchor => (
       <div key={anchor} className="color-anchor">
-                <label>{anchor.replace(/([A-Z])/g, " $1")}</label>
-                <input
+                <label>{anchor.replace(/([A-Z])/g, ' $1')}</label>       {' '}
+        <input
           type="color"
           value={colorAnchors[anchor]}
-          onChange={(e) => handleColorChange(anchor, e.target.value)}
-        />     {" "}
+          onChange={e => handleColorChange(anchor, e.target.value)}
+        />
+             {' '}
       </div>
     ))}
-     {" "}
+     {' '}
   </div>
 );
 ```
@@ -386,9 +385,9 @@ Allow users to add, rename, and delete anchors dynamically.
 ```javascript
 const [colorAnchors, setColorAnchors] = useState(defaultAnchors);
 
-const addAnchor = (name) => {
+const addAnchor = name => {
   if (!colorAnchors[name]) {
-    setColorAnchors((prev) => ({ ...prev, [name]: "#ffffff" }));
+    setColorAnchors(prev => ({ ...prev, [name]: '#ffffff' }));
   }
 };
 
@@ -402,7 +401,7 @@ const renameAnchor = (oldName, newName) => {
   setColorAnchors(updatedAnchors);
 };
 
-const deleteAnchor = (name) => {
+const deleteAnchor = name => {
   const updatedAnchors = { ...colorAnchors };
 
   delete updatedAnchors[name];
@@ -419,18 +418,18 @@ Provide a UI for adding, renaming, and deleting anchors.
 
 ```javascript
 const handleAddAnchor = () => {
-  const newAnchorName = prompt("Enter a name for the new anchor:");
+  const newAnchorName = prompt('Enter a name for the new anchor:');
 
   if (newAnchorName) addAnchor(newAnchorName);
 };
 
-const handleRenameAnchor = (oldName) => {
+const handleRenameAnchor = oldName => {
   const newName = prompt(`Rename ${oldName} to:`);
 
   if (newName) renameAnchor(oldName, newName);
 };
 
-const handleDeleteAnchor = (name) => {
+const handleDeleteAnchor = name => {
   if (confirm(`Are you sure you want to delete the anchor: ${name}?`)) {
     deleteAnchor(name);
   }
@@ -438,23 +437,20 @@ const handleDeleteAnchor = (name) => {
 
 return (
   <div>
-        <h3>Color Anchors</h3>   {" "}
-    <button onClick={handleAddAnchor}>Add Anchor</button>   {" "}
-    {Object.keys(colorAnchors).map((anchor) => (
+        <h3>Color Anchors</h3>    <button onClick={handleAddAnchor}>Add Anchor</button>   {' '}
+    {Object.keys(colorAnchors).map(anchor => (
       <div key={anchor} className="color-anchor">
-                <label>{anchor.replace(/([A-Z])/g, " $1")}</label>
-                <input
+                <label>{anchor.replace(/([A-Z])/g, ' $1')}</label>       {' '}
+        <input
           type="color"
           value={colorAnchors[anchor]}
-          onChange={(e) => handleColorChange(anchor, e.target.value)}
-        />        <button onClick={() => handleRenameAnchor(anchor)}>
-          Rename
-        </button>        <button onClick={() => handleDeleteAnchor(anchor)}>
-          Delete
-        </button>     {" "}
+          onChange={e => handleColorChange(anchor, e.target.value)}
+        />
+                <button onClick={() => handleRenameAnchor(anchor)}>Rename</button>       {' '}
+        <button onClick={() => handleDeleteAnchor(anchor)}>Delete</button>     {' '}
       </div>
     ))}
-     {" "}
+     {' '}
   </div>
 );
 ```
@@ -541,35 +537,29 @@ Add styles for the new buttons and anchor management interface.
 
 ## Step 4: Testing
 
-1. Anchor History:
-   • Update anchors multiple times and verify undo/redo functionality.
-   • Ensure changes are reflected on the canvas dynamically.
-1. Custom Anchors:
-   • Add new anchors and verify they appear in the list and are usable.
-   • Rename anchors and ensure references are updated throughout the grid.
-   • Delete anchors and confirm their removal from the list and the canvas.
+1. Anchor History: • Update anchors multiple times and verify undo/redo functionality. • Ensure
+   changes are reflected on the canvas dynamically.
+1. Custom Anchors: • Add new anchors and verify they appear in the list and are usable. • Rename
+   anchors and ensure references are updated throughout the grid. • Delete anchors and confirm their
+   removal from the list and the canvas.
 
 ## Next Enhancements
 
-1. Anchor Groups:
-   • Allow multiple colors to be assigned to a single anchor.
-   • Use groups for gradient-like effects.
-1. Preset Anchors:
-   • Provide predefined anchor sets for common use cases (e.g., game sprites, UI design).
-1. Anchor Syncing:
-   • Sync anchors across projects for consistent theming.
+1. Anchor Groups: • Allow multiple colors to be assigned to a single anchor. • Use groups for
+   gradient-like effects.
+1. Preset Anchors: • Provide predefined anchor sets for common use cases (e.g., game sprites, UI
+   design).
+1. Anchor Syncing: • Sync anchors across projects for consistent theming.
 
 ## Continuing with 1 (Anchor Groups), 2 (Preset Anchors), and 3 (Anchor Syncing)
 
-1. Anchor Groups:
-   • Allow multiple colors to be assigned to a single anchor.
-   • Use groups for gradient-like effects.
+1. Anchor Groups: • Allow multiple colors to be assigned to a single anchor. • Use groups for
+   gradient-like effects.
 
-1. Preset Anchors:
-   • Provide predefined anchor sets for common use cases (e.g., game sprites, UI design).
+1. Preset Anchors: • Provide predefined anchor sets for common use cases (e.g., game sprites, UI
+   design).
 
-1. Anchor Syncing:
-   • Sync anchors across projects for consistent theming.
+1. Anchor Syncing: • Sync anchors across projects for consistent theming.
 
 ## 1. Anchor Groups
 
@@ -581,18 +571,18 @@ Update the colorAnchors structure to allow multiple colors per anchor.
 
 ```javascript
 const defaultAnchors = {
-  baseColor: ["#ffffff"],
+  baseColor: ['#ffffff'],
 
-  secondaryColor: ["#cccccc"],
+  secondaryColor: ['#cccccc'],
 
-  accentColor: ["#ff0000"],
+  accentColor: ['#ff0000'],
 };
 
 export const useColorAnchors = () => {
   const [colorAnchors, setColorAnchors] = useState(defaultAnchors);
 
   const updateColorAnchor = (anchor, newColors) => {
-    setColorAnchors((prev) => ({
+    setColorAnchors(prev => ({
       ...prev,
 
       [anchor]: newColors,
@@ -610,8 +600,8 @@ Allow users to add, remove, and reorder colors in a group.
 #### Update UI for Groups in File: src/frontend/ColorAnchors.js
 
 ```javascript
-const handleAddGroupColor = (anchor) => {
-  const newColor = "#ffffff"; // Default new color
+const handleAddGroupColor = anchor => {
+  const newColor = '#ffffff'; // Default new color
 
   const updatedColors = [...colorAnchors[anchor], newColor];
 
@@ -636,17 +626,17 @@ const handleReorderGroupColor = (anchor, fromIndex, toIndex) => {
 
 return (
   <div>
-       {" "}
-    {Object.keys(colorAnchors).map((anchor) => (
+       {' '}
+    {Object.keys(colorAnchors).map(anchor => (
       <div key={anchor}>
-                <label>{anchor.replace(/([A-Z])/g, " $1")}</label>       {" "}
+                <label>{anchor.replace(/([A-Z])/g, ' $1')}</label>       {' '}
         {colorAnchors[anchor].map((color, index) => (
           <div key={index} className="color-group">
-                       {" "}
+                       {' '}
             <input
               type="color"
               value={color}
-              onChange={(e) => {
+              onChange={e => {
                 const updatedColors = [...colorAnchors[anchor]];
 
                 updatedColors[index] = e.target.value;
@@ -654,17 +644,12 @@ return (
                 updateColorAnchor(anchor, updatedColors);
               }}
             />
-                        <button
-              onClick={() => handleRemoveGroupColor(anchor, index)}
-            >
-              Remove
-            </button>            <button
-              onClick={() =>
-                handleReorderGroupColor(anchor, index, Math.max(0, index - 1))
-              }
-            >
-                            Up            {" "}
-            </button>           {" "}
+                       {' '}
+            <button onClick={() => handleRemoveGroupColor(anchor, index)}>Remove</button>           {' '}
+            <button onClick={() => handleReorderGroupColor(anchor, index, Math.max(0, index - 1))}>
+                            Up            {' '}
+            </button>
+                       {' '}
             <button
               onClick={() =>
                 handleReorderGroupColor(
@@ -674,17 +659,15 @@ return (
                 )
               }
             >
-                            Down            {" "}
+                            Down            {' '}
             </button>
-                     {" "}
+                     {' '}
           </div>
         ))}
-               {" "}
-        <button onClick={() => handleAddGroupColor(anchor)}>Add Color</button> 
-           {" "}
+                <button onClick={() => handleAddGroupColor(anchor)}>Add Color</button>     {' '}
       </div>
     ))}
-     {" "}
+     {' '}
   </div>
 );
 ```
@@ -699,20 +682,20 @@ Create predefined anchor sets for specific use cases.
 
 ```javascript
 export const anchorPresets = {
-  "Game Sprites": {
-    baseColor: ["#ffffff"],
+  'Game Sprites': {
+    baseColor: ['#ffffff'],
 
-    secondaryColor: ["#888888"],
+    secondaryColor: ['#888888'],
 
-    accentColor: ["#ff0000", "#00ff00", "#0000ff"],
+    accentColor: ['#ff0000', '#00ff00', '#0000ff'],
   },
 
-  "UI Design": {
-    baseColor: ["#f0f0f0"],
+  'UI Design': {
+    baseColor: ['#f0f0f0'],
 
-    secondaryColor: ["#d0d0d0"],
+    secondaryColor: ['#d0d0d0'],
 
-    accentColor: ["#007bff", "#28a745", "#ffc107"],
+    accentColor: ['#007bff', '#28a745', '#ffc107'],
   },
 };
 ```
@@ -724,25 +707,25 @@ Allow users to load a preset from the library.
 #### Add Preset Loading in File: src/frontend/ColorAnchors.js
 
 ```javascript
-import { anchorPresets } from "../data/anchorPresets";
+import { anchorPresets } from '../data/anchorPresets';
 
-const handleLoadPreset = (presetName) => {
+const handleLoadPreset = presetName => {
   setColorAnchors(anchorPresets[presetName]);
 };
 
 return (
   <div>
-        <label>Load Preset:</label>   {" "}
-    <select onChange={(e) => handleLoadPreset(e.target.value)}>
-            <option value="">Select Preset</option>     {" "}
-      {Object.keys(anchorPresets).map((presetName) => (
+        <label>Load Preset:</label>   {' '}
+    <select onChange={e => handleLoadPreset(e.target.value)}>
+            <option value="">Select Preset</option>     {' '}
+      {Object.keys(anchorPresets).map(presetName => (
         <option key={presetName} value={presetName}>
-                    {presetName}       {" "}
+                    {presetName}       {' '}
         </option>
       ))}
-         {" "}
+         {' '}
     </select>
-     {" "}
+     {' '}
   </div>
 );
 ```
@@ -757,11 +740,11 @@ Automatically save anchors for use across projects.
 
 ```javascript
 useEffect(() => {
-  localStorage.setItem("colorAnchors", JSON.stringify(colorAnchors));
+  localStorage.setItem('colorAnchors', JSON.stringify(colorAnchors));
 }, [colorAnchors]);
 
 useEffect(() => {
-  const savedAnchors = JSON.parse(localStorage.getItem("colorAnchors"));
+  const savedAnchors = JSON.parse(localStorage.getItem('colorAnchors'));
 
   if (savedAnchors) setColorAnchors(savedAnchors);
 }, []);
@@ -774,15 +757,15 @@ Enable syncing via a back-end API.
 #### Cloud Syncing in File: routes/anchors.js
 
 ```javascript
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
 
-const Anchor = require("../models/Anchor"); // MongoDB model
+const Anchor = require('../models/Anchor'); // MongoDB model
 
 // Save anchors
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { userId, anchors } = req.body;
 
@@ -796,20 +779,20 @@ router.post("/", async (req, res) => {
 
     res.status(200).json(updatedAnchor);
   } catch (err) {
-    res.status(500).json({ error: "Failed to save anchors" });
+    res.status(500).json({ error: 'Failed to save anchors' });
   }
 });
 
 // Load anchors
 
-router.get("/:userId", async (req, res) => {
+router.get('/:userId', async (req, res) => {
   try {
     const anchor = await Anchor.findOne({ userId: req.params.userId });
 
     if (anchor) res.status(200).json(anchor.anchors);
-    else res.status(404).json({ error: "No anchors found" });
+    else res.status(404).json({ error: 'No anchors found' });
   } catch (err) {
-    res.status(500).json({ error: "Failed to load anchors" });
+    res.status(500).json({ error: 'Failed to load anchors' });
   }
 });
 
@@ -824,17 +807,17 @@ Add a button to save/load anchors from the cloud.
 
 ```javascript
 const saveToCloud = async () => {
-  await fetch("/anchors", {
-    method: "POST",
+  await fetch('/anchors', {
+    method: 'POST',
 
-    headers: { "Content-Type": "application/json" },
+    headers: { 'Content-Type': 'application/json' },
 
-    body: JSON.stringify({ userId: "user123", anchors: colorAnchors }),
+    body: JSON.stringify({ userId: 'user123', anchors: colorAnchors }),
   });
 };
 
 const loadFromCloud = async () => {
-  const response = await fetch("/anchors/user123");
+  const response = await fetch('/anchors/user123');
 
   const data = await response.json();
 
@@ -843,22 +826,19 @@ const loadFromCloud = async () => {
 
 return (
   <div>
-        <button onClick={saveToCloud}>Save to Cloud</button>   {" "}
-    <button onClick={loadFromCloud}>Load from Cloud</button> {" "}
+        <button onClick={saveToCloud}>Save to Cloud</button>   {' '}
+    <button onClick={loadFromCloud}>Load from Cloud</button> {' '}
   </div>
 );
 ```
 
 ### Testing Plan
 
-1. Anchor Groups:
-   • Add multiple colors to an anchor and verify updates across the canvas.
-   • Test reordering and removing colors.
-1. Preset Anchors:
-   • Load a preset and verify it updates the canvas dynamically.
-1. Anchor Syncing:
-   • Save and load anchors from local storage and the cloud.
-   • Verify anchors persist across sessions and devices.
+1. Anchor Groups: • Add multiple colors to an anchor and verify updates across the canvas. • Test
+   reordering and removing colors.
+1. Preset Anchors: • Load a preset and verify it updates the canvas dynamically.
+1. Anchor Syncing: • Save and load anchors from local storage and the cloud. • Verify anchors
+   persist across sessions and devices.
 
 ### Next Steps
 
@@ -882,27 +862,27 @@ Provide a UI for managing presets, including options to create, edit, and delete
 #### Add Preset Editor in File: src/frontend/PresetEditor.js
 
 ```javascript
-import { useState } from "react";
+import { useState } from 'react';
 
-import { anchorPresets } from "../data/anchorPresets";
+import { anchorPresets } from '../data/anchorPresets';
 
 const PresetEditor = ({ onSavePreset }) => {
   const [presets, setPresets] = useState(anchorPresets);
 
-  const [newPresetName, setNewPresetName] = useState("");
+  const [newPresetName, setNewPresetName] = useState('');
 
   const [editingPreset, setEditingPreset] = useState(null);
 
   const saveNewPreset = () => {
     if (!newPresetName || presets[newPresetName]) {
-      alert("Invalid or duplicate preset name!");
+      alert('Invalid or duplicate preset name!');
 
       return;
     }
 
     setPresets({ ...presets, [newPresetName]: {} });
 
-    setNewPresetName("");
+    setNewPresetName('');
   };
 
   const savePreset = (name, updatedPreset) => {
@@ -913,7 +893,7 @@ const PresetEditor = ({ onSavePreset }) => {
     onSavePreset(name, updatedPreset);
   };
 
-  const deletePreset = (name) => {
+  const deletePreset = name => {
     const updatedPresets = { ...presets };
 
     delete updatedPresets[name];
@@ -923,38 +903,38 @@ const PresetEditor = ({ onSavePreset }) => {
 
   return (
     <div className="preset-editor">
-            <h3>Preset Editor</h3>     {" "}
+            <h3>Preset Editor</h3>     {' '}
       <div>
-               {" "}
+               {' '}
         <input
           type="text"
           placeholder="New Preset Name"
           value={newPresetName}
-          onChange={(e) => setNewPresetName(e.target.value)}
+          onChange={e => setNewPresetName(e.target.value)}
         />
-                <button onClick={saveNewPreset}>Create Preset</button>     {" "}
+                <button onClick={saveNewPreset}>Create Preset</button>     {' '}
       </div>
-           {" "}
+           {' '}
       <ul>
-               {" "}
-        {Object.keys(presets).map((presetName) => (
+               {' '}
+        {Object.keys(presets).map(presetName => (
           <li key={presetName}>
-                        <span>{presetName}</span>           {" "}
-            <button onClick={() => setEditingPreset(presetName)}>Edit</button> 
-                     {" "}
-            <button onClick={() => deletePreset(presetName)}>Delete</button>   
-                 {" "}
+                        <span>{presetName}</span>           {' '}
+            <button onClick={() => setEditingPreset(presetName)}>Edit</button>           {' '}
+            <button onClick={() => deletePreset(presetName)}>Delete</button>         {' '}
           </li>
         ))}
-             {" "}
+             {' '}
       </ul>
-            {editingPreset && (
+           {' '}
+      {editingPreset && (
         <PresetForm
           presetName={editingPreset}
           preset={presets[editingPreset]}
-          onSave={(updatedPreset) => savePreset(editingPreset, updatedPreset)}
+          onSave={updatedPreset => savePreset(editingPreset, updatedPreset)}
         />
-      )}   {" "}
+      )}
+         {' '}
     </div>
   );
 };
@@ -980,8 +960,8 @@ const PresetForm = ({ presetName, preset, onSave }) => {
     setUpdatedPreset({ ...updatedPreset, [anchor]: updatedColors });
   };
 
-  const addColor = (anchor) => {
-    const updatedColors = [...(updatedPreset[anchor] || []), "#ffffff"];
+  const addColor = anchor => {
+    const updatedColors = [...(updatedPreset[anchor] || []), '#ffffff'];
 
     setUpdatedPreset({ ...updatedPreset, [anchor]: updatedColors });
   };
@@ -992,23 +972,22 @@ const PresetForm = ({ presetName, preset, onSave }) => {
 
   return (
     <div className="preset-form">
-            <h4>Editing {presetName}</h4>     {" "}
-      {Object.keys(updatedPreset).map((anchor) => (
+            <h4>Editing {presetName}</h4>     {' '}
+      {Object.keys(updatedPreset).map(anchor => (
         <div key={anchor}>
-                    <label>{anchor.replace(/([A-Z])/g, " $1")}</label>         {" "}
+                    <label>{anchor.replace(/([A-Z])/g, ' $1')}</label>         {' '}
           {updatedPreset[anchor].map((color, index) => (
             <input
               key={index}
               type="color"
               value={color}
-              onChange={(e) => handleColorChange(anchor, index, e.target.value)}
+              onChange={e => handleColorChange(anchor, index, e.target.value)}
             />
           ))}
-                    <button onClick={() => addColor(anchor)}>Add Color</button> 
-               {" "}
+                    <button onClick={() => addColor(anchor)}>Add Color</button>       {' '}
         </div>
       ))}
-            <button onClick={saveChanges}>Save Changes</button>   {" "}
+            <button onClick={saveChanges}>Save Changes</button>   {' '}
     </div>
   );
 };
@@ -1025,7 +1004,7 @@ Ensure custom presets persist across sessions.
 ```javascript
 export const usePresetStorage = () => {
   const [presets, setPresets] = useState(() => {
-    const savedPresets = localStorage.getItem("anchorPresets");
+    const savedPresets = localStorage.getItem('anchorPresets');
 
     return savedPresets ? JSON.parse(savedPresets) : {};
   });
@@ -1035,17 +1014,17 @@ export const usePresetStorage = () => {
 
     setPresets(updatedPresets);
 
-    localStorage.setItem("anchorPresets", JSON.stringify(updatedPresets));
+    localStorage.setItem('anchorPresets', JSON.stringify(updatedPresets));
   };
 
-  const deletePreset = (name) => {
+  const deletePreset = name => {
     const updatedPresets = { ...presets };
 
     delete updatedPresets[name];
 
     setPresets(updatedPresets);
 
-    localStorage.setItem("anchorPresets", JSON.stringify(updatedPresets));
+    localStorage.setItem('anchorPresets', JSON.stringify(updatedPresets));
   };
 
   return { presets, savePreset, deletePreset };
@@ -1063,18 +1042,16 @@ Extend the WebSocket server to handle anchor updates.
 ```javascript
 const colorAnchorState = {}; // Keep track of anchor states by session
 
-wss.on("connection", (ws) => {
-  ws.on("message", (message) => {
+wss.on('connection', ws => {
+  ws.on('message', message => {
     const { type, payload } = JSON.parse(message);
 
-    if (type === "updateAnchors") {
+    if (type === 'updateAnchors') {
       colorAnchorState[payload.sessionId] = payload.anchors; // Broadcast updated anchors to all clients
 
-      wss.clients.forEach((client) => {
+      wss.clients.forEach(client => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
-          client.send(
-            JSON.stringify({ type: "anchorsUpdated", payload: payload.anchors })
-          );
+          client.send(JSON.stringify({ type: 'anchorsUpdated', payload: payload.anchors }));
         }
       });
     }
@@ -1093,12 +1070,12 @@ const Collaboration = ({ sessionId, onUpdateAnchors }) => {
   const ws = useRef(null);
 
   useEffect(() => {
-    ws.current = new WebSocket("ws://localhost:8080");
+    ws.current = new WebSocket('ws://localhost:8080');
 
-    ws.current.onmessage = (event) => {
+    ws.current.onmessage = event => {
       const { type, payload } = JSON.parse(event.data);
 
-      if (type === "anchorsUpdated") {
+      if (type === 'anchorsUpdated') {
         onUpdateAnchors(payload);
       }
     };
@@ -1106,10 +1083,8 @@ const Collaboration = ({ sessionId, onUpdateAnchors }) => {
     return () => ws.current.close();
   }, [onUpdateAnchors]);
 
-  const sendAnchorUpdate = (anchors) => {
-    ws.current.send(
-      JSON.stringify({ type: "updateAnchors", payload: { sessionId, anchors } })
-    );
+  const sendAnchorUpdate = anchors => {
+    ws.current.send(JSON.stringify({ type: 'updateAnchors', payload: { sessionId, anchors } }));
   };
 
   return { sendAnchorUpdate };
@@ -1118,36 +1093,31 @@ const Collaboration = ({ sessionId, onUpdateAnchors }) => {
 
 ### 4. Testing Plan
 
-1. Preset Editor:
-   • Create, edit, and delete custom presets.
-   • Verify presets persist across sessions in local storage.
-1. Real-Time Syncing:
-   • Open multiple instances and test anchor updates.
-   • Verify updates propagate instantly across all collaborators.
+1. Preset Editor: • Create, edit, and delete custom presets. • Verify presets persist across
+   sessions in local storage.
+1. Real-Time Syncing: • Open multiple instances and test anchor updates. • Verify updates propagate
+   instantly across all collaborators.
 
 ### 5. Next Enhancements
 
-1. Advanced Preset Tools:
-   • Allow users to export/import presets as JSON files.
-   • Add visual previews for presets.
-1. Syncing Enhancements:
-   • Include conflict resolution for simultaneous updates.
-   • Add user indicators to show who is editing anchors.
+1. Advanced Preset Tools: • Allow users to export/import presets as JSON files. • Add visual
+   previews for presets.
+1. Syncing Enhancements: • Include conflict resolution for simultaneous updates. • Add user
+   indicators to show who is editing anchors.
 
 ## Enhancing and Implementing the Functionality of Color Anchors
 
-This enhancement will focus on ensuring that Color Anchors are fully functional, user-friendly, and deeply integrated into the grid canvas, palette library, brush tools, and collaborative workflows.
+This enhancement will focus on ensuring that Color Anchors are fully functional, user-friendly, and
+deeply integrated into the grid canvas, palette library, brush tools, and collaborative workflows.
 
 ### Current Goals
 
-1. Dynamic Updates Across Grid:
-   • Ensure color anchors dynamically update all instances of their assigned colors on the canvas.
-1. Full Integration:
-   • Integrate color anchors into the brush, palette library, and other tools.
-1. Advanced Anchor Management:
-   • Add improved usability features like anchor preview, advanced UI interactions, and visual feedback.
-1. Testing & Debugging:
-   • Validate that all functionality works as expected.
+1. Dynamic Updates Across Grid: • Ensure color anchors dynamically update all instances of their
+   assigned colors on the canvas.
+1. Full Integration: • Integrate color anchors into the brush, palette library, and other tools.
+1. Advanced Anchor Management: • Add improved usability features like anchor preview, advanced UI
+   interactions, and visual feedback.
+1. Testing & Debugging: • Validate that all functionality works as expected.
 
 ### Step 1: Core Enhancements to Color Anchors
 
@@ -1197,7 +1167,7 @@ Provide a live preview of how the anchor color change will affect the grid befor
 const handlePreviewAnchorChange = (anchorName, previewColor) => {
   const previewColors = { ...cellColors };
 
-  Object.keys(previewColors).forEach((index) => {
+  Object.keys(previewColors).forEach(index => {
     if (previewColors[index] === colorAnchors[anchorName]) {
       previewColors[index] = previewColor;
     }
@@ -1285,11 +1255,11 @@ const applyBrushWithAnchor = (x, y, anchorName) => {
 
 // Add an anchor selector to the brush tool:
 
-<select onChange={(e) => setActiveAnchor(e.target.value)}>
-   {" "}
-  {Object.keys(colorAnchors).map((anchorName) => (
+<select onChange={e => setActiveAnchor(e.target.value)}>
+   {' '}
+  {Object.keys(colorAnchors).map(anchorName => (
     <option key={anchorName} value={anchorName}>
-            {anchorName.replace(/([A-Z])/g, " $1")}   {" "}
+            {anchorName.replace(/([A-Z])/g, ' $1')}   {' '}
     </option>
   ))}
 </select>;
@@ -1310,18 +1280,18 @@ const assignToAnchor = (color, anchorName) => {
 
 return (
   <div className="palette-library">
-       {" "}
-    {palette.map((color) => (
+       {' '}
+    {palette.map(color => (
       <div key={color} className="palette-color">
-               {" "}
+               {' '}
         <div
           style={{ backgroundColor: color }}
           onClick={() => assignToAnchor(color, activeAnchor)}
         />
-             {" "}
+             {' '}
       </div>
     ))}
-     {" "}
+     {' '}
   </div>
 );
 ```
@@ -1337,18 +1307,16 @@ Modify WebSocket logic to include color anchor updates.
 #### 3.2 Add WebSocket Updates in File: server.js
 
 ```javascript
-wss.on("connection", (ws) => {
-  ws.on("message", (message) => {
+wss.on('connection', ws => {
+  ws.on('message', message => {
     const { type, payload } = JSON.parse(message);
 
-    if (type === "updateAnchor") {
+    if (type === 'updateAnchor') {
       colorAnchorState[payload.sessionId] = payload.anchors; // Broadcast updated anchors
 
-      wss.clients.forEach((client) => {
+      wss.clients.forEach(client => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
-          client.send(
-            JSON.stringify({ type: "anchorsUpdated", payload: payload.anchors })
-          );
+          client.send(JSON.stringify({ type: 'anchorsUpdated', payload: payload.anchors }));
         }
       });
     }
@@ -1361,16 +1329,16 @@ wss.on("connection", (ws) => {
 #### 3.2 Add Front-End Sync in File: src/frontend/Collaboration.js
 
 ```javascript
-const syncAnchors = (updatedAnchors) => {
+const syncAnchors = updatedAnchors => {
   setColorAnchors(updatedAnchors);
 
   updateGridWithAllAnchors(updatedAnchors);
 };
 
-ws.current.onmessage = (event) => {
+ws.current.onmessage = event => {
   const { type, payload } = JSON.parse(event.data);
 
-  if (type === "anchorsUpdated") {
+  if (type === 'anchorsUpdated') {
     syncAnchors(payload);
   }
 };
@@ -1380,22 +1348,20 @@ ws.current.onmessage = (event) => {
 
 #### 4.1 Functional Testing
 
-• Test anchor updates dynamically on the grid.
-• Validate integration with brush tools and palette library.
-• Ensure collaboration sync works across multiple instances.
+• Test anchor updates dynamically on the grid. • Validate integration with brush tools and palette
+library. • Ensure collaboration sync works across multiple instances.
 
 #### 4.2 User Experience Testing
 
-• Test reordering, previewing, and committing anchor changes.
-• Verify that anchor-based workflows are intuitive and efficient.
+• Test reordering, previewing, and committing anchor changes. • Verify that anchor-based workflows
+are intuitive and efficient.
 
 #### 4.3 Debugging
 
-• Resolve any edge cases where grid updates might lag or fail.
-• Test scenarios where multiple users update anchors simultaneously.
+• Resolve any edge cases where grid updates might lag or fail. • Test scenarios where multiple users
+update anchors simultaneously.
 
 ### 5. Future Enhancements
 
-• Add gradient and pattern effects for anchor groups.
-• Show which user is editing a specific anchor during collaboration.
-• Allow users to save and load anchor configurations as JSON files.
+• Add gradient and pattern effects for anchor groups. • Show which user is editing a specific anchor
+during collaboration. • Allow users to save and load anchor configurations as JSON files.

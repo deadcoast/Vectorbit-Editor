@@ -1,24 +1,25 @@
 # Implementation Plan: Advanced Color Tools and Brush Enhancements
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-We will focus on developing indexed color mode, palette tools, and brush enhancements, providing detailed implementation steps and advanced functionality.
+We will focus on developing indexed color mode, palette tools, and brush enhancements, providing
+detailed implementation steps and advanced functionality.
 
 ## 4. Advanced Color Tools
 
 ### 4.1 Indexed Color Mode
 
-Objective:
-Restrict artwork to a predefined palette, with automatic remapping for out-of-palette colors.
+Objective: Restrict artwork to a predefined palette, with automatic remapping for out-of-palette
+colors.
 
 Implementation:
 
-1. Predefined Palette:
-   • Let users select or upload a palette to serve as the index.
-1. Color Mapping:
-   • Map all artwork colors to the closest color in the selected palette using Euclidean distance in RGB space.
+1. Predefined Palette: • Let users select or upload a palette to serve as the index.
+1. Color Mapping: • Map all artwork colors to the closest color in the selected palette using
+   Euclidean distance in RGB space.
 
 ### Add Color Mapping in File: src/utils/colorUtils.js
 
@@ -28,7 +29,7 @@ const mapToPalette = (currentColor, palette) => {
 
   let minDistance = Number.MAX_VALUE;
 
-  palette.forEach((color) => {
+  palette.forEach(color => {
     const distance = Math.sqrt(
       Math.pow(currentColor.r - color.r, 2) +
         Math.pow(currentColor.g - color.g, 2) +
@@ -53,10 +54,10 @@ const mapToPalette = (currentColor, palette) => {
 ### Add Indexed Mode in File: src/frontend/Grid.js
 
 ```javascript
-const applyIndexedColorMode = (palette) => {
+const applyIndexedColorMode = palette => {
   const updatedColors = { ...cellColors };
 
-  Object.keys(updatedColors).forEach((index) => {
+  Object.keys(updatedColors).forEach(index => {
     const currentColor = updatedColors[index];
 
     updatedColors[index] = mapToPalette(currentColor, palette);
@@ -124,22 +125,20 @@ const handleBlendPalettes = () => {
 
 ### Step 4.3 Palette Locking
 
-Objective:
-Lock specific colors in a palette to prevent changes.
+Objective: Lock specific colors in a palette to prevent changes.
 
 Implementation:
 
-1. Lock State:
-   • Track locked colors in the palette.
+1. Lock State: • Track locked colors in the palette.
 
 ### 4.3 Add Palette Locking in File: src/frontend/PaletteLibrary.js
 
 ```javascript
 const [lockedColors, setLockedColors] = useState([]);
 
-const toggleColorLock = (color) => {
-  setLockedColors((prev) =>
-    prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+const toggleColorLock = color => {
+  setLockedColors(prev =>
+    prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]
   );
 };
 ```
@@ -152,8 +151,7 @@ Display a lock icon next to locked colors.
 
 Implementation:
 
-1. Visual Lock Indicator:
-   • Display a lock icon next to locked colors.
+1. Visual Lock Indicator: • Display a lock icon next to locked colors.
 
 ### Add Lock Icon in File: src/frontend/PaletteLibrary.css
 
@@ -173,7 +171,8 @@ Generate harmonious palettes based on color theory (complementary, triadic, etc.
 
 Implementation:
 
-Use the generateComplementary, generateAnalogous, and similar functions defined earlier to create palettes dynamically.
+Use the generateComplementary, generateAnalogous, and similar functions defined earlier to create
+palettes dynamically.
 
 ## 5. Brushes and Drawing Enhancements
 
@@ -195,8 +194,9 @@ Implementation:
 <div>
     <label>Opacity</label>
 
-    <input     type="range"     min="0.1"     max="1"     step="0.1"    
-  value={opacity}     onChange={(e) => setOpacity(e.target.value)}   />
+   
+  <input type="range" min="0.1" max="1" step="0.1" value="{opacity}" onChange="{(e)" ="" />
+  setOpacity(e.target.value)}   />
 </div>
 ```
 
@@ -236,7 +236,7 @@ const saveStencil = (x, y, width, height) => {
     }
   }
 
-  setStencils((prev) => [...prev, stencil]);
+  setStencils(prev => [...prev, stencil]);
 };
 ```
 
@@ -288,11 +288,8 @@ const applyRandomizedBrush = (x, y) => {
 
 ### 6. Testing Plan
 
-1. Advanced Color Tools:
-   • Test indexed mode by limiting artwork to a predefined palette.
-   • Verify palette blending produces smooth transitions.
-   • Ensure locked colors remain unchanged when editing palettes.
-1. Brush Enhancements:
-   • Test opacity, flow, and edge softness.
-   • Create, save, and apply stencils.
+1. Advanced Color Tools: • Test indexed mode by limiting artwork to a predefined palette. • Verify
+   palette blending produces smooth transitions. • Ensure locked colors remain unchanged when
+   editing palettes.
+1. Brush Enhancements: • Test opacity, flow, and edge softness. • Create, save, and apply stencils.
    • Verify randomness in textures generated by randomized brushes.

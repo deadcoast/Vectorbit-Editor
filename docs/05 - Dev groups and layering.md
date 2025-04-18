@@ -1,10 +1,12 @@
 # Enhancing the Freehand Tool with Smoothing Algorithms and Adding Layer Manipulation Features
 
-**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL TRANSLATIONS TO THE SOURCE CODE.
+**NOTE:** ALL DOCUMENTATION IS SUBJECT TO CHANGE, EXAMPLES LISTED ARE NOT DIRECT AND OR LITTERAL
+TRANSLATIONS TO THE SOURCE CODE.
 
 ---
 
-We’ll refine the Freehand Tool to create smoother, more natural strokes and enhance layer manipulation features with drag-and-drop reordering and additional group management options.
+We’ll refine the Freehand Tool to create smoother, more natural strokes and enhance layer
+manipulation features with drag-and-drop reordering and additional group management options.
 
 1. Enhance the Freehand Tool with Smoothing Algorithms
 
@@ -19,21 +21,21 @@ Modify the handleMouseMove function to record the points as the user drags.
 ```javascript
 const [freehandPoints, setFreehandPoints] = useState([]);
 
-const handleMouseDown = (index) => {
-  if (activeTool === "freehand") {
+const handleMouseDown = index => {
+  if (activeTool === 'freehand') {
     setIsDrawing(true);
     setFreehandPoints([index]); // Start tracking points
   }
 };
 
-const handleMouseMove = (index) => {
-  if (activeTool === "freehand" && isDrawing) {
-    setFreehandPoints((prev) => [...prev, index]); // Add points to the path
+const handleMouseMove = index => {
+  if (activeTool === 'freehand' && isDrawing) {
+    setFreehandPoints(prev => [...prev, index]); // Add points to the path
   }
 };
 
 const handleMouseUp = () => {
-  if (activeTool === "freehand" && isDrawing) {
+  if (activeTool === 'freehand' && isDrawing) {
     smoothFreehand(freehandPoints); // Smooth the stroke
     setIsDrawing(false);
     setFreehandPoints([]);
@@ -48,7 +50,7 @@ Smooth the points using a Bezier curve algorithm.
 ### Smooth Points for File: src/frontend/Grid.js
 
 ```javascript
-const smoothFreehand = (points) => {
+const smoothFreehand = points => {
   const updatedColors = { ...cellColors };
 
   for (let i = 0; i < points.length - 1; i++) {
@@ -66,12 +68,8 @@ const smoothFreehand = (points) => {
 
     // Draw the curve
     for (let t = 0; t <= 1; t += 0.05) {
-      const x = Math.round(
-        (1 - t) ** 2 * startX + 2 * (1 - t) * t * controlX + t ** 2 * endX
-      );
-      const y = Math.round(
-        (1 - t) ** 2 * startY + 2 * (1 - t) * t * controlY + t ** 2 * endY
-      );
+      const x = Math.round((1 - t) ** 2 * startX + 2 * (1 - t) * t * controlX + t ** 2 * endX);
+      const y = Math.round((1 - t) ** 2 * startY + 2 * (1 - t) * t * controlY + t ** 2 * endY);
       const index = y * gridSize + x;
       updatedColors[index] = activeColor;
     }
@@ -146,15 +144,15 @@ Allow users to rename and delete groups.
 
 ```javascript
 const renameGroup = (groupId, newName) => {
-  const updatedGroups = groups.map((group) =>
+  const updatedGroups = groups.map(group =>
     group.id === groupId ? { ...group, name: newName } : group
   );
   setGroups(updatedGroups);
 };
 
-const deleteGroup = (groupId) => {
-  const updatedGroups = groups.filter((group) => group.id !== groupId);
-  const updatedLayers = layers.map((layer) =>
+const deleteGroup = groupId => {
+  const updatedGroups = groups.filter(group => group.id !== groupId);
+  const updatedLayers = layers.map(layer =>
     layer.group === groupId ? { ...layer, group: null } : layer
   );
   setGroups(updatedGroups);
@@ -162,12 +160,10 @@ const deleteGroup = (groupId) => {
 };
 
 <div className="group-controls">
-  {groups.map((group) => (
+  {groups.map(group => (
     <div key={group.id}>
       <span>{group.name}</span>
-      <button onClick={() => renameGroup(group.id, prompt("New Group Name:"))}>
-        Rename
-      </button>
+      <button onClick={() => renameGroup(group.id, prompt('New Group Name:'))}>Rename</button>
       <button onClick={() => deleteGroup(group.id)}>Delete</button>
     </div>
   ))}
@@ -200,21 +196,19 @@ const deleteGroup = (groupId) => {
 
 ## Testing the Features
 
-1. Run the development server:
-   npm start
-1. Test Freehand Tool:
-   • Verify the smoothness of strokes when using the freehand tool.
-1. Test Layer Reordering:
-   • Drag and drop layers to reorder them in the stack.
-1. Test Group Management:
-   • Create, rename, and delete groups. Verify layers are updated accordingly.
+1. Run the development server: npm start
+1. Test Freehand Tool: • Verify the smoothness of strokes when using the freehand tool.
+1. Test Layer Reordering: • Drag and drop layers to reorder them in the stack.
+1. Test Group Management: • Create, rename, and delete groups. Verify layers are updated
+   accordingly.
 
 ## Undo/Redo Support for Groups and Layer Reordering + Enhancing Export Functionality for Groups
 
 We will:
 
 1. Add undo/redo functionality for group operations and layer reordering.
-1. Enhance export functionality to respect group-level transformations, such as opacity and visibility.
+1. Enhance export functionality to respect group-level transformations, such as opacity and
+   visibility.
 
 ## Undo/Redo Support for Groups and Layer Reordering
 
@@ -230,7 +224,7 @@ Modify the updateHistory function to handle both group and layer changes.
 const [history, setHistory] = useState([]);
 const [historyIndex, setHistoryIndex] = useState(-1);
 
-const updateHistory = (newState) => {
+const updateHistory = newState => {
   const newHistory = [...history.slice(0, historyIndex + 1), newState];
   setHistory(newHistory);
   setHistoryIndex(newHistory.length - 1);
@@ -244,8 +238,7 @@ const saveState = () => {
 // Undo and redo functions
 const undo = () => {
   if (historyIndex > 0) {
-    const { layers: prevLayers, groups: prevGroups } =
-      history[historyIndex - 1];
+    const { layers: prevLayers, groups: prevGroups } = history[historyIndex - 1];
     setLayers(prevLayers);
     setGroups(prevGroups);
     setHistoryIndex(historyIndex - 1);
@@ -254,8 +247,7 @@ const undo = () => {
 
 const redo = () => {
   if (historyIndex < history.length - 1) {
-    const { layers: nextLayers, groups: nextGroups } =
-      history[historyIndex + 1];
+    const { layers: nextLayers, groups: nextGroups } = history[historyIndex + 1];
     setLayers(nextLayers);
     setGroups(nextGroups);
     setHistoryIndex(historyIndex + 1);
@@ -335,9 +327,9 @@ Update the rendering logic in Grid.js to account for group-level transformations
 
 ```javascript
 const renderGroup = (ctx, group, scale = 1) => {
-  const groupLayers = layers.filter((layer) => group.layers.includes(layer.id));
-  ctx.globalAlpha = Math.min(...groupLayers.map((layer) => layer.opacity)); // Use the lowest opacity
-  groupLayers.forEach((layer) => {
+  const groupLayers = layers.filter(layer => group.layers.includes(layer.id));
+  ctx.globalAlpha = Math.min(...groupLayers.map(layer => layer.opacity)); // Use the lowest opacity
+  groupLayers.forEach(layer => {
     if (layer.visible) {
       renderLayer(ctx, layer, scale);
     }
@@ -346,7 +338,7 @@ const renderGroup = (ctx, group, scale = 1) => {
 
 const renderToCanvas = (scale = 1) => {
   const canvas = canvasRef.current;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
   const resolution = 500 * scale;
 
   canvas.width = resolution;
@@ -354,10 +346,8 @@ const renderToCanvas = (scale = 1) => {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  groups.forEach((group) => renderGroup(ctx, group, scale));
-  layers
-    .filter((layer) => !layer.group)
-    .forEach((layer) => renderLayer(ctx, layer, scale));
+  groups.forEach(group => renderGroup(ctx, group, scale));
+  layers.filter(layer => !layer.group).forEach(layer => renderLayer(ctx, layer, scale));
 };
 ```
 
@@ -369,11 +359,11 @@ Enable exporting groups as separate files or combined into one file.
 
 ```javascript
 const exportGroupsToSVG = () => {
-  groups.forEach((group) => {
+  groups.forEach(group => {
     renderToCanvas(1); // Render the group
     const canvas = canvasRef.current;
-    const link = document.createElement("a");
-    link.href = canvas.toDataURL("image/svg+xml");
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/svg+xml');
     link.download = `${group.name}.svg`;
     link.click();
   });
@@ -382,8 +372,8 @@ const exportGroupsToSVG = () => {
 const exportAllGroupsToSVG = () => {
   renderToCanvas(1); // Render all groups together
   const canvas = canvasRef.current;
-  const link = document.createElement("a");
-  link.href = canvas.toDataURL("image/svg+xml");
+  const link = document.createElement('a');
+  link.href = canvas.toDataURL('image/svg+xml');
   link.download = `all-groups.svg`;
   link.click();
 };
@@ -432,18 +422,16 @@ const exportAllGroupsToSVG = () => {
 
 ## Step 7: Testing the Features
 
-1. Run the development server:
-   npm start
-1. Test Undo/Redo:
-   • Perform actions like adding layers/groups or reordering layers.
-   • Undo/redo changes and verify the state updates correctly.
-1. Test Group Export:
-   • Export each group as separate .svg files.
-   • Export all groups combined into a single .svg file.
+1. Run the development server: npm start
+1. Test Undo/Redo: • Perform actions like adding layers/groups or reordering layers. • Undo/redo
+   changes and verify the state updates correctly.
+1. Test Group Export: • Export each group as separate .svg files. • Export all groups combined into
+   a single .svg file.
 
 ## Advanced Transformation Tools for Groups: Scaling and Rotation
 
-We will implement tools to allow scaling and rotation of groups. These transformations will affect all layers within a group, and the changes will be reflected during rendering and export.
+We will implement tools to allow scaling and rotation of groups. These transformations will affect
+all layers within a group, and the changes will be reflected during rendering and export.
 
 ## Step 1: Update Group Data Structure
 
@@ -586,7 +574,7 @@ Add styling for the new transformation controls.
   gap: 10px;
 }
 
-.group-controls input[type="range"] {
+.group-controls input[type='range'] {
   margin-left: 10px;
   width: 100px;
 }
@@ -599,18 +587,16 @@ Add styling for the new transformation controls.
 
 ## Step 5: Testing the Features
 
-1. Run the development server:
-   npm start
-1. Test Group Transformations:
-   • Adjust the scale and rotation for each group.
-   • Verify the transformations are applied correctly during rendering.
-1. Test Group Export:
-   • Export groups as .svg files with transformations applied.
-   • Verify each file respects the group’s scale and rotation.
+1. Run the development server: npm start
+1. Test Group Transformations: • Adjust the scale and rotation for each group. • Verify the
+   transformations are applied correctly during rendering.
+1. Test Group Export: • Export groups as .svg files with transformations applied. • Verify each file
+   respects the group’s scale and rotation.
 
 ## Step 6: Adding Drag-and-Drop Positioning for Groups
 
-We will implement a drag-and-drop positioning tool to allow users to move entire groups around the grid.
+We will implement a drag-and-drop positioning tool to allow users to move entire groups around the
+grid.
 
 ## Step 1: Add Positioning to the Group Data Structure
 
@@ -623,7 +609,7 @@ const App = () => {
   const [groups, setGroups] = useState([
     {
       id: 1,
-      name: "Group 1",
+      name: 'Group 1',
       layers: [],
       scale: 1,
       rotation: 0,
@@ -633,7 +619,7 @@ const App = () => {
   ]);
 
   const updateGroupPosition = (groupId, position) => {
-    const updatedGroups = groups.map((group) =>
+    const updatedGroups = groups.map(group =>
       group.id === groupId ? { ...group, ...position } : group
     );
     setGroups(updatedGroups);
@@ -643,7 +629,7 @@ const App = () => {
     <div>
       <h1>Vectorbit</h1>
       <div className="group-controls">
-        {groups.map((group) => (
+        {groups.map(group => (
           <div key={group.id}>
             <span>{group.name}</span>
             <span>
@@ -672,7 +658,7 @@ const handleDragStart = (groupId, startX, startY) => {
   });
 };
 
-const handleDrag = (event) => {
+const handleDrag = event => {
   if (draggingGroup) {
     const { groupId, startX, startY } = draggingGroup;
     const deltaX = event.clientX - startX;
@@ -763,25 +749,22 @@ const renderGroup = (ctx, group, scale = 1) => {
 
 ## Step 5: Testing Drag-and-Drop for Groups
 
-1. Run the development server:
-   npm start
-1. Test Dragging:
-   • Drag groups around the grid and verify their position updates correctly.
-1. Test Combined Transformations:
-   • Verify that scaling and rotation still apply correctly after repositioning a group.
+1. Run the development server: npm start
+1. Test Dragging: • Drag groups around the grid and verify their position updates correctly.
+1. Test Combined Transformations: • Verify that scaling and rotation still apply correctly after
+   repositioning a group.
 
 ## Step 6: Testing Drag-and-Drop for Groups
 
-1. Run the development server:
-   npm start
-1. Test Dragging:
-   • Drag groups around the grid and verify their position updates correctly.
-1. Test Combined Transformations:
-   • Verify that scaling and rotation still apply correctly after repositioning a group.
+1. Run the development server: npm start
+1. Test Dragging: • Drag groups around the grid and verify their position updates correctly.
+1. Test Combined Transformations: • Verify that scaling and rotation still apply correctly after
+   repositioning a group.
 
 ## Step 7: Enhance Group Positioning with Snapping to Grid
 
-We’ll improve group positioning by adding a snapping feature that ensures groups align with the grid when moved.
+We’ll improve group positioning by adding a snapping feature that ensures groups align with the grid
+when moved.
 
 ### Add Grid Snapping Logic
 
@@ -888,33 +871,27 @@ Add styling for the snapping preview to make it visually distinct.
 
 ## Step 5: Testing Snapping
 
-1. Run the development server:
-   npm start
-1. Test Group Dragging:
-   • Drag groups and verify they snap to the nearest grid cell when released.
-1. Test Visual Feedback:
-   • Ensure the snapping preview aligns with the nearest grid cell during dragging.
-1. Test Combined Transformations:
-   • Verify that snapping works correctly alongside scaling and rotation.
+1. Run the development server: npm start
+1. Test Group Dragging: • Drag groups and verify they snap to the nearest grid cell when released.
+1. Test Visual Feedback: • Ensure the snapping preview aligns with the nearest grid cell during
+   dragging.
+1. Test Combined Transformations: • Verify that snapping works correctly alongside scaling and
+   rotation.
 
 ## Step 6: Testing Snapping
 
-1. Run the development server:
-   npm start
-1. Test Group Dragging:
-   • Drag groups and verify they snap to the nearest grid cell when released.
-1. Test Visual Feedback:
-   • Ensure the snapping preview aligns with the nearest grid cell during dragging.
-1. Test Combined Transformations:
-   • Verify that snapping works correctly alongside scaling and rotation.
+1. Run the development server: npm start
+1. Test Group Dragging: • Drag groups and verify they snap to the nearest grid cell when released.
+1. Test Visual Feedback: • Ensure the snapping preview aligns with the nearest grid cell during
+   dragging.
+1. Test Combined Transformations: • Verify that snapping works correctly alongside scaling and
+   rotation.
 
 ## Step 7: Testing Snapping
 
-1. Run the development server:
-   npm start
-1. Test Group Dragging:
-   • Drag groups and verify they snap to the nearest grid cell when released.
-1. Test Visual Feedback:
-   • Ensure the snapping preview aligns with the nearest grid cell during dragging.
-1. Test Combined Transformations:
-   • Verify that snapping works correctly alongside scaling and rotation.
+1. Run the development server: npm start
+1. Test Group Dragging: • Drag groups and verify they snap to the nearest grid cell when released.
+1. Test Visual Feedback: • Ensure the snapping preview aligns with the nearest grid cell during
+   dragging.
+1. Test Combined Transformations: • Verify that snapping works correctly alongside scaling and
+   rotation.

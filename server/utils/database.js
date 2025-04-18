@@ -1,5 +1,4 @@
-
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 /**
  * Function to establish a connection with MongoDB.
@@ -30,12 +29,12 @@ const connectDB = async () => {
       );
 
       if (retries >= maxRetries) {
-        console.error("❌ Max connection retries reached. Exiting...");
+        console.error('❌ Max connection retries reached. Exiting...');
         process.exit(1); // Exit the application on failure
       }
 
-      console.log("🔄 Retrying connection in 5 seconds...");
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait before retrying
+      console.log('🔄 Retrying connection in 5 seconds...');
+      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait before retrying
     }
   }
 };
@@ -47,7 +46,7 @@ const connectDB = async () => {
 export const disconnectDB = async () => {
   try {
     await mongoose.connection.close();
-    console.log("🛑 MongoDB Connection Closed");
+    console.log('🛑 MongoDB Connection Closed');
   } catch (error) {
     console.error(`❌ Error Closing MongoDB Connection: ${error.message}`);
   }
@@ -57,20 +56,20 @@ export const disconnectDB = async () => {
  * MongoDB Event Listeners
  * Logs important connection events for better observability.
  */
-mongoose.connection.on("connected", () => {
-  console.log("⚡️ MongoDB connection established.");
+mongoose.connection.on('connected', () => {
+  console.log('⚡️ MongoDB connection established.');
 });
 
-mongoose.connection.on("disconnected", () => {
-  console.warn("⚠️ MongoDB connection disconnected.");
+mongoose.connection.on('disconnected', () => {
+  console.warn('⚠️ MongoDB connection disconnected.');
 });
 
-mongoose.connection.on("error", (err) => {
+mongoose.connection.on('error', err => {
   console.error(`❌ MongoDB connection error: ${err.message}`);
 });
 
-mongoose.connection.on("reconnected", () => {
-  console.log("🔄 MongoDB connection reestablished.");
+mongoose.connection.on('reconnected', () => {
+  console.log('🔄 MongoDB connection reestablished.');
 });
 
 /**
@@ -78,14 +77,14 @@ mongoose.connection.on("reconnected", () => {
  * Handles app termination signals to close MongoDB connection cleanly.
  */
 const handleShutdown = () => {
-  process.on("SIGINT", async () => {
-    console.log("🚦 SIGINT received. Closing MongoDB connection...");
+  process.on('SIGINT', async () => {
+    console.log('🚦 SIGINT received. Closing MongoDB connection...');
     await disconnectDB();
     process.exit(0);
   });
 
-  process.on("SIGTERM", async () => {
-    console.log("🚦 SIGTERM received. Closing MongoDB connection...");
+  process.on('SIGTERM', async () => {
+    console.log('🚦 SIGTERM received. Closing MongoDB connection...');
     await disconnectDB();
     process.exit(0);
   });

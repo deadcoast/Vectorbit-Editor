@@ -1,46 +1,40 @@
 // src/components/Grid/DrawingTools.js
-import { debounce } from "lodash";
-import { interpolateColors, generateNoise } from "../utils/colorUtils";
+import { debounce } from 'lodash';
+
+import { interpolateColors, generateNoise } from '../utils/colorUtils';
 
 /**
  * Brush Types and Effects Configuration
  */
 export const BRUSH_TYPES = {
-  FILLED: "filled",
-  OUTLINE: "outline",
-  PATTERNED: "patterned",
-  GRADIENT: "gradient",
-  AIRBRUSH: "airbrush",
-  PIXEL_PERFECT: "pixel_perfect",
-  TEXTURED: "textured",
-  DITHERED: "dithered",
-  NOISE: "noise",
-  SYMMETRICAL: "symmetrical",
-  SHADER: "shader",
-  BLEND: "blend",
+  FILLED: 'filled',
+  OUTLINE: 'outline',
+  PATTERNED: 'patterned',
+  GRADIENT: 'gradient',
+  AIRBRUSH: 'airbrush',
+  PIXEL_PERFECT: 'pixel_perfect',
+  TEXTURED: 'textured',
+  DITHERED: 'dithered',
+  NOISE: 'noise',
+  SYMMETRICAL: 'symmetrical',
+  SHADER: 'shader',
+  BLEND: 'blend',
 };
 
 export const BRUSH_EFFECTS = {
-  NONE: "none",
-  GLOW: "glow",
-  BLUR: "blur",
-  SHARPEN: "sharpen",
-  OUTLINE_EFFECT: "outline_effect",
-  SHADOW: "shadow",
-  NEON: "neon",
+  NONE: 'none',
+  GLOW: 'glow',
+  BLUR: 'blur',
+  SHARPEN: 'sharpen',
+  OUTLINE_EFFECT: 'outline_effect',
+  SHADOW: 'shadow',
+  NEON: 'neon',
 };
 
 /**
  * Enhanced Brush Application with Effects
  */
-export const applyBrush = (
-  x,
-  y,
-  color,
-  brushConfig,
-  gridSize,
-  setCellColors
-) => {
+export const applyBrush = (x, y, color, brushConfig, gridSize, setCellColors) => {
   const {
     type = BRUSH_TYPES.FILLED,
     size = 1,
@@ -50,20 +44,15 @@ export const applyBrush = (
     angle = 0,
     spacing = 1,
     texture = null,
-    blendMode = "normal",
+    blendMode = 'normal',
   } = brushConfig;
 
   const updateCell = (x, y, color, opacity = 1) => {
     const index = y * gridSize + x;
     if (index >= 0 && index < gridSize * gridSize) {
-      setCellColors((prev) => {
+      setCellColors(prev => {
         const updatedColors = [...prev];
-        const finalColor = applyBlendMode(
-          updatedColors[index],
-          color,
-          blendMode,
-          opacity
-        );
+        const finalColor = applyBlendMode(updatedColors[index], color, blendMode, opacity);
         updatedColors[index] = finalColor;
         return updatedColors;
       });
@@ -138,24 +127,14 @@ const applyAirbrush = (x, y, color, size, pressure, opacity, updateCell) => {
   const sprayDensity = pressure * 0.5;
   const points = generateSprayPoints(x, y, size, sprayDensity);
 
-  points.forEach((point) => {
-    const distance = Math.sqrt(
-      Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2)
-    );
+  points.forEach(point => {
+    const distance = Math.sqrt(Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2));
     const pointOpacity = opacity * (1 - distance / size);
     updateCell(point.x, point.y, color, pointOpacity);
   });
 };
 
-const applyTexturedBrush = (
-  x,
-  y,
-  color,
-  size,
-  texture,
-  opacity,
-  updateCell
-) => {
+const applyTexturedBrush = (x, y, color, size, texture, opacity, updateCell) => {
   const texturePattern = generateTexturePattern(texture, size);
 
   for (let dx = -size; dx <= size; dx++) {
@@ -182,15 +161,7 @@ const applyDitheredBrush = (x, y, color, size, updateCell) => {
 /**
  * Brush Effects Implementation
  */
-const applyBrushEffect = (
-  x,
-  y,
-  effect,
-  color,
-  size,
-  gridSize,
-  setCellColors
-) => {
+const applyBrushEffect = (x, y, effect, color, size, gridSize, setCellColors) => {
   switch (effect) {
     case BRUSH_EFFECTS.GLOW:
       applyGlowEffect(x, y, color, size, gridSize, setCellColors);
@@ -215,11 +186,11 @@ const applyBlendMode = (baseColor, blendColor, mode, opacity) => {
   if (!baseColor) return blendColor;
 
   switch (mode) {
-    case "multiply":
+    case 'multiply':
       return multiplyColors(baseColor, blendColor, opacity);
-    case "screen":
+    case 'screen':
       return screenColors(baseColor, blendColor, opacity);
-    case "overlay":
+    case 'overlay':
       return overlayColors(baseColor, blendColor, opacity);
     default:
       return blendColor;
@@ -243,7 +214,7 @@ const generateSprayPoints = (x, y, size, density) => {
 };
 
 // Export additional utility functions
-export const getBrushPreview = (brushConfig) => {
+export const getBrushPreview = brushConfig => {
   // Generate brush preview for UI
   // Implementation details...
 };
@@ -253,6 +224,6 @@ export const getBrushSize = (pressure, baseSize) => {
 };
 
 // Debounced update function for performance
-export const debouncedBrushUpdate = debounce((updateFn) => {
+export const debouncedBrushUpdate = debounce(updateFn => {
   updateFn();
 }, 16);

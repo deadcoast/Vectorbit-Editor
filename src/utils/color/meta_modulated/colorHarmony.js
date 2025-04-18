@@ -1,4 +1,3 @@
-
 /**
  * Harmonize a palette by adjusting its color intensity.
  * Supports multiple harmonization modes for greater flexibility.
@@ -8,15 +7,20 @@
  * @param {string} mode - Harmonization mode: "saturation", "brightness", or "contrast" (default: "saturation").
  * @returns {Array<string>} - Array of harmonized color codes.
  */
-export const harmonizePalette = (palette, intensity = 1.2, mode = "saturation") => {
+export const harmonizePalette = (palette, intensity = 1.2, mode = 'saturation') => {
   const adjustColor = (r, g, b, intensity) => {
     switch (mode) {
-      case "saturation":
+      case 'saturation':
         return [r * intensity, g * intensity, b * intensity];
-      case "brightness":
+      case 'brightness': {
         const avg = (r + g + b) / 3;
-        return [avg + (r - avg) * intensity, avg + (g - avg) * intensity, avg + (b - avg) * intensity];
-      case "contrast":
+        return [
+          avg + (r - avg) * intensity,
+          avg + (g - avg) * intensity,
+          avg + (b - avg) * intensity,
+        ];
+      }
+      case 'contrast':
         return [r * (1 + intensity), g * (1 + intensity), b * (1 + intensity)];
       default:
         console.warn(`Unknown harmonization mode: ${mode}`);
@@ -24,19 +28,17 @@ export const harmonizePalette = (palette, intensity = 1.2, mode = "saturation") 
     }
   };
 
-  return palette.map((color) => {
+  return palette.map(color => {
     const [r, g, b] = color
       .slice(1)
       .match(/.{2}/g)
-      .map((hex) => parseInt(hex, 16));
+      .map(hex => parseInt(hex, 16));
 
-    const [newR, newG, newB] = adjustColor(r, g, b, intensity).map((val) =>
+    const [newR, newG, newB] = adjustColor(r, g, b, intensity).map(val =>
       Math.min(255, Math.max(0, Math.round(val)))
     );
 
-    return `#${[newR, newG, newB]
-      .map((val) => val.toString(16).padStart(2, "0"))
-      .join("")}`;
+    return `#${[newR, newG, newB].map(val => val.toString(16).padStart(2, '0')).join('')}`;
   });
 };
 
@@ -48,20 +50,25 @@ export const harmonizePalette = (palette, intensity = 1.2, mode = "saturation") 
  * @param {string} mode - Harmonization mode: "saturation", "brightness", or "contrast" (default: "saturation").
  * @returns {string} - Harmonized color code.
  */
-export const harmonizeColor = (color, intensity = 1.2, mode = "saturation") => {
+export const harmonizeColor = (color, intensity = 1.2, mode = 'saturation') => {
   const [r, g, b] = color
     .slice(1)
     .match(/.{2}/g)
-    .map((hex) => parseInt(hex, 16));
+    .map(hex => parseInt(hex, 16));
 
   const adjustColor = (r, g, b, intensity) => {
     switch (mode) {
-      case "saturation":
+      case 'saturation':
         return [r * intensity, g * intensity, b * intensity];
-      case "brightness":
+      case 'brightness': {
         const avg = (r + g + b) / 3;
-        return [avg + (r - avg) * intensity, avg + (g - avg) * intensity, avg + (b - avg) * intensity];
-      case "contrast":
+        return [
+          avg + (r - avg) * intensity,
+          avg + (g - avg) * intensity,
+          avg + (b - avg) * intensity,
+        ];
+      }
+      case 'contrast':
         return [r * (1 + intensity), g * (1 + intensity), b * (1 + intensity)];
       default:
         console.warn(`Unknown harmonization mode: ${mode}`);
@@ -69,11 +76,9 @@ export const harmonizeColor = (color, intensity = 1.2, mode = "saturation") => {
     }
   };
 
-  const [newR, newG, newB] = adjustColor(r, g, b, intensity).map((val) =>
+  const [newR, newG, newB] = adjustColor(r, g, b, intensity).map(val =>
     Math.min(255, Math.max(0, Math.round(val)))
   );
 
-  return `#${[newR, newG, newB]
-    .map((val) => val.toString(16).padStart(2, "0"))
-    .join("")}`;
+  return `#${[newR, newG, newB].map(val => val.toString(16).padStart(2, '0')).join('')}`;
 };

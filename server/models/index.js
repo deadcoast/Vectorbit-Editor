@@ -1,6 +1,5 @@
-
-const Palette = require("./Palette");
-const Project = require("./Project");
+const Palette = require('./Palette');
+const Project = require('./Project');
 
 module.exports = {
   Palette,

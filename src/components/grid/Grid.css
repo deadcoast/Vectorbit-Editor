@@ -28,7 +28,9 @@
   border: 1px solid var(--grid-border-color);
   cursor: pointer;
   position: relative;
-  transition: background-color 0.2s ease, border-color 0.2s ease,
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
     transform 0.2s ease;
 }
 

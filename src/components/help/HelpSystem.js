@@ -1,11 +1,12 @@
 /**
  * Help System Component
- * 
+ *
  * Provides a comprehensive help system with contextual help, tooltips,
  * and integration with keyboard shortcuts
  */
-import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState, useEffect, useCallback } from 'react';
+
 import { useShortcuts } from '../../utils/shortcuts/KeyboardShortcuts';
 import ShortcutsManager from '../shortcuts/ShortcutsManager';
 import './HelpSystem.css';
@@ -27,9 +28,9 @@ const HELP_TOPICS = {
         <li><strong>Zoom:</strong> Use the mouse wheel or trackpad to zoom in and out.</li>
         <li><strong>Drawing:</strong> Click and drag to draw with the active tool.</li>
       </ul>
-    `
+    `,
   },
-  'tools': {
+  tools: {
     title: 'Drawing Tools',
     content: `
       <h3>Drawing Tools</h3>
@@ -60,9 +61,9 @@ const HELP_TOPICS = {
         <li>Magic Wand for color-based selection</li>
         <li>Lasso for freehand selection</li>
       </ul>
-    `
+    `,
   },
-  'layers': {
+  layers: {
     title: 'Working with Layers',
     content: `
       <h3>Layer Management</h3>
@@ -86,9 +87,9 @@ const HELP_TOPICS = {
         <li>Duplicate layers with <kbd>Shift+D</kbd></li>
         <li>Delete layers with <kbd>Shift+Delete</kbd></li>
       </ul>
-    `
+    `,
   },
-  'export': {
+  export: {
     title: 'Exporting Artwork',
     content: `
       <h3>Exporting Your Artwork</h3>
@@ -109,9 +110,9 @@ const HELP_TOPICS = {
         <li>Select specific layers to export</li>
         <li>Configure SVG optimization settings</li>
       </ul>
-    `
+    `,
   },
-  'shortcuts': {
+  shortcuts: {
     title: 'Keyboard Shortcuts',
     content: `
       <h3>Keyboard Shortcuts</h3>
@@ -132,9 +133,9 @@ const HELP_TOPICS = {
       </ul>
       
       <p>Click "Show All Shortcuts" below to see the complete list and customize them.</p>
-    `
+    `,
   },
-  'vector': {
+  vector: {
     title: 'Vector Features',
     content: `
       <h3>Working with Vector Elements</h3>
@@ -164,46 +165,43 @@ const HELP_TOPICS = {
         <li>Maintain blend modes and opacity</li>
         <li>Optimize SVG for file size or quality</li>
       </ul>
-    `
-  }
+    `,
+  },
 };
 
-const HelpSystem = ({ 
-  onClose,
-  initialTopic = 'getting-started'
-}) => {
+const HelpSystem = ({ onClose, initialTopic = 'getting-started' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentTopic, setCurrentTopic] = useState(initialTopic);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const { setContext } = useShortcuts();
-  
+
   // Register keyboard shortcut to toggle help
   useEffect(() => {
-    const handleToggleHelp = (event) => {
+    const handleToggleHelp = event => {
       if (event.key === '?' || event.key === 'F1') {
         event.preventDefault();
         setIsOpen(prev => !prev);
       }
-      
+
       if (event.key === 'Escape' && isOpen) {
         setIsOpen(false);
       }
     };
-    
+
     window.addEventListener('keydown', handleToggleHelp);
-    
+
     return () => {
       window.removeEventListener('keydown', handleToggleHelp);
     };
   }, [isOpen]);
-  
+
   // Set shortcuts context when help system is open
   useEffect(() => {
     if (isOpen) {
       setContext(['global', 'help']);
     }
   }, [isOpen, setContext]);
-  
+
   // Handle closing
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -211,31 +209,33 @@ const HelpSystem = ({
       onClose();
     }
   }, [onClose]);
-  
+
   // Toggle shortcuts manager
   const toggleShortcutsManager = () => {
     setIsShortcutsOpen(prev => !prev);
   };
-  
+
   if (!isOpen) return null;
-  
+
   const topics = Object.keys(HELP_TOPICS);
   const currentTopicData = HELP_TOPICS[currentTopic] || HELP_TOPICS['getting-started'];
-  
+
   return (
     <div className="help-system-container">
       <div className="help-panel">
         <div className="help-header">
           <h2>Vectorbit Help</h2>
-          <button className="help-close-button" onClick={handleClose}>×</button>
+          <button className="help-close-button" onClick={handleClose}>
+            ×
+          </button>
         </div>
-        
+
         <div className="help-content">
           <div className="help-sidebar">
             <h3>Topics</h3>
             <ul className="help-topics-list">
               {topics.map(topic => (
-                <li 
+                <li
                   key={topic}
                   className={topic === currentTopic ? 'active' : ''}
                   onClick={() => setCurrentTopic(topic)}
@@ -244,28 +244,23 @@ const HelpSystem = ({
                 </li>
               ))}
             </ul>
-            
+
             <div className="help-shortcuts-button">
-              <button onClick={toggleShortcutsManager}>
-                Show All Shortcuts
-              </button>
+              <button onClick={toggleShortcutsManager}>Show All Shortcuts</button>
             </div>
           </div>
-          
+
           <div className="help-topic-content">
             <h2>{currentTopicData.title}</h2>
-            <div 
+            <div
               className="topic-html-content"
               dangerouslySetInnerHTML={{ __html: currentTopicData.content }}
             />
           </div>
         </div>
       </div>
-      
-      <ShortcutsManager 
-        isOpen={isShortcutsOpen} 
-        onClose={() => setIsShortcutsOpen(false)} 
-      />
+
+      <ShortcutsManager isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
     </div>
   );
 };
@@ -274,32 +269,27 @@ const HelpSystem = ({
 export const HelpProvider = ({ children }) => {
   const [helpState, setHelpState] = useState({
     isOpen: false,
-    currentTopic: 'getting-started'
+    currentTopic: 'getting-started',
   });
-  
+
   const openHelp = useCallback((topic = 'getting-started') => {
     setHelpState({
       isOpen: true,
-      currentTopic: topic
+      currentTopic: topic,
     });
   }, []);
-  
+
   const closeHelp = useCallback(() => {
     setHelpState(prev => ({
       ...prev,
-      isOpen: false
+      isOpen: false,
     }));
   }, []);
-  
+
   return (
     <HelpContext.Provider value={{ openHelp, closeHelp }}>
       {children}
-      {helpState.isOpen && (
-        <HelpSystem 
-          initialTopic={helpState.currentTopic}
-          onClose={closeHelp}
-        />
-      )}
+      {helpState.isOpen && <HelpSystem initialTopic={helpState.currentTopic} onClose={closeHelp} />}
     </HelpContext.Provider>
   );
 };
@@ -307,23 +297,23 @@ export const HelpProvider = ({ children }) => {
 // Create context for help system
 const HelpContext = React.createContext({
   openHelp: () => {},
-  closeHelp: () => {}
+  closeHelp: () => {},
 });
 
 // Hook for using help system
 export const useHelp = () => {
   const context = React.useContext(HelpContext);
-  
+
   if (!context) {
     throw new Error('useHelp must be used within a HelpProvider');
   }
-  
+
   return context;
 };
 
 HelpSystem.propTypes = {
   onClose: PropTypes.func,
-  initialTopic: PropTypes.string
+  initialTopic: PropTypes.string,
 };
 
 export default HelpSystem;

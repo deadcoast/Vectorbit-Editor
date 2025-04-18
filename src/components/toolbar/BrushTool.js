@@ -1,4 +1,3 @@
-
 // File: src/components/Toolbar/BrushTool.js
 
 /**
@@ -12,7 +11,15 @@
  * @param {Object} colorAnchors - The available color anchors.
  * @param {Function} setCellColors - State setter for cell colors.
  */
-const applyBrushWithAnchor = (x, y, anchorName, gridSize, cellColors, colorAnchors, setCellColors) => {
+const applyBrushWithAnchor = (
+  x,
+  y,
+  anchorName,
+  gridSize,
+  cellColors,
+  colorAnchors,
+  setCellColors
+) => {
   const updatedColors = { ...cellColors };
   const index = y * gridSize + x;
 
@@ -39,24 +46,19 @@ const applyBrushStroke = (x, y, gridSize, brushType, activeColor, cellColors, se
   const index = y * gridSize + x;
 
   if (index >= 0 && index < cellColors.length) {
-    if (brushType === "filled") {
+    if (brushType === 'filled') {
       updatedColors[index] = activeColor;
-    } else if (brushType === "outline") {
-      const neighbors = [
-        index - 1,
-        index + 1,
-        index - gridSize,
-        index + gridSize,
-      ];
-      neighbors.forEach((neighbor) => {
+    } else if (brushType === 'outline') {
+      const neighbors = [index - 1, index + 1, index - gridSize, index + gridSize];
+      neighbors.forEach(neighbor => {
         if (neighbor >= 0 && neighbor < cellColors.length) {
           updatedColors[neighbor] = activeColor;
         }
       });
-    } else if (brushType === "patterned") {
+    } else if (brushType === 'patterned') {
       updatedColors[index] = index % 2 === 0 ? activeColor : null;
-    } else if (brushType === "gradient") {
-      const gradientColors = ["#FFAAAA", "#FF8888", activeColor];
+    } else if (brushType === 'gradient') {
+      const gradientColors = ['#FFAAAA', '#FF8888', activeColor];
       gradientColors.forEach((color, i) => {
         const gradientIndex = index + i - 1;
         if (gradientIndex >= 0 && gradientIndex < cellColors.length) {
@@ -76,10 +78,10 @@ const applyBrushStroke = (x, y, gridSize, brushType, activeColor, cellColors, se
  * @returns {JSX.Element} - The rendered dropdown.
  */
 const renderAnchorSelector = (colorAnchors, setActiveAnchor) => (
-  <select onChange={(e) => setActiveAnchor(e.target.value)}>
-    {Object.keys(colorAnchors).map((anchorName) => (
+  <select onChange={e => setActiveAnchor(e.target.value)}>
+    {Object.keys(colorAnchors).map(anchorName => (
       <option key={anchorName} value={anchorName}>
-        {anchorName.replace(/([A-Z])/g, " $1")}
+        {anchorName.replace(/([A-Z])/g, ' $1')}
       </option>
     ))}
   </select>
@@ -97,11 +99,11 @@ const renderBrushSizeSelector = (brushSize, setBrushSize) => (
     <label>
       Brush Size:
       <input
-        type="number"
-        min="1"
         max="10"
+        min="1"
+        type="number"
         value={brushSize}
-        onChange={(e) => setBrushSize(Number(e.target.value))}
+        onChange={e => setBrushSize(Number(e.target.value))}
       />
     </label>
   </div>
@@ -118,10 +120,7 @@ const renderBrushTypeSelector = (brushType, setBrushType) => (
   <div className="brush-type-selector">
     <label>
       Brush Type:
-      <select
-        value={brushType}
-        onChange={(e) => setBrushType(e.target.value)}
-      >
+      <select value={brushType} onChange={e => setBrushType(e.target.value)}>
         <option value="filled">Filled</option>
         <option value="outline">Outline</option>
         <option value="patterned">Patterned</option>

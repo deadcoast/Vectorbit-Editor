@@ -1,8 +1,8 @@
-
 // File: src/components/ColorPicker/ColorAnchors.js
-import React, { useState } from "react";
-import { useAnchorHistory } from "../state/useAnchorHistory";
-import { generateComplementary, rotateHue } from "../../utils/color/colorCore";
+import React, { useState } from 'react';
+
+import { generateComplementary, rotateHue } from '../../utils/color/colorCore';
+import { useAnchorHistory } from '../state/useAnchorHistory';
 
 const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) => {
   const { addToHistory, undo, redo } = useAnchorHistory();
@@ -39,9 +39,9 @@ const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) =>
 
   // Add a new anchor
   const handleAddAnchor = () => {
-    const newAnchorName = prompt("Enter a name for the new anchor:");
+    const newAnchorName = prompt('Enter a name for the new anchor:');
     if (newAnchorName && !colorAnchors[newAnchorName]) {
-      const updatedAnchors = { ...colorAnchors, [newAnchorName]: "#ffffff" };
+      const updatedAnchors = { ...colorAnchors, [newAnchorName]: '#ffffff' };
       addToHistory(updatedAnchors);
       setLocalColorAnchors(updatedAnchors);
       setColorAnchors(updatedAnchors);
@@ -49,7 +49,7 @@ const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) =>
   };
 
   // Rename an existing anchor
-  const handleRenameAnchor = (oldName) => {
+  const handleRenameAnchor = oldName => {
     const newName = prompt(`Rename "${oldName}" to:`);
     if (newName && !colorAnchors[newName]) {
       const updatedAnchors = { ...colorAnchors };
@@ -59,12 +59,12 @@ const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) =>
       setLocalColorAnchors(updatedAnchors);
       setColorAnchors(updatedAnchors);
     } else if (colorAnchors[newName]) {
-      alert("Anchor with this name already exists.");
+      alert('Anchor with this name already exists.');
     }
   };
 
   // Delete an existing anchor
-  const handleDeleteAnchor = (name) => {
+  const handleDeleteAnchor = name => {
     if (confirm(`Are you sure you want to delete the anchor: "${name}"?`)) {
       const updatedAnchors = { ...colorAnchors };
       delete updatedAnchors[name];
@@ -75,7 +75,7 @@ const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) =>
   };
 
   // Generate complementary color for an anchor
-  const handleGenerateComplementary = (anchor) => {
+  const handleGenerateComplementary = anchor => {
     const complementaryColor = generateComplementary(colorAnchors[anchor])[1];
     handleColorChange(anchor, complementaryColor);
   };
@@ -105,7 +105,7 @@ const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) =>
   };
 
   // Add a new gradient to history
-  const addGradientToHistory = (gradient) => {
+  const addGradientToHistory = gradient => {
     const updatedHistory = [...gradientHistory.slice(0, gradientHistoryIndex + 1), gradient];
     setGradientHistory(updatedHistory);
     setGradientHistoryIndex(updatedHistory.length - 1);
@@ -115,40 +115,37 @@ const ColorAnchors = ({ defaultAnchors, setColorAnchors, updateColorAnchor }) =>
     <div className="color-anchors-popup">
       <h3>Color Anchors</h3>
       <div className="action-buttons">
-        <button onClick={handleUndo} disabled={!undo}>
+        <button disabled={!undo} onClick={handleUndo}>
           Undo Anchors
         </button>
-        <button onClick={handleRedo} disabled={!redo}>
+        <button disabled={!redo} onClick={handleRedo}>
           Redo Anchors
         </button>
         <button onClick={handleAddAnchor}>Add Anchor</button>
-        <button onClick={handleUndoGradient} disabled={gradientHistoryIndex <= 0}>
+        <button disabled={gradientHistoryIndex <= 0} onClick={handleUndoGradient}>
           Undo Gradient
         </button>
-        <button onClick={handleRedoGradient} disabled={gradientHistoryIndex >= gradientHistory.length - 1}>
+        <button
+          disabled={gradientHistoryIndex >= gradientHistory.length - 1}
+          onClick={handleRedoGradient}
+        >
           Redo Gradient
         </button>
       </div>
       <div className="anchor-list">
-        {Object.keys(colorAnchors).map((anchor) => (
+        {Object.keys(colorAnchors).map(anchor => (
           <div key={anchor} className="color-anchor">
-            <label>{anchor.replace(/([A-Z])/g, " $1")}</label>
+            <label>{anchor.replace(/([A-Z])/g, ' $1')}</label>
             <input
               type="color"
               value={colorAnchors[anchor]}
-              onChange={(e) => handleColorChange(anchor, e.target.value)}
+              onChange={e => handleColorChange(anchor, e.target.value)}
             />
             <button onClick={() => handleRenameAnchor(anchor)}>Rename</button>
             <button onClick={() => handleDeleteAnchor(anchor)}>Delete</button>
-            <button onClick={() => handleGenerateComplementary(anchor)}>
-              Complementary
-            </button>
-            <button onClick={() => handleRotateHue(anchor, 30)}>
-              Rotate +30°
-            </button>
-            <button onClick={() => handleRotateHue(anchor, -30)}>
-              Rotate -30°
-            </button>
+            <button onClick={() => handleGenerateComplementary(anchor)}>Complementary</button>
+            <button onClick={() => handleRotateHue(anchor, 30)}>Rotate +30°</button>
+            <button onClick={() => handleRotateHue(anchor, -30)}>Rotate -30°</button>
           </div>
         ))}
       </div>

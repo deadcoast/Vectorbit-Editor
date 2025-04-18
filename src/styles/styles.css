@@ -12,7 +12,9 @@ body {
   background-color: var(--background-color);
   color: var(--font-color);
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   overflow-x: hidden;
 }
 
@@ -30,7 +32,12 @@ body {
 }
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--primary-color);
   font-family: "Roboto", sans-serif;
   margin-bottom: 10px;
@@ -61,7 +68,9 @@ h4 {
 a {
   color: var(--secondary-color);
   text-decoration: none;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
 }
 
 a:hover {
@@ -80,7 +89,10 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
 }
 
 button:hover {
@@ -102,16 +114,22 @@ button:disabled {
 }
 
 /* Inputs */
-input, select, textarea {
+input,
+select,
+textarea {
   font-size: 1rem;
   padding: 10px;
   border: 1px solid var(--border-color);
   border-radius: var(--button-radius);
   outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 6px var(--primary-color);
 }
@@ -211,13 +229,15 @@ textarea {
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
   margin: 20px 0;
   padding-left: 40px;
   list-style-position: inside;
 }
 
-ul li, ol li {
+ul li,
+ol li {
   margin-bottom: 10px;
 }
 

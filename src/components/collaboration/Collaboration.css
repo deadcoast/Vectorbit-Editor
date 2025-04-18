@@ -42,7 +42,7 @@ css
 }
 
 .status-indicator::before {
-  content: '';
+  content: "";
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -80,8 +80,13 @@ css
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Collaborators List */

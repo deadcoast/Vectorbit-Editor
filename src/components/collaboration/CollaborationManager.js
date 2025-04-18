@@ -1,7 +1,7 @@
-
+import { debounce } from 'lodash';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { debounce } from 'lodash';
+
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import './Collaboration.css';
 
@@ -10,7 +10,7 @@ const SYNC_DEBOUNCE_TIME = 100; // ms
 const PRESENCE_UPDATE_INTERVAL = 5000; // ms
 const MAX_RECONNECT_ATTEMPTS = 5;
 
-const CollaborationManager = ({ 
+const CollaborationManager = ({
   projectId,
   userId,
   userName,
@@ -19,7 +19,7 @@ const CollaborationManager = ({
   onColorUpdate,
   onUserJoin,
   onUserLeave,
-  initialState = {}
+  initialState = {},
 }) => {
   const [collaborators, setCollaborators] = useState(new Map());
   const [isConnected, setIsConnected] = useState(false);
@@ -36,11 +36,11 @@ const CollaborationManager = ({
         query: {
           projectId,
           userId,
-          userName
+          userName,
         },
         reconnectionAttempts: MAX_RECONNECT_ATTEMPTS,
         reconnectionDelay: 1000,
-        timeout: 10000
+        timeout: 10000,
       });
 
       setupSocketListeners();
@@ -60,16 +60,16 @@ const CollaborationManager = ({
       console.log('Connected to collaboration server');
     });
 
-    socket.on('disconnect', (reason) => {
+    socket.on('disconnect', reason => {
       setIsConnected(false);
       console.warn(`Disconnected: ${reason}`);
     });
 
-    socket.on('error', (error) => {
+    socket.on('error', error => {
       setError(`Connection error: ${error.message}`);
     });
 
-    socket.on('reconnect_attempt', (attempt) => {
+    socket.on('reconnect_attempt', attempt => {
       reconnectAttempts.current = attempt;
       console.log(`Reconnection attempt ${attempt}/${MAX_RECONNECT_ATTEMPTS}`);
     });
@@ -87,50 +87,56 @@ const CollaborationManager = ({
   }, []);
 
   // Event handlers
-  const handleUserJoin = useCallback((userData) => {
-    setCollaborators(prev => {
-      const updated = new Map(prev);
-      updated.set(userData.userId, {
-        ...userData,
-        joinedAt: Date.now(),
-        lastActive: Date.now()
+  const handleUserJoin = useCallback(
+    userData => {
+      setCollaborators(prev => {
+        const updated = new Map(prev);
+        updated.set(userData.userId, {
+          ...userData,
+          joinedAt: Date.now(),
+          lastActive: Date.now(),
+        });
+        return updated;
       });
-      return updated;
-    });
-    onUserJoin?.(userData);
-  }, [onUserJoin]);
+      onUserJoin?.(userData);
+    },
+    [onUserJoin]
+  );
 
-  const handleUserLeave = useCallback((userId) => {
-    setCollaborators(prev => {
-      const updated = new Map(prev);
-      updated.delete(userId);
-      return updated;
-    });
-    setCursorPositions(prev => {
-      const updated = new Map(prev);
-      updated.delete(userId);
-      return updated;
-    });
-    onUserLeave?.(userId);
-  }, [onUserLeave]);
+  const handleUserLeave = useCallback(
+    userId => {
+      setCollaborators(prev => {
+        const updated = new Map(prev);
+        updated.delete(userId);
+        return updated;
+      });
+      setCursorPositions(prev => {
+        const updated = new Map(prev);
+        updated.delete(userId);
+        return updated;
+      });
+      onUserLeave?.(userId);
+    },
+    [onUserLeave]
+  );
 
   // Debounced update handlers
   const debouncedLayerUpdate = useCallback(
-    debounce((layerData) => {
+    debounce(layerData => {
       socketRef.current?.emit('layer:update', layerData);
     }, SYNC_DEBOUNCE_TIME),
     []
   );
 
   const debouncedGridUpdate = useCallback(
-    debounce((gridData) => {
+    debounce(gridData => {
       socketRef.current?.emit('grid:update', gridData);
     }, SYNC_DEBOUNCE_TIME),
     []
   );
 
   const debouncedColorUpdate = useCallback(
-    debounce((colorData) => {
+    debounce(colorData => {
       socketRef.current?.emit('color:update', colorData);
     }, SYNC_DEBOUNCE_TIME),
     []
@@ -145,7 +151,7 @@ const CollaborationManager = ({
   useEffect(() => {
     const interval = setInterval(() => {
       socketRef.current?.emit('presence:update', {
-        lastActive: Date.now()
+        lastActive: Date.now(),
       });
     }, PRESENCE_UPDATE_INTERVAL);
 
@@ -158,24 +164,30 @@ const CollaborationManager = ({
     socketRef.current?.emit('sync:request');
   }, []);
 
-  const handleSyncRequest = useCallback((requesterId) => {
-    socketRef.current?.emit('sync:provide', {
-      requesterId,
-      state: {
-        layers: initialState.layers,
-        grid: initialState.grid,
-        colors: initialState.colors
-      }
-    });
-  }, [initialState]);
+  const handleSyncRequest = useCallback(
+    requesterId => {
+      socketRef.current?.emit('sync:provide', {
+        requesterId,
+        state: {
+          layers: initialState.layers,
+          grid: initialState.grid,
+          colors: initialState.colors,
+        },
+      });
+    },
+    [initialState]
+  );
 
-  const handleSyncReceive = useCallback((state) => {
-    setSyncStatus('syncing');
-    onLayerUpdate?.(state.layers);
-    onGridUpdate?.(state.grid);
-    onColorUpdate?.(state.colors);
-    setSyncStatus('synced');
-  }, [onLayerUpdate, onGridUpdate, onColorUpdate]);
+  const handleSyncReceive = useCallback(
+    state => {
+      setSyncStatus('syncing');
+      onLayerUpdate?.(state.layers);
+      onGridUpdate?.(state.grid);
+      onColorUpdate?.(state.colors);
+      setSyncStatus('synced');
+    },
+    [onLayerUpdate, onGridUpdate, onColorUpdate]
+  );
 
   // Initialize connection
   useEffect(() => {
@@ -218,11 +230,11 @@ const CollaborationManager = ({
               </span>
             </div>
             {cursorPositions.has(collaborator.userId) && (
-              <div 
+              <div
                 className="collaborator-cursor"
                 style={{
                   left: cursorPositions.get(collaborator.userId).x,
-                  top: cursorPositions.get(collaborator.userId).y
+                  top: cursorPositions.get(collaborator.userId).y,
                 }}
               />
             )}
@@ -231,13 +243,15 @@ const CollaborationManager = ({
       </div>
 
       <div className="sync-controls">
-        <button 
-          onClick={requestSync}
+        <button
           disabled={syncStatus === 'requesting' || syncStatus === 'syncing'}
+          onClick={requestSync}
         >
-          {syncStatus === 'requesting' ? 'Requesting Sync...' : 
-           syncStatus === 'syncing' ? 'Syncing...' : 
-           'Sync Project'}
+          {syncStatus === 'requesting'
+            ? 'Requesting Sync...'
+            : syncStatus === 'syncing'
+              ? 'Syncing...'
+              : 'Sync Project'}
         </button>
       </div>
 
@@ -261,10 +275,9 @@ export const syncAnchors = (updatedAnchors, setColorAnchors, updateGridWithAllAn
 
 export const handleWebSocketMessage = (event, setColorAnchors, updateGridWithAllAnchors) => {
   const { type, payload } = JSON.parse(event.data);
-  if (type === "anchorsUpdated") {
+  if (type === 'anchorsUpdated') {
     syncAnchors(payload, setColorAnchors, updateGridWithAllAnchors);
   }
 };
 
 export default React.memo(CollaborationManager);
-
