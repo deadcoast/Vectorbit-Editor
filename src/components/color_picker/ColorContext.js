@@ -22,8 +22,11 @@ export const ColorProvider = ({ children, defaultColor = '#000000' }) => {
 
   // Add a color to recent colors (debounced for performance)
   const debouncedSetRecentColors = useCallback(
-    debounce(colors => setRecentColors(colors), 300),
-    []
+    colors => {
+      const debouncedFn = debounce(updatedColors => setRecentColors(updatedColors), 300);
+      debouncedFn(colors);
+    },
+    [setRecentColors]
   );
 
   const addToRecentColors = color => {

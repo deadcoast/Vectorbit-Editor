@@ -1,6 +1,5 @@
 /**
  * Symmetry Utility Functions
- * 
  * This file contains utility functions for handling symmetry operations
  * in the brush system.
  */

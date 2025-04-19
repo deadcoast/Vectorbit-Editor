@@ -358,23 +358,35 @@ const applyGlowEffect = (x, y, color, size, gridSize, setCellColors) => {
     const updatedColors = [...prev];
 
     // Apply glow effect in a larger radius than the brush
+    // Helper function to apply glow at a specific point
+    const applyGlowAtPoint = (dx, dy) => {
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance > glowRadius) {
+        return; // Skip points outside glow radius
+      }
+
+      const glowX = x + dx;
+      const glowY = y + dy;
+      const index = glowY * gridSize + glowX;
+
+      // Skip invalid indices
+      if (index < 0 || index >= gridSize * gridSize) {
+        return;
+      }
+
+      // Calculate glow opacity based on distance
+      const opacity = glowIntensity * (1 - distance / glowRadius);
+
+      // Only apply glow if it would make the cell brighter
+      if (!updatedColors[index] || opacity > 0.1) {
+        updatedColors[index] = color; // Simplified for example
+      }
+    };
+
+    // Process all points within glow radius
     for (let dx = -glowRadius; dx <= glowRadius; dx++) {
       for (let dy = -glowRadius; dy <= glowRadius; dy++) {
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance <= glowRadius) {
-          const glowX = x + dx;
-          const glowY = y + dy;
-          const index = glowY * gridSize + glowX;
-
-          if (index >= 0 && index < gridSize * gridSize) {
-            // Calculate glow opacity based on distance
-            const opacity = glowIntensity * (1 - distance / glowRadius);
-            // Only apply glow if it would make the cell brighter
-            if (!updatedColors[index] || opacity > 0.1) {
-              updatedColors[index] = color; // Simplified for example
-            }
-          }
-        }
+        applyGlowAtPoint(dx, dy);
       }
     }
 

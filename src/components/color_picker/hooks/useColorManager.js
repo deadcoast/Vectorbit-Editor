@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+
 import {
   generateComplementary,
   generateAnalogous,
@@ -24,7 +25,12 @@ const presets = {
 /**
  * Custom hook for managing color palettes, gradients, and color tools
  */
-const useColorManager = ({ onApplyGradient, onApplyPalette, setColorAnchors, setRecentColors }) => {
+const useColorManager = ({
+  _onApplyGradient,
+  onApplyPalette,
+  _setColorAnchors,
+  setRecentColors,
+}) => {
   // State for custom color data
   const [customPalettes, setCustomPalettes] = useState([]);
   const [customGradients, setCustomGradients] = useState([]);

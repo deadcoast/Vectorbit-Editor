@@ -1,25 +1,12 @@
 import { useState, useRef, useContext, useCallback } from 'react';
+
 import { ColorContext } from '../ColorContext';
 
 /**
- * Custom hook for the ColorPicker component functionality
+ * Custom hook for managing color selection and recent colors
  */
-const useColorPicker = ({ onAddToPalette, onAssignToAnchor, gridRef }) => {
-  // Get color context
+const useColorManagement = () => {
   const { activeColor, setActiveColor, recentColors, addToRecentColors } = useContext(ColorContext);
-
-  // State for gradient management
-  const [gradientStops, setGradientStops] = useState([0, 100]);
-  const [gradientStart, setGradientStart] = useState('#ffffff');
-  const [gradientEnd, setGradientEnd] = useState('#000000');
-  const gradientPreviewRef = useRef(null);
-
-  // State for palettes management
-  const [savedPalettes, setSavedPalettes] = useState({});
-  const [paletteName, setPaletteName] = useState('');
-
-  // Eye dropper tool state
-  const [eyeDropperActive, setEyeDropperActive] = useState(false);
 
   // Add a color to recent colors
   const addRecentColor = useCallback(
@@ -40,6 +27,20 @@ const useColorPicker = ({ onAddToPalette, onAssignToAnchor, gridRef }) => {
     },
     [setActiveColor, addRecentColor]
   );
+
+  return {
+    activeColor,
+    recentColors,
+    addRecentColor,
+    handleColorChange,
+  };
+};
+
+/**
+ * Custom hook for the eyedropper tool functionality
+ */
+const useEyeDropper = (gridRef, handleColorChange) => {
+  const [eyeDropperActive, setEyeDropperActive] = useState(false);
 
   // Toggle eye dropper tool
   const handleEyeDropperToggle = useCallback(() => {
@@ -68,6 +69,22 @@ const useColorPicker = ({ onAddToPalette, onAssignToAnchor, gridRef }) => {
     [gridRef, handleColorChange]
   );
 
+  return {
+    eyeDropperActive,
+    handleEyeDropperToggle,
+    handleEyeDropper,
+  };
+};
+
+/**
+ * Custom hook for gradient management
+ */
+const useGradient = (activeColor, onAddToPalette) => {
+  const [gradientStops, setGradientStops] = useState([0, 100]);
+  const [gradientStart, setGradientStart] = useState('#ffffff');
+  const [gradientEnd, setGradientEnd] = useState('#000000');
+  const gradientPreviewRef = useRef(null);
+
   // Save gradient
   const handleGradientSave = useCallback(() => {
     const gradient = `linear-gradient(to right, ${gradientStart}, ${gradientEnd})`;
@@ -88,6 +105,34 @@ const useColorPicker = ({ onAddToPalette, onAssignToAnchor, gridRef }) => {
     },
     [gradientPreviewRef]
   );
+
+  // Create gradient style
+  const gradientStyle = {
+    background: `linear-gradient(to right, ${gradientStops
+      .map(stop => `${activeColor} ${stop}%`)
+      .join(', ')})`,
+  };
+
+  return {
+    gradientEnd,
+    gradientPreviewRef,
+    gradientStart,
+    gradientStops,
+    gradientStyle,
+    handleGradientDrag,
+    handleGradientSave,
+    setGradientEnd,
+    setGradientStart,
+    setGradientStops,
+  };
+};
+
+/**
+ * Custom hook for palette management
+ */
+const usePalette = (recentColors, addToRecentColors, activeColor, onAssignToAnchor) => {
+  const [savedPalettes, setSavedPalettes] = useState({});
+  const [paletteName, setPaletteName] = useState('');
 
   // Handle saving a palette
   const handleSavePalette = useCallback(() => {
@@ -113,18 +158,60 @@ const useColorPicker = ({ onAddToPalette, onAssignToAnchor, gridRef }) => {
     [savedPalettes, addToRecentColors]
   );
 
-  // Create gradient style
-  const gradientStyle = {
-    background: `linear-gradient(to right, ${gradientStops
-      .map(stop => `${activeColor} ${stop}%`)
-      .join(', ')})`,
+  // Handle preset application
+  const handleApplyPreset = useCallback(
+    preset => {
+      // Map of preset names to their color values
+      const presets = {
+        warmTones: ['#FF5733', '#FF8C42', '#FFBA49'],
+        coolTones: ['#4286f4', '#42b0f4', '#42f4d1'],
+        grayscale: ['#111111', '#777777', '#DDDDDD'],
+        earthy: ['#5D4037', '#795548', '#A1887F'],
+      };
+
+      if (presets[preset]) {
+        presets[preset].forEach(color => addToRecentColors(color));
+      }
+    },
+    [addToRecentColors]
+  );
+
+  // Assign color to anchor
+  const handleAssignToAnchor = useCallback(() => {
+    onAssignToAnchor(activeColor);
+  }, [activeColor, onAssignToAnchor]);
+
+  return {
+    paletteName,
+    savedPalettes,
+    handleApplyPreset,
+    handleAssignToAnchor,
+    handleLoadPalette,
+    handleSavePalette,
+    setPaletteName,
   };
+};
+
+/**
+ * Main custom hook for the ColorPicker component functionality
+ * Combines all sub-hooks to provide complete functionality
+ */
+const useColorPicker = ({ onAddToPalette, onAssignToAnchor, gridRef }) => {
+  const colorManagement = useColorManagement();
+  const eyeDropper = useEyeDropper(gridRef, colorManagement.handleColorChange);
+  const gradient = useGradient(colorManagement.activeColor, onAddToPalette);
+  const palette = usePalette(
+    colorManagement.recentColors,
+    colorManagement.addRecentColor,
+    colorManagement.activeColor,
+    onAssignToAnchor
+  );
 
   // Setup mouse event handlers for gradient stops
   const handleGradientStopMouseDown = useCallback(
     index => {
       return () => {
-        const onMouseMove = ev => handleGradientDrag(index, ev);
+        const onMouseMove = ev => gradient.handleGradientDrag(index, ev);
         const onMouseUp = () => {
           window.removeEventListener('mousemove', onMouseMove);
           window.removeEventListener('mouseup', onMouseUp);
@@ -133,46 +220,35 @@ const useColorPicker = ({ onAddToPalette, onAssignToAnchor, gridRef }) => {
         window.addEventListener('mouseup', onMouseUp);
       };
     },
-    [handleGradientDrag]
+    [gradient]
   );
 
   // Handle keyboard navigation for gradient stops
-  const handleGradientStopKeyDown = useCallback((index, stop) => {
-    return event => {
-      if (event.key === 'ArrowLeft') {
-        const newStop = Math.max(stop - 1, 0);
-        setGradientStops(stops => stops.map((s, i) => (i === index ? newStop : s)));
-      } else if (event.key === 'ArrowRight') {
-        const newStop = Math.min(stop + 1, 100);
-        setGradientStops(stops => stops.map((s, i) => (i === index ? newStop : s)));
-      }
-    };
-  }, []);
+  const handleGradientStopKeyDown = useCallback(
+    ({ stop, index }) => {
+      return event => {
+        if (event.key === 'ArrowLeft') {
+          const newStop = Math.max(stop - 1, 0);
+          gradient.setGradientStops(stops => stops.map((s, i) => (i === index ? newStop : s)));
+        } else if (event.key === 'ArrowRight') {
+          const newStop = Math.min(stop + 1, 100);
+          gradient.setGradientStops(stops => stops.map((s, i) => (i === index ? newStop : s)));
+        }
+      };
+    },
+    [gradient]
+  );
 
+  // Return all necessary state and handlers combined from sub-hooks
   return {
-    activeColor,
-    recentColors,
-    gradientStops,
-    gradientStart,
-    gradientEnd,
-    gradientPreviewRef,
-    gradientStyle,
-    paletteName,
-    savedPalettes,
-    eyeDropperActive,
-    setPaletteName,
-    setGradientStart,
-    setGradientEnd,
-    handleColorChange,
-    handleEyeDropperToggle,
-    handleEyeDropper,
-    handleGradientSave,
-    handleGradientDrag,
-    handleSavePalette,
-    handleLoadPalette,
-    handleGradientStopMouseDown,
+    ...colorManagement,
+    ...eyeDropper,
+    ...gradient,
+    ...palette,
     handleGradientStopKeyDown,
+    handleGradientStopMouseDown,
   };
 };
 
 export default useColorPicker;
+export { useColorManagement, useEyeDropper, useGradient, usePalette };

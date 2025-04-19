@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useState, useCallback, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -221,6 +222,9 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
               undo();
             }
             break;
+          default:
+            // No action for other keys
+            break;
         }
       }
     };
@@ -283,7 +287,19 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
                           <button onClick={() => setRenamingLayer(null)}>Cancel</button>
                         </div>
                       ) : (
-                        <span onClick={() => setActiveLayer(layer.id)}>{layer.name}</span>
+                        <span
+                          aria-label={`Select layer: ${layer.name}`}
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => setActiveLayer(layer.id)}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              setActiveLayer(layer.id);
+                            }
+                          }}
+                        >
+                          {layer.name}
+                        </span>
                       )}
 
                       <div className="layer-controls">
@@ -386,6 +402,23 @@ const LayerManager = ({ layers, setLayers, activeLayer, setActiveLayer }) => {
       </div>
     </div>
   );
+};
+
+LayerManager.propTypes = {
+  layers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      visible: PropTypes.bool,
+      opacity: PropTypes.number,
+      locked: PropTypes.bool,
+      blendMode: PropTypes.string,
+      gridData: PropTypes.object,
+    })
+  ).isRequired,
+  setLayers: PropTypes.func.isRequired,
+  activeLayer: PropTypes.string,
+  setActiveLayer: PropTypes.func.isRequired,
 };
 
 export default React.memo(LayerManager);

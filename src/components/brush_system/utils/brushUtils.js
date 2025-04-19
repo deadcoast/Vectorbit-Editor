@@ -1,9 +1,50 @@
 /**
  * Brush Utility Functions
- * 
  * This file contains utility functions for the brush system
  * to help with various calculations and transformations.
  */
+
+/**
+ * Creates a standardized brush settings object
+ *
+ * @param {Object} options - Configuration options for the brush
+ * @param {string} options.type - Brush type (pencil, eraser, shader, etc.)
+ * @param {number} options.size - Brush size in pixels
+ * @param {string} options.color - Brush color in hex format
+ * @param {number} options.opacity - Brush opacity value (0-1)
+ * @param {Object} options.effect - Special brush effects
+ * @returns {Object} - Standardized brush settings object
+ */
+export const createBrushSettingsObject = (options = {}) => {
+  const {
+    type = 'pencil',
+    size = 1,
+    color = '#000000',
+    opacity = 1,
+    effect = null,
+    mode = 'normal',
+    pressure = false,
+    tilt = false,
+    // Symmetry settings
+    symmetry = {
+      enabled: false,
+      type: 'mirror',
+      axis: 'vertical',
+    },
+  } = options;
+
+  return {
+    type,
+    size,
+    color,
+    opacity,
+    effect,
+    mode,
+    pressure,
+    tilt,
+    symmetry,
+  };
+};
 
 /**
  * Determines if a position is within the current brush shape

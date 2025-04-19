@@ -51,7 +51,8 @@ app.get('/health', (req, res) => {
 });
 
 // ===== Global Error Handler =====
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
+  // eslint-disable-next-line no-console
   console.error(`❌ Server Error: ${err.message}`);
   res.status(err.status || 500).json({
     error: true,
@@ -61,6 +62,7 @@ app.use((err, req, res, next) => {
 
 // ===== Graceful Shutdown =====
 const gracefulShutdown = async signal => {
+  // eslint-disable-next-line no-console
   console.log(`🚦 ${signal} received. Closing server...`);
   await disconnectDB();
   process.exit(0);
@@ -71,6 +73,7 @@ process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 
 // ===== Start Server =====
 const PORT = process.env.PORT || 5000;
+// eslint-disable-next-line no-console
 const server = app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
 
 export default server;

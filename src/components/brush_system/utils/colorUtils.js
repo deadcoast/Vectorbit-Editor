@@ -107,6 +107,113 @@ export const determineCellColor = (
 };
 
 /**
+ * Generates a pattern based on provided settings
+ * @param {object} settings - Pattern settings
+ * @param {string} settings.type - Pattern type (e.g., 'dots', 'lines', 'grid')
+ * @param {number} settings.size - Size of the pattern
+ * @param {string} settings.primaryColor - Primary color for the pattern
+ * @param {string} settings.secondaryColor - Secondary color for the pattern
+ * @param {number} settings.density - Density of the pattern elements
+ * @param {number} settings.angle - Angle for directional patterns
+ * @returns {Array<Array<string>>} 2D array representing the pattern
+ */
+export const generatePattern = ({
+  type = 'dots',
+  size = 10,
+  primaryColor = '#000000',
+  secondaryColor = '#FFFFFF',
+  density = 0.5,
+  angle = 0,
+}) => {
+  // Create a 2D array representing the pattern
+  const pattern = Array(size)
+    .fill()
+    .map(() => Array(size).fill(secondaryColor));
+
+  // Variables needed for patterns - declare outside case statements to avoid lexical declaration errors
+  let rad;
+  let lineSpacing;
+  let gridSpacing;
+  let checkerSize;
+  let projected;
+  let checkerX;
+  let checkerY;
+
+  // Apply different pattern types
+  switch (type) {
+    case 'dots':
+      // Create a dot pattern
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          // Place dots based on density
+          if (
+            Math.random() < density &&
+            (x + y) % Math.max(2, Math.floor((1 - density) * 5)) === 0
+          ) {
+            pattern[y][x] = primaryColor;
+          }
+        }
+      }
+      break;
+
+    case 'lines':
+      // Create a line pattern at specified angle
+      rad = (angle * Math.PI) / 180;
+      lineSpacing = Math.max(1, Math.floor(size / (size * density)));
+
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          // Project point onto angle direction to determine line position
+          projected = x * Math.cos(rad) + y * Math.sin(rad);
+          if (Math.round(projected) % lineSpacing === 0) {
+            pattern[y][x] = primaryColor;
+          }
+        }
+      }
+      break;
+
+    case 'grid':
+      // Create a grid pattern
+      gridSpacing = Math.max(1, Math.floor(size / (size * density)));
+
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (x % gridSpacing === 0 || y % gridSpacing === 0) {
+            pattern[y][x] = primaryColor;
+          }
+        }
+      }
+      break;
+
+    case 'checker':
+      // Create a checker pattern
+      checkerSize = Math.max(1, Math.floor(size / (size * density) / 2));
+
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          checkerX = Math.floor(x / checkerSize);
+          checkerY = Math.floor(y / checkerSize);
+
+          if ((checkerX + checkerY) % 2 === 0) {
+            pattern[y][x] = primaryColor;
+          }
+        }
+      }
+      break;
+
+    default:
+      // Default to flat color
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          pattern[y][x] = primaryColor;
+        }
+      }
+  }
+
+  return pattern;
+};
+
+/**
  * Calculates pressure-based size
  * @param {number} brushSize - Base brush size
  * @param {number} basePressure - Base pressure value
@@ -114,7 +221,14 @@ export const determineCellColor = (
  * @returns {number} Calculated brush size based on pressure
  */
 export const calculatePressureSize = (brushSize, basePressure, pressurePoints) => {
-  const avgPressure =
-    pressurePoints.reduce((sum, p) => sum + p, 0) / Math.max(1, pressurePoints.length);
-  return Math.max(1, Math.round(brushSize * avgPressure * basePressure));
+  if (!pressurePoints || pressurePoints.length === 0) {
+    return brushSize;
+  }
+
+  // Average the last few pressure points
+  const recentPressure =
+    pressurePoints.slice(-3).reduce((acc, p) => acc + p, 0) / Math.min(3, pressurePoints.length);
+
+  // Scale brush size based on pressure relative to base pressure
+  return brushSize * (recentPressure / basePressure);
 };

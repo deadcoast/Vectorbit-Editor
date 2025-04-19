@@ -1,11 +1,11 @@
 /**
  * Custom hook for managing brush-related logic and effects
  */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 
 import BrushPreviewGenerator from '../BrushPreviewGenerator';
-import { createBrushAPI, createSettingsObject } from '../utils/brushEffectUtils';
 import { createApplyBrushFunction } from '../utils/brushApplyUtils';
+import { createBrushAPI, createSettingsObject } from '../utils/brushEffectUtils';
 import { createBrushSettingsObject } from '../utils/brushUtils';
 import { determineCellColor, generatePattern } from '../utils/colorUtils';
 import { applySymmetry } from '../utils/symmetryUtils';
@@ -47,74 +47,21 @@ const setupBrushEvents = ({ gridRef, setCursorPosition, setIsDrawing }) => {
 };
 
 /**
- * Hook to manage brush manager functionality
+ * Creates and configures the brush API for external components
  */
-const useBrushManager = ({
-  activeColor,
-  blendMode,
-  brushEffect,
-  brushHardness,
-  brushShape,
-  brushSize,
-  brushSmoothing,
-  brushSpacing,
-  brushType,
-  gridRef,
-  gridSize,
-  layerId,
+const useBrushChangeEffect = ({
   onBrushChange,
-  onSettingsChange,
-  onStroke,
+  applyBrush,
+  brushType,
+  brushEffect,
+  brushSize,
   opacity,
+  pressure,
   patternSettings,
   gradientSettings,
-  pressure,
-  setCursorPosition,
-  setIsDrawing,
   symmetryMode,
+  blendMode,
 }) => {
-  // Pattern cache for performance optimization
-  const patternCache = useRef({});
-
-  // Create the applyBrush function with all dependencies
-  const applyBrush = createApplyBrushFunction({
-    activeColor,
-    blendMode,
-    brushShape,
-    brushSize,
-    brushType,
-    determineCellColor,
-    generatePattern,
-    gradientSettings,
-    gridSize,
-    layerId,
-    onStroke,
-    opacity,
-    patternCache,
-    patternSettings,
-    pressure,
-    applySymmetry,
-    symmetryMode,
-  });
-
-  // Current brush settings object for preview
-  const currentBrushSettings = createBrushSettingsObject({
-    blendMode,
-    brushEffect,
-    brushHardness,
-    brushShape,
-    brushSize,
-    brushSmoothing,
-    brushSpacing,
-    brushType,
-    gradientSettings,
-    opacity,
-    patternSettings,
-    pressure,
-    symmetryMode,
-  });
-
-  // Handle onBrushChange callback
   useEffect(() => {
     if (onBrushChange) {
       const brushAPI = createBrushAPI({
@@ -144,8 +91,23 @@ const useBrushManager = ({
     pressure,
     symmetryMode,
   ]);
+};
 
-  // Handle onSettingsChange callback
+/**
+ * Handles settings change callback notifications
+ */
+const useSettingsChangeEffect = ({
+  onSettingsChange,
+  brushType,
+  brushEffect,
+  brushSize,
+  opacity,
+  pressure,
+  patternSettings,
+  gradientSettings,
+  symmetryMode,
+  blendMode,
+}) => {
   useEffect(() => {
     if (onSettingsChange) {
       const settingsObject = createSettingsObject({
@@ -173,15 +135,129 @@ const useBrushManager = ({
     pressure,
     symmetryMode,
   ]);
+};
 
-  // Clean up pattern cache on unmount
-  useEffect(() => {
-    return () => {
-      patternCache.current = {};
-    };
-  }, []);
+/**
+ * Creates the brush application function
+ */
+const useApplyBrushFunction = params => {
+  const {
+    activeColor,
+    blendMode,
+    brushShape,
+    brushSize,
+    brushType,
+    gradientSettings,
+    gridSize,
+    layerId,
+    onStroke,
+    opacity,
+    patternCache,
+    patternSettings,
+    pressure,
+    symmetryMode,
+  } = params;
 
-  // Set up brush events on grid
+  return useMemo(
+    () =>
+      createApplyBrushFunction({
+        activeColor,
+        blendMode,
+        brushShape,
+        brushSize,
+        brushType,
+        determineCellColor,
+        generatePattern,
+        gradientSettings,
+        gridSize,
+        layerId,
+        onStroke,
+        opacity,
+        patternCache,
+        patternSettings,
+        pressure,
+        applySymmetry,
+        symmetryMode,
+      }),
+    [
+      activeColor,
+      blendMode,
+      brushShape,
+      brushSize,
+      brushType,
+      gradientSettings,
+      gridSize,
+      layerId,
+      onStroke,
+      opacity,
+      patternCache,
+      patternSettings,
+      pressure,
+      symmetryMode,
+    ]
+  );
+};
+
+/**
+ * Creates the current brush settings object
+ */
+const useCurrentBrushSettings = params => {
+  const {
+    blendMode,
+    brushEffect,
+    brushHardness,
+    brushShape,
+    brushSize,
+    brushSmoothing,
+    brushSpacing,
+    brushType,
+    gradientSettings,
+    opacity,
+    patternSettings,
+    pressure,
+    symmetryMode,
+  } = params;
+
+  return useMemo(
+    () =>
+      createBrushSettingsObject({
+        blendMode,
+        brushEffect,
+        brushHardness,
+        brushShape,
+        brushSize,
+        brushSmoothing,
+        brushSpacing,
+        brushType,
+        gradientSettings,
+        opacity,
+        patternSettings,
+        pressure,
+        symmetryMode,
+      }),
+    [
+      blendMode,
+      brushEffect,
+      brushHardness,
+      brushShape,
+      brushSize,
+      brushSmoothing,
+      brushSpacing,
+      brushType,
+      gradientSettings,
+      opacity,
+      patternSettings,
+      pressure,
+      symmetryMode,
+    ]
+  );
+};
+
+/**
+ * Sets up brush events on grid
+ */
+const useGridEventSetup = params => {
+  const { gridRef, setCursorPosition, setIsDrawing } = params;
   useEffect(() => {
     return setupBrushEvents({
       gridRef,
@@ -189,14 +265,204 @@ const useBrushManager = ({
       setIsDrawing,
     });
   }, [gridRef, setCursorPosition, setIsDrawing]);
+};
 
-  // Use the BrushPreviewGenerator to get the preview generation function
-  const { generateBrushPreview } = BrushPreviewGenerator({
+/**
+ * Creates the brush preview generator
+ */
+const useBrushPreviewGenerator = params => {
+  const {
     activeColor,
     brushShape,
     brushSize,
     brushType,
-    generatePattern,
+    gradientSettings,
+    gridSize,
+    patternCache,
+    patternSettings,
+  } = params;
+
+  return useMemo(
+    () =>
+      BrushPreviewGenerator({
+        activeColor,
+        brushShape,
+        brushSize,
+        brushType,
+        generatePattern,
+        gradientSettings,
+        gridSize,
+        patternCache,
+        patternSettings,
+      }),
+    [
+      activeColor,
+      brushShape,
+      brushSize,
+      brushType,
+      gradientSettings,
+      gridSize,
+      patternCache,
+      patternSettings,
+    ]
+  );
+};
+
+/**
+ * Manages cleanup effects
+ */
+const useCleanupEffects = patternCache => {
+  useEffect(() => {
+    return () => {
+      patternCache.current = {};
+    };
+  }, [patternCache]);
+};
+
+/**
+ * Sets up all event handlers and callbacks
+ */
+const useEventHandlers = ({
+  applyBrush,
+  blendMode,
+  brushEffect,
+  brushSize,
+  brushType,
+  gradientSettings,
+  onBrushChange,
+  onSettingsChange,
+  opacity,
+  patternSettings,
+  pressure,
+  symmetryMode,
+}) => {
+  // Handle brush API changes
+  useBrushChangeEffect({
+    onBrushChange,
+    applyBrush,
+    brushType,
+    brushEffect,
+    brushSize,
+    opacity,
+    pressure,
+    patternSettings,
+    gradientSettings,
+    symmetryMode,
+    blendMode,
+  });
+
+  // Handle settings changes
+  useSettingsChangeEffect({
+    onSettingsChange,
+    brushType,
+    brushEffect,
+    brushSize,
+    opacity,
+    pressure,
+    patternSettings,
+    gradientSettings,
+    symmetryMode,
+    blendMode,
+  });
+};
+
+/**
+ * Hook to manage brush manager functionality
+ */
+const useBrushManager = ({
+  activeColor,
+  blendMode,
+  brushEffect,
+  brushHardness,
+  brushShape,
+  brushSize,
+  brushSmoothing,
+  brushSpacing,
+  brushType,
+  gridRef,
+  gridSize,
+  layerId,
+  onBrushChange,
+  onSettingsChange,
+  onStroke,
+  opacity,
+  patternSettings,
+  gradientSettings,
+  pressure,
+  setCursorPosition,
+  setIsDrawing,
+  symmetryMode,
+}) => {
+  // Pattern cache for performance optimization
+  const patternCache = useRef({});
+
+  // Create the applyBrush function
+  const applyBrush = useApplyBrushFunction({
+    activeColor,
+    blendMode,
+    brushShape,
+    brushSize,
+    brushType,
+    gradientSettings,
+    gridSize,
+    layerId,
+    onStroke,
+    opacity,
+    patternCache,
+    patternSettings,
+    pressure,
+    symmetryMode,
+  });
+
+  // Create brush settings
+  const currentBrushSettings = useCurrentBrushSettings({
+    blendMode,
+    brushEffect,
+    brushHardness,
+    brushShape,
+    brushSize,
+    brushSmoothing,
+    brushSpacing,
+    brushType,
+    gradientSettings,
+    opacity,
+    patternSettings,
+    pressure,
+    symmetryMode,
+  });
+
+  // Setup event handling and callbacks
+  useEventHandlers({
+    applyBrush,
+    blendMode,
+    brushEffect,
+    brushSize,
+    brushType,
+    gradientSettings,
+    onBrushChange,
+    onSettingsChange,
+    opacity,
+    patternSettings,
+    pressure,
+    symmetryMode,
+  });
+
+  // Clean up pattern cache on unmount
+  useCleanupEffects(patternCache);
+
+  // Set up grid events
+  useGridEventSetup({
+    gridRef,
+    setCursorPosition,
+    setIsDrawing,
+  });
+
+  // Get brush preview
+  const { generateBrushPreview } = useBrushPreviewGenerator({
+    activeColor,
+    brushShape,
+    brushSize,
+    brushType,
     gradientSettings,
     gridSize,
     patternCache,
